@@ -1,0 +1,65 @@
+% !Mode:: "TeX:UTF-8" 
+
+%====================================== 中文摘要 ==========================================
+\BiAppendixChapter{摘~~~~要}{ABSTRACT (Chinese)}
+\setcounter{page}{1}\pagenumbering{Roman}
+\defaultfont
+
+%博士学位论文摘要正文为 1000 字左右。
+%
+%内容一般包括：从事这项研究工作的目的和意义；完成的工作 (作者独立进行的研究工作及相应结果的概括性叙述)；获得的主要结论 (这是摘要的中心内容)。博士学位论文摘要应突出论文的创新点。
+%
+%摘要中一般不用图、表、化学结构式、非公知公用的符号和术语。
+%
+%如果论文的主体工作得到了有关基金资助，应在摘要第一页的页脚处标注：本研究得到某某基金 (编号：) 资助。
+
+网络通信是支撑当今社会的重要基础设施，当前的发展方向主要集中于建设高性能，高可创新性的网络环境。最近10年，软件定义网络(SDN)和可编程网络(SDN2.0)概念的提出很好的解决了过去网络创新性差、创新难的不足。但随着流量和网络复杂度快速增长，新的网络体系结构也带来了性能和可扩展性两方面的挑战。性能和功能方面:基于CPU 的转发平台性能发展逐步减慢，基于ASIC的智能网卡硬件可编程性差。可扩展性方面:数据平面和控制平面分离的SDN网络架构带来了稳定性不足和效率低的问题。
+
+将问题从网络的三个维度进行分析：
+
+主机侧网络，在服务器网卡层面，基于CPU的智能能网卡的性能难以满足目前虚拟化技术和网络监管细粒度化的发展需求。
+
+交换侧网络，在核心网骨干网层面，基于ASIC的转发平面不足以提供网络网络处理的高灵活性，由于其与成本、性能之间平衡困难，网络工程师的创新空间受到了限制。
+
+流表可扩展性研究，硬件流表是一种高效且昂贵的实现网络转发抽象的核心部件，在软件定义网络时代流表稀缺性更加突出。同时，由于流数目和流量的快速增长，控制平面针对流表的操作导致数据平面和控制平面的大量协议开销，导致网络鲁棒性差，易形成安全隐患。近年来，现场可编程门阵列（FPGA）器件快速发展，以可编程硬件技术为首的异构架构已经大量融合到网络领域，带来高用户可定制能力的同时也能保证处理性能。
+
+本文主要探索基于可编程硬件的高性能网络数据平面。本文研究在软件定义网络编程语言内如何将这种可编程硬件抽象层融入整体开发系统，并设计与其配套的控制平面软件和协议，使整体网络系统的软硬件有机结合，增强网络处理性能、灵活性的同时保证安全性。论文从理论抽象分析中提出了体系架构，最后给出了系统实现并进行验证。本文将从以下三方面阐述：
+
+1）研究可编程设备加速主机侧网络方法。本文提出利用基于FPGA的智能网卡卸载操作系统层部分网络功能，以达到扩展网络接入层的性能的目的。探讨了不同场景下网络功能的构成，分析并提出一种基于可编程硬件的网络功能定义抽象（Data-Computing，DC抽象）。本文把服务器网络功能任务中可转化为DC抽象的计算密集型功能通过合理转换下放到网卡的FPGA可编程器件中。论文基于可编程网卡设计了一套网络流量捕获，统计分析和回放系统。在满足网络功能不受改变的前提下，证明利用基于FPGA的智能网卡能有效地提升服务器的网络性能（100x）、抖动(降低$10^4$x)和效率(10x)。
+
+2）研究可编程设备加速网络硬件交换层方法。本文提出一种硬件异构型的可编程网络数据平面架构，将FPGA与ASIC交换芯片有机结合，以增强ASIC报文处理报文的灵活性，同时满足性能需求。论文设计了ASIC面向硬件可编程扩展的接口，将数据包头拆分并通过高速数据互联载体发送给FPGA，利用FPGA可重配特性实现完全可编程的报文处理数据平面；同时，本文基于DC抽象，将网络随路计算（network-centric computing）模式引入可编程网络体系架构；本文通过分析流量模型在FPGA中设计了一种并行化处理单元，在资源消耗可控的前提下大规模提高系统的可扩展性能；另外本文提出了一套基于可编程硬件混合网络架构的软件定义语言编程框架，实现了软件定义需求和可编程硬抽象层分离，以及针对底层数据平面的一种高效自适应的并行单元流分配算法，在可编程性与FPGA同等的条件下，比目前FPGA交换机性能提升120x。
+
+3）SDN硬件流表可扩展性研究。本文针对不同层面网络设备的控制，进行全局优化、分布式优化。在可编程网卡和交换机组成的网络系统中，数据平面内最重要的资源是流表资源（瓶颈资源），本文从全局视野角度，结合可编程硬件的特性，在全网约束的条件下，对流表资源进行优化，以满足未来可扩展性需求。本文分析不同的流量规模和特征，以及系统多模块直接独特的互联协议，提出一种SDN网络流表空间全局共享机制。实现了在流量大规模扩展的情形下，保证数据平面稳定性，对受影响的流转发RTT时间和安全通道消息风暴数量的优化均达到至少2个数量级。
+
+此外，为支持本文提出的相关设计概念，本文实现了一套基于FPGA的转发平面设备，包括智能网卡和交换机原型平台。此套平台资源容量大，外设接口丰富，可以满足本文在各类网络架构下实验验证需求。
+
+
+{\boldsong}
+\vspace{\baselineskip}
+\noindent{\fontsize{11.5pt}{11.5pt}\boldsong 关\hspace{0.5em}键\hspace{0.5em}词}：软件定义网络；网络数据平面；可编程硬件；现场可编程门阵列
+
+\vspace{\baselineskip}
+\noindent{\fontsize{11.5pt}{11.5pt}\boldsong 论文类型}：应用基础
+
+%论文类型包括：a.理论研究（Theoretical Research)；b.应用基础(Application Fundamentals)；c.应用研究(Application Research)；d.研究报告(Research Report)；e.设计报告(Design Report)；f.案例分析(Case Study)；g.调研报告(Investigation Report)；h.产品研发(Product Development)；i.工程设计(Engineering Design)；j.工程/项目管理(Engineering/Project Management)；k.其它（Others）。
+
+\clearpage
+
+%====================================== 英文摘要 ==========================================
+\BiAppendixChapter{ABSTRACT}{ABSTRACT (English)}
+
+\noindent 英文摘要正文每段开头不缩进，每段之间空一行。\newline
+
+\noindent The abstract goes here. \newline
+
+\noindent \LaTeX{} is a typesetting system that is very suitable for producing scientific and mathematical documents of high typographical quality.
+
+%\noindent You will never want to use Word when you have learned how to use \LaTeX.
+
+\vspace{\baselineskip}
+\noindent{\fontsize{11.5pt}{11.5pt}\selectfont\bfseries KEY WORDS}: Xi'an Jiaotong University, Doctoral dissertation, \LaTeX{} template
+
+\vspace{\baselineskip}
+\noindent{\fontsize{11.5pt}{11.5pt}\selectfont\bfseries TYPE OF DISSERTATION}: Application Fundamentals
+
+\clearpage

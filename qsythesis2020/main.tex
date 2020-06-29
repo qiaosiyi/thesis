@@ -1,0 +1,35 @@
+% !Mode:: "TeX:UTF-8"
+
+\documentclass[openany,twoside,fontset=none,UTF8]{ctexbook}
+\input{setup/package-xiuwen}
+\graphicspath{{figures/}}
+
+%===================================== Cover and TOC =====================================
+\begin{document}
+\input{setup/format-xiuwen}
+\frontmatter
+\input{setup/cover-xiuwen}
+\input{setup/abstract-xiuwen}
+\input{setup/content}
+
+%======================================= Main Body =======================================
+\mainmatter
+\include{body/chapter_1}
+\include{body/chapter_2}
+\include{body/chapter_3}
+\include{appendix/acknowledgements}
+
+%======================================= Reference =======================================
+\wuhao\selectfont
+\addcontentsline{toc}{chapter}{参考文献}
+\addcontentsline{toe}{chapter}{References}
+\bibliography{bib/mybib}
+
+%======================================= Appendix ========================================
+\include{setup/formatApp}
+\include{appendix/appA}
+\include{appendix/appB}
+\include{appendix/achievements}
+\include{appendix/authorization}
+
+\end{document} 

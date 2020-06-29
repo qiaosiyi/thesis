@@ -1,0 +1,62 @@
+This is BibTeX, Version 0.99d (TeX Live 2020/W32TeX)
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: main.aux
+The style file: gbt7714-numerical.bst
+A level-1 auxiliary file: body/chapter_1.aux
+A level-1 auxiliary file: body/chapter_2.aux
+A level-1 auxiliary file: body/chapter_3.aux
+A level-1 auxiliary file: appendix/acknowledgements.aux
+A level-1 auxiliary file: setup/formatApp.aux
+A level-1 auxiliary file: appendix/appA.aux
+A level-1 auxiliary file: appendix/appB.aux
+A level-1 auxiliary file: appendix/achievements.aux
+A level-1 auxiliary file: appendix/authorization.aux
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
+Database file #1: bib/mybib.bib
+Warning--I didn't find a database entry for "Manolakis2005"
+Warning--empty author in huawei2019
+Warning--empty author in cisco2019
+Warning--empty title in xilinx
+You've used 36 entries,
+            4418 wiz_defined-function locations,
+            1078 strings with 13106 characters,
+and the built_in function-call counts, 147703 in all, are:
+= -- 3295
+> -- 16465
+< -- 20408
++ -- 5824
+- -- 1416
+* -- 1047
+:= -- 20577
+add.period$ -- 131
+call.type$ -- 36
+change.case$ -- 113
+chr.to.int$ -- 5189
+cite$ -- 41
+duplicate$ -- 674
+empty$ -- 2112
+format.name$ -- 437
+if$ -- 38799
+int.to.chr$ -- 8
+int.to.str$ -- 37
+missing$ -- 0
+newline$ -- 221
+num.names$ -- 102
+pop$ -- 6873
+preamble$ -- 1
+purify$ -- 36
+quote$ -- 0
+skip$ -- 15294
+stack$ -- 0
+substring$ -- 6885
+swap$ -- 47
+text.length$ -- 306
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 448
+warning$ -- 3
+while$ -- 390
+width$ -- 0
+write$ -- 488
+(There were 4 warnings)

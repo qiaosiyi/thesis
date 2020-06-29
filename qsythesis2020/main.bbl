@@ -1,0 +1,267 @@
+\begin{thebibliography}{36}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{#1}
+\expandafter\ifx\csname urlstyle\endcsname\relax\else
+  \urlstyle{same}\fi
+\expandafter\ifx\csname href\endcsname\relax
+  \DeclareUrlCommand\doi{\urlstyle{rm}}
+  \def\eprint#1#2{#2}
+\else
+  \def\doi#1{\href{https://doi.org/#1}{\nolinkurl{#1}}}
+  \let\eprint\href
+\fi
+
+\bibitem[hua(2019)]{huawei2019}
+华为公司年报\allowbreak[EB/OL].
+\newblock 2019.
+\newblock
+  \url{https://www-file.huawei.com/-/media/corporate/pdf/annual-report/annual_report_2019_cn.pdf}.
+
+\bibitem[cis(2019)]{cisco2019}
+思科公司互联网发展跟踪白皮书（2018-2023）\allowbreak[EB/OL].
+\newblock 2019.
+\newblock
+  \url{https://www.cisco.com/c/en/us/solutions/collateral/executive-perspectives/annual-internet-report/white-paper-c11-741490.html}.
+
+\bibitem[国际数据公司（IDC）(2019)]{idc2019}
+国际数据公司（IDC）.
+\newblock 上半年中国公有云市场\allowbreak[EB/OL].
+\newblock 2019.
+\newblock
+  \url{https://www.idc.com/url.do?url=/getdoc/pdf_download.do?containerId=prCHC45634819&position=15&transactionId=39032154&term=&page=5&perPage=100}.
+
+\bibitem[ireasearch(2020)]{idc2020}
+IREASEARCH.
+\newblock 中国公有云服务市场跟踪\allowbreak[EB/OL].
+\newblock 2020.
+\newblock \url{http://news.iresearch.cn/yx/2020/02/315730.shtml}.
+
+\bibitem[Bosshart et~al.(2014)Bosshart, Daly, Gibb, Izzard, McKeown, Rexford,
+  Schlesinger, Talayco, Vahdat, Varghese, et~al.]{p4}
+BOSSHART~P, DALY~D, GIBB~G, et~al.
+\newblock P4: Programming protocol-independent packet processors\allowbreak[J].
+\newblock ACM SIGCOMM Computer Communication Review, 2014, 44\penalty0 (3):
+  87-95.
+
+\bibitem[Bosshart et~al.(2013)Bosshart, Gibb, Kim, Varghese, McKeown, Izzard,
+  Mujica, and Horowitz]{rmt}
+BOSSHART~P, GIBB~G, KIM~H~S, et~al.
+\newblock Forwarding metamorphosis: Fast programmable match-action processing
+  in hardware for sdn\allowbreak[J].
+\newblock ACM SIGCOMM Computer Communication Review, 2013, 43\penalty0 (4):
+  99-110.
+
+\bibitem[Honda et~al.(2015)Honda, Huici, Lettieri, and Rizzo]{mswitch}
+HONDA~M, HUICI~F, LETTIERI~G, et~al.
+\newblock mswitch: a highly-scalable, modular software
+  switch\allowbreak[C]//\allowbreak
+Proceedings of the 1st ACM SIGCOMM Symposium on Software Defined Networking
+  Research.
+\newblock [S.l.: s.n.], 2015: 1-13.
+
+\bibitem[McKeown et~al.(2008)McKeown, Anderson, Balakrishnan, Parulkar,
+  Peterson, Rexford, Shenker, and Turner]{mckeown2008openflow}
+MCKEOWN~N, ANDERSON~T, BALAKRISHNAN~H, et~al.
+\newblock Openflow: enabling innovation in campus networks\allowbreak[J].
+\newblock ACM SIGCOMM Computer Communication Review, 2008, 38\penalty0 (2):
+  69-74.
+
+\bibitem[Casado et~al.(2019)Casado, McKeown, and Shenker]{ethane}
+CASADO~M, MCKEOWN~N, SHENKER~S.
+\newblock From ethane to sdn and beyond\allowbreak[J].
+\newblock ACM SIGCOMM Computer Communication Review, 2019, 49\penalty0 (5):
+  92-95.
+
+\bibitem[Shahbaz et~al.(2016)Shahbaz, Choi, Pfaff, Kim, Feamster, McKeown, and
+  Rexford]{pisces}
+SHAHBAZ~M, CHOI~S, PFAFF~B, et~al.
+\newblock Pisces: A programmable, protocol-independent software
+  switch\allowbreak[C]//\allowbreak
+Proceedings of the 2016 ACM SIGCOMM Conference.
+\newblock [S.l.: s.n.], 2016: 525-538.
+
+\bibitem[huawei(2018)]{huawei1800v}
+HUAWEI.
+\newblock 1800V虚拟交换机\allowbreak[EB/OL].
+\newblock 2018.
+\newblock
+  \url{https://carrier.huawei.com/~/media/CNBG/Downloads/Product/Fixed%20Network/b2b/0920/1800-en.pdf}.
+
+\bibitem[SANDVINE(2020)]{activelogic}
+SANDVINE.
+\newblock Hyperscale data plane for next generation telco
+  networks\allowbreak[EB/OL].
+\newblock 2020.
+\newblock
+  \url{https://www.sandvine.com/hubfs/Sandvine_Redesign_2019/Downloads/2020/Datasheets/Network%20Optimization/Sandvine_DS_ActiveLogic.pdf}.
+
+\bibitem[centec(2019)]{v580}
+CENTEC.
+\newblock Hybrid v580 sdn switch\allowbreak[EB/OL].
+\newblock 2019.
+\newblock
+  \url{http://www.centecnetworks.com/cn/DownView.asp?ID=2272&SortID=153}.
+
+\bibitem[高山渊\ 等(2020)高山渊, 蔡德忠, 赵晓雪, 刘礼寅,
+  刘水旺, 陈义全, and 徐波]{alibaba}
+高山渊, 蔡德忠, 赵晓雪, 等.
+\newblock
+  企业数字化基石-阿里巴巴云计算基础设施实践\allowbreak[M].
+\newblock 北京市海淀区: 电子工业出版社, 2020.
+
+\bibitem[BAREFOOT(2020)]{tofino2}
+BAREFOOT.
+\newblock Second generation of world's fastest p4 programmable ethernet switch
+  asics\allowbreak[EB/OL].
+\newblock 2020.
+\newblock \url{https://www.barefootnetworks.com/products/brief-tofino-2/}.
+
+\bibitem[Lu et~al.(2011)Lu, Guo, Li, Zhou, Yuan, Wu, Xiong, Gao, and
+  Zhang]{serverswitch}
+LU~G, GUO~C, LI~Y, et~al.
+\newblock Serverswitch: a programmable and high performance platform for data
+  center networks.\allowbreak[C]//\allowbreak
+Nsdi: volume~11.
+\newblock [S.l.: s.n.], 2011: 2-2.
+
+\bibitem[Firestone et~al.(2018)Firestone, Putnam, Mundkur, Chiou, Dabagh,
+  Andrewartha, Angepat, Bhanu, Caulfield, Chung, et~al.]{azure}
+FIRESTONE~D, PUTNAM~A, MUNDKUR~S, et~al.
+\newblock Azure accelerated networking: Smartnics in the public
+  cloud\allowbreak[C]//\allowbreak
+15th $\{$USENIX$\}$ Symposium on Networked Systems Design and Implementation
+  ($\{$NSDI$\}$ 18).
+\newblock [S.l.: s.n.], 2018: 51-66.
+
+\bibitem[Zilberman et~al.(2014)Zilberman, Audzevich, Covington, and
+  Moore]{netfpga2014}
+ZILBERMAN~N, AUDZEVICH~Y, COVINGTON~G~A, et~al.
+\newblock Netfpga sume: Toward 100 gbps as research commodity\allowbreak[J].
+\newblock IEEE micro, 2014, 34\penalty0 (5): 32-41.
+
+\bibitem[XILINX~Co.(2020)]{xilinx}
+XILINX~CO.~L.
+\newblock \allowbreak[EB/OL].
+\newblock 2020.
+\newblock \url{https://www.xilinx.com/about/company-overview.html}.
+
+\bibitem[XILINX(2020{\natexlab{a}})]{alveo}
+XILINX.
+\newblock Smartnics for diverse workloads\allowbreak[EB/OL].
+\newblock 2020.
+\newblock
+  \url{https://www.xilinx.com/applications/data-center/network-acceleration.html#smartnics}.
+
+\bibitem[Intel(2020{\natexlab{a}})]{intelfpganic}
+INTEL.
+\newblock Fpga programmable acceleration card n3000 for
+  networking\allowbreak[EB/OL].
+\newblock 2020.
+\newblock
+  \url{https://plan.seek.intel.com/psg_WW_psgcom3_LPCS_EN_2019_PACN3000ProductBrief}.
+
+\bibitem[Intel(2020{\natexlab{b}})]{intel5g}
+INTEL.
+\newblock 5G前传边缘网络FPGA（IP）方案\allowbreak[EB/OL].
+\newblock 2020.
+\newblock
+  \url{https://plan.seek.intel.com/5GFrontHaulGatedFormCN_LP?erpm_id=8235613&erpm_id=8235613&elq_cid=6511651}.
+
+\bibitem[XILINX(2020{\natexlab{b}})]{xilinxnvme}
+XILINX.
+\newblock Stand alone nvme-of acceleration solution\allowbreak[EB/OL].
+\newblock 2020.
+\newblock
+  \url{https://www.xilinx.com/publications/solution-briefs/partner/nvme-of_solutionbrief.pdf}.
+
+\bibitem[Intel(2020{\natexlab{c}})]{intelgre}
+INTEL.
+\newblock SDN/NFV低延迟GRE处理加速器\allowbreak[EB/OL].
+\newblock 2020.
+\newblock
+  \url{https://www.intel.cn/content/dam/altera-www/global/zh_CN/pdfs/literature/wp/low-latency-gre-processing-accelerator-evaluation-cn.pdf}.
+
+\bibitem[Intel(2020{\natexlab{d}})]{intelddos}
+INTEL.
+\newblock 电信解决方案FPGA PAC
+  N3000助力在云环境中实现大容量DDoS防护\allowbreak[EB/OL].
+\newblock 2020.
+\newblock
+  \url{https://www.intel.cn/content/dam/www/programmable/cn/zh/pdfs/literature/solution-sheets/sb-high-capacity-ddos-protection-in-cloud-environments-cn.pdf}.
+
+\bibitem[Intel(2020{\natexlab{e}})]{intelencryption}
+INTEL.
+\newblock
+  英特尔FPGA可编程加速卡N3000的IPSec加速解决方案\allowbreak[EB/OL].
+\newblock 2020.
+\newblock
+  \url{https://www.intel.cn/content/dam/altera-www/global/zh_CN/pdfs/literature/solution-sheets/sb-accelerating-ipsec-arrive-technology-intel-fgpa-pac3000-cn.pdf}.
+
+\bibitem[XILINX(2020{\natexlab{c}})]{xilinxhls}
+XILINX.
+\newblock Vivado high-level synthesis accelerates ip creation by enabling c/c++
+  and system c specifications\allowbreak[EB/OL].
+\newblock 2020.
+\newblock
+  \url{https://www.xilinx.com/products/design-tools/vivado/integration/esl-design.html}.
+
+\bibitem[Xilinx(2020)]{hlsdoc}
+XILINX.
+\newblock Vivado hls documentation\allowbreak[EB/OL].
+\newblock 2020.
+\newblock
+  \url{https://www.xilinx.com/products/design-tools/vivado/integration/esl-design.html#documentation}.
+
+\bibitem[Intel(2020{\natexlab{f}})]{dpdk}
+INTEL.
+\newblock Data plane development kit\allowbreak[EB/OL].
+\newblock 2020.
+\newblock \url{https://www.dpdk.org/}.
+
+\bibitem[VMWare(2019)]{sriov}
+VMWARE.
+\newblock Single root i/o virtualization(sr-iov)\allowbreak[EB/OL].
+\newblock 2019.
+\newblock
+  \url{https://docs.vmware.com/en/VMware-vSphere/7.0/com.vmware.vsphere.networking.doc/GUID-CC021803-30EA-444D-BCBE-618E0D836B9F.html}.
+
+\bibitem[Mellanox(2019)]{rdma}
+MELLANOX.
+\newblock Remote direct memory access(rdma)\allowbreak[EB/OL].
+\newblock 2019.
+\newblock \url{https://community.mellanox.com/s/global-search/rdma}.
+
+\bibitem[Microsoft(2008)]{microsofttcpoffload}
+MICROSOFT.
+\newblock Information about the tcp chimney offload, receive side scaling, and
+  network direct memory access features\allowbreak[EB/OL].
+\newblock 2008.
+\newblock
+  \url{https://support.microsoft.com/en-us/help/951037/information-about-the-tcp-chimney-offload-receive-side-scaling-and-net}.
+
+\bibitem[XILINX(2020)]{alveo250}
+XILINX.
+\newblock Alveo u250 data center accelerator card\allowbreak[EB/OL].
+\newblock 2020.
+\newblock
+  \url{https://www.xilinx.com/products/boards-and-kits/alveo/u250.html}.
+
+\bibitem[NetFPGA(2020)]{netfpgaabout}
+NETFPGA.
+\newblock A line-rate, flexible, and open platform for research, and classroom
+  experimentation.\allowbreak[EB/OL].
+\newblock 2020.
+\newblock \url{https://netfpga.org/site/#/about/}.
+
+\bibitem[Vetterli et~al.(2014)Vetterli, Kovacevic, and Goyal]{Vetterli2014}
+VETTERLI~M, KOVACEVIC~J, GOYAL~V~K.
+\newblock Foundations of signal processing\allowbreak[M].
+\newblock Cambridge: Cambridge University Press, 2014.
+
+\bibitem[Lee(2016)]{Lee2016}
+LEE~Z.
+\newblock GB/T 7714-2015 参考文献 BiBTeX 样式\allowbreak[EB/OL].
+\newblock 2016.
+\newblock \url{https://github.com/zepinglee/gbt7714-bibtex-style}.
+
+\end{thebibliography}
