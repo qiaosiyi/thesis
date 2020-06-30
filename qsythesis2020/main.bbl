@@ -231,6 +231,13 @@ MELLANOX.
 \newblock 2019.
 \newblock \url{https://community.mellanox.com/s/global-search/rdma}.
 
+\bibitem[Mellanox(2020)]{roce}
+MELLANOX.
+\newblock Rdma over converged ethernet(roce)\allowbreak[EB/OL].
+\newblock 2020.
+\newblock
+  \url{https://docs.mellanox.com/pages/viewpage.action?pageId=19811943}.
+
 \bibitem[Microsoft(2008)]{microsofttcpoffload}
 MICROSOFT.
 \newblock Information about the tcp chimney offload, receive side scaling, and
@@ -252,11 +259,6 @@ NETFPGA.
   experimentation.\allowbreak[EB/OL].
 \newblock 2020.
 \newblock \url{https://netfpga.org/site/#/about/}.
-
-\bibitem[Vetterli et~al.(2014)Vetterli, Kovacevic, and Goyal]{Vetterli2014}
-VETTERLI~M, KOVACEVIC~J, GOYAL~V~K.
-\newblock Foundations of signal processing\allowbreak[M].
-\newblock Cambridge: Cambridge University Press, 2014.
 
 \bibitem[Lee(2016)]{Lee2016}
 LEE~Z.
