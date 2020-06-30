@@ -1,76 +1,170 @@
 % !Mode:: "TeX:UTF-8" 
 
-\BiChapter{数据平面可编程综述}{pdpintro}
+\BiChapter{相关工作综述}{pdpintro}
 \label{sec:pdpintro}
 
-虽然本模板不讲解 \LaTeX{} 的详细使用方法，但是为了方便大家使用本模板撰写论文，本章对论文写作中经常用到的{\hei 图、表、公式}等内容的排版方法做一个简单介绍。
 
-%%=========================================================================================
-%\BiSection{图}{Figures}
-%\BiSubsection{单幅图}{Single Figure}
-%
-%图 \ref{fig_ch2_echoes} 是用 TeXLive 自带的宏包 Tikz 绘制而成，Visio 画不出这么好看的图。
-%\begin{figure}[!ht]
-%	\centering
-%	\includegraphics[width=\textwidth]{echoes}
-%	\caption{雷达回波信号 ({\color{red}注意}：图注是五号字)。} \label{fig_ch2_echoes}
-%\end{figure}
-%
-%%-----------------------------------------------------------------------------------------
-%\BiSubsection{多幅图}{Multiple Figures}
-%
-%如果一幅图中包含多幅子图，每一幅子图都要有图注，并且子图用 (a)、(b)、(c) 等方式编号，如图 \ref{fig_ch2_badge} 所示。
-%\begin{figure}[!ht]
-%	\centering
-%	\subfigure[灰色的交大校徽]{\includegraphics[width=0.45\textwidth]{xjtu_gray}} \hfill
-%	\subfigure[蓝色的交大校徽]{\includegraphics[width=0.45\textwidth]{xjtu_blue}}
-%	\caption{交大校徽 \label{fig_ch2_badge}}
-%\end{figure}
-%
-%%=========================================================================================
-%\BiSection{表}{Tables} 
-%
-%表格要求采用三线表，与文字齐宽，顶线与底线线粗是 $1\frac12$ 磅，中线线粗是 1 磅，如表 \ref{tab_ch2} 所示\footnote{{\color{red}注意}：图表中的变量与单位通过斜线 $/$ 隔开。}。
-%\begin{table}[!ht]
-%	\renewcommand{\arraystretch}{1.2}
-%	\centering\wuhao
-%	\caption{表题也是五号字} \label{tab_ch2} \vspace{2mm}
-%	\begin{tabularx}{\textwidth}{*{4}Y}
-%	\toprule[1.5pt]
-%		Interference & DOA / degree & Bandwidth / MHz & INR / dB \\
-%	\midrule[1pt]
-%		1 & $-30$ & 20 & 60 \\
-%		2 & 20 & 10 & 50 \\
-%		3 & 40 & 5 & 40 \\
-%	\bottomrule[1.5pt]
-%	\end{tabularx}
-%\end{table}
-%
-%%=========================================================================================
-%\BiSection{公式}{Equations}
-%\BiSubsection{单个公式}{Equations}
-%
-%\LaTeX{} 最强大的地方在于对数学公式的编辑，不仅美观，而且高效。单个公式的编号如式 (\ref{equ_ch2_pdf}) 所示，该式是正态分布的概率密度函数\citeup{Manolakis2005}，
-%\begin{equation} \label{equ_ch2_pdf}
-%	f_Z(z) = \frac{1}{\pi\sigma^2} \exp\left(-\frac{|z-\mu|^2}{\sigma^2}\right)
-%\end{equation}
-%式中：$\mu$ 是 Gauss 随机变量 $Z$ 的均值；$\sigma^2$ 是 $Z$ 的方差。
-%
-%%-----------------------------------------------------------------------------------------
-%\BiSubsection{多个公式}{Subequations}
-%
-%多个公式作为一个整体可以进行二级编号，如式 (\ref{equ_ch2_fourier}) 所示，该式是连续时间 Fourier 变换的正反变换公式\citeup{Vetterli2014}，
-%\begin{subequations} \label{equ_ch2_fourier}
-%	\begin{align}
-%		X(f) &= \int_{-\infty}^{\infty}x(t)e^{-j2\pi f t}\dif t \\
-%		x(t) &= \int_{-\infty}^{\infty}X(f)e^{j2\pi f t}\dif f
-%	\end{align}
-%\end{subequations}
-%式中：$x(t)$ 是信号的时域波形；$X(f)$ 是 $x(t)$ 的 Fourier 变换。
-%
-%如果公式中包含推导步骤，可以只对最终的公式进行编号，例如：
-%\begin{align}
-%	\mbf{w}_{\mathrm{smi}} &= \alpha \left[\frac{1}{\sigma_n^2}\mbf{v}(\theta_0) - \frac{1}{\sigma_n^2}\mbf{v}(\theta_0) + \sum_{i=1}^{N} \frac{\mbf{u}_i^H\mbf{v}(\theta_0)}{\lambda_i} \mbf{u}_i\right] \nonumber \\
-%	&= \frac{\alpha}{\sigma_n^2} \left[\mbf{v}(\theta_0) - \sum_{i=1}^{N}\mbf{u}_i^H\mbf{v}(\theta_0)\mbf{u}_i +  \sum_{i=1}^{N}\frac{\sigma_n^2\mbf{u}_i^H\mbf{v}(\theta_0)}{\lambda_i} \mbf{u}_i \right] \nonumber \\
-%	&= \frac{\alpha}{\sigma_n^2} \left[\mbf{v}(\theta_0) - \sum_{i=1}^{N} \frac{\lambda_i-\sigma_n^2}{\lambda_i} \mbf{u}_i^H\mbf{v}(\theta_0)\mbf{u}_i \right]
-%\end{align}
+
+%重要概念介绍
+
+%重要技术的介绍
+
+%研究的基石
+
+%研究的关键问题
+
+
+
+%目标，软件功能硬件卸载，提速。在硬件中增加可编程逻辑的对外性能。
+
+
+\BiSection{本章引论}{}
+本章综述了国内外网络基础设施技术的演进，主要分析其主要技术特征和局限短板，重点关注了现阶段实际情况下SDN可编程数据平面的灵活性与性能矛盾点，为本文研究工作指明了方向和意义所在。
+
+
+
+
+
+
+
+\BiSection{网络可编程的发展历程}{}
+%研究领域发展趋势介绍
+
+
+
+
+
+\BiSubsection{软件实现---早期网络基础设施}{} %IP10k https://mp.weixin.qq.com/s/1tUXilmvbIzlMoDQUuC2Jg 《可编程数据平面调研_说的还不错.pdf》
+
+%主旨：过去软件的好处，软件的坏处，现在软件的好处，软件的坏处
+
+网络对于业务的基本价值是网络实现了数据在计算机之间的任意传输。在早期\footnote{上世纪90年代中期以前}，由于用户数量、计算机算力、存储、硬件性能都过于微弱，作为连接所有终端、服务与用户的管道，网络的主要特点集中在连通性、可行性和初期探索性上。在一个简单的星型拓扑中，一个路由器其实就是一台普通计算机。在学术和产业界的初期，人们并没有意识到网络需要单独拎出使其成为一套独立系统的价值。这在侧面也体现出软件作为网络实施载体的特点：“灵活性”。即：对于处理并实现一个新兴事物，软件可以发挥其巨大的灵活性优势，使其可以作为一种为数不多的手段，快速实现工程师学者的任意的新的思想。
+
+后期随着社会生活、技术进步，步入信息时代之后逐渐发现人与人之间数字信息交互的需求和价值越来越大。因而研究重点开始关注在如何实现快速的包交换、路由查找。为此人们开始提出各种快速交换的数据结构：Cache优化、哈希表、Radix Tree(树查找)等。很长时间基于软件的转发设备核心架构都没有变化，唯一变化的是跟随摩尔定律成长的芯片技术。CPU和存储每18月性能翻番，网络设备的性能也顺势而上，人们对网络的发展信心十足。网络处理从单CPU向多CPU并行，向分布式存储cache结构进行了小小扩展，但也好像失去了创新的动力。然而人们对信息量需求的增长却大大快于摩尔定律。到2011年底，我国互联网入户带宽平均接近20Mbps\citeup{20112m}。从最初14.4Kb的拨号上网，网络容量的发展几乎是以每18个月翻10倍的速度在增长。在数百兆的路由性能要求下用软件作为转发设备基础比较合适，但如果核心网要升级到1G或数十G以上更高的带宽就会面临技术、成本等多方面的瓶颈。
+
+\BiSubsection{向硬件过渡}{} %IP10k
+
+数据包交换对于CPU来讲是一种很累的工作。虽然数据包转发算法既简单、又高效，但面对无穷无尽的任务量，依靠指令集的软件转发架构存在访存效率差、CPU无法批处理等劣势。这时研究人员抛弃了基于指令集的软件架构，开始思考基于专用硬件电路（Application-specific integrated circuit, ASIC）的数据包处理模型。此时硬件转发的发展目标是如何增大交换设备的交换容量以及研究具有更好的可扩展性的设计方案。电路交换Crossbar（交叉开关）[1]架构追求$N$队列输入到$N$队列输出的无阻碍转发，其思想的本质是使用一种二维电子开关（Switching）矩阵。由于矩阵拥有$N^2$个开关交点，可以实现任意的$N_i$输入映射到$N_j$输出，也易实现多对一、一对多映射。由于开关数量众多控制器硬件算法难度高[2]，以及传输冲突的问题[3]，此后的一系列技术创新集中在如何降低交叉开关的转发时延和提高理论吞吐容量[4,5]。人们也在思索如何在扩展交换容量时节约芯片面积，其中重要的思想是由单模块交叉开关联结为多交叉开关结成的网（fabric）。有专用硬件电路的加持，业界把单芯片交换能力提升至12.8Tbps[7]。能够支持在一个大规模数据中心内可以支持128台配置有100G网的卡服务器形成一个小区进行高速互联，这样的组网计算机的并行处理能力已经足够一个通常规模大数据算法使用。单芯片容量升高会使晶体管面积成$O(N^2)$规模增长从而变得不再划算。如果想支持512台服务器，网络架构商可以选用两级Spine\&Leaf(骨干与边缘)架构，使用12\footnote{12=4(Spine)+8(leaf)}块12.8Tbps的交换芯片组成一个51.2Tbps的扩展规模网络。
+
+TODO:%网络管理是传统的，过去小规模是有优势的，但当规模大了之后收敛慢，编程复杂，可以参考ethan论文 -> From Ethane to SDN and Beyond,然后主要找传统网络的劣势
+
+
+
+[1] paper： Fast Switched Backplan for a Gigabit Switched Router.
+[2] 变长报文 60\%资源
+[3] HOL blocking
+[4] 固定 cell based switch 
+[5] VOQ vitrual output queueing
+[6] CLOS
+[7] broadcom switching chip
+
+\BiSubsection{软件定义网络演进---软、硬任务划分，物理隔离}{} %http://blog.sina.com.cn/s/blog_13743c4140102vh7e.html openflow 标准演进过程 
+%《软件定义网络 SDN 数据平面带状态转发》 page14
+%《阿里巴巴）page10 12
+
+
+
+
+\BiSubsection{协议无关数据平面可编程演进---可编程性层次划分，逻辑隔离}{} %《可编程数据平面调研_说的还不错.pdf》
+
+%《软件定义网络关键技术及相关问题的研究》 page10
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\BiSection{网络可编程性的“图灵完备”}{}
+%完备性与硬件平台的设计思路息息相关。https://www.zhihu.com/question/20115374 知乎问题解答
+
+
+
+\BiSubsection{通用可编程性和可编程网卡}{}%虽说FPGA足够灵活，但卸载东西还是有难度
+%NP
+
+
+
+\BiSubsection{领域内可编程性和可编程转发设备}{}%ipad笔记本
+
+
+
+
+
+
+\BiSubsection{可编程数据平面的应用与问题}{}%已经有的成果和应用，展望我们工作的未来
+% https://rg0now.github.io/prog_dataplane_reading_list/README.html#org37fc8b1 有很多应用和分类 %《可编程数据平面调研_说的还不错.pdf》
+%《阿里巴巴》page11
+
+
+
+
+
+
+\BiSection{网络资源优化}{} %已经有的成果和应用，展望我们工作的未来 周亚东 冷峻园的安全论文
+
+\BiSubsection{软件定义网络安全通道机制}{}
+%《软件定义网络关键技术及相关问题的研究》 page11
+
+\BiSubsection{数据平面流表资源与问题}{}
+%ip1w 2.2.1
+
+
+
+\BiSection{本章小结}{}
+核心思想是在不同时段，人们根据不同的现有即使做取舍从而满足技术需求。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
