@@ -305,7 +305,7 @@ f(c)=\frac{b^c-1}{b-1}
 	{$ c = c + \delta(c,l) $ \tcp*{向下取整}}
 \end{algorithm}
 
-DISCO算法为努力将存储空间降低，引入了一种概率估计。由算法\ref{discoa1},系统可以获取整数估计后的压缩值$c$。其中$ \delta(c,l) $和$ p_d(c,l) $又下面公式定义：
+DISCO算法为努力将存储空间降低，引入了一种概率估计。由算法\ref{discoa1},系统可以获取整数估计后的压缩值$c$。其中$ \delta(c,l) $和$ p_d(c,l) $由下列公式定义：
 
 \begin{equation} \label{discofun2}
 \delta(c,l)=\lceil f^{-1}(l+f(c)) - c \rceil - 1
@@ -426,7 +426,7 @@ f(c+1) - f(c) &\geq l
 f(c+1) - f(c) \geq 1518
 \end{equation}
 
-则根据公式\ref{mydiscof3}，一定可找到一个最小的$ c_{lmin} $值，满足：对于任意$ c \geq c_{lmin} $ 时，均有$ \delta(c,l)=0$。
+由于$ f(\cdot) $是增函数且导数始终大于零，则一定可找到一个最小的$ c_{lmin} $值，满足：对于任意$ c \geq c_{lmin} $ 时，均有上式成立，也即$\delta(c,l) =0$。
 
 下面关注$ p_d(c,l) $，DISCO算法\ref{discoa1}对$ p_d(c,l) $的描述为：系统对压缩计数器以概率$p= p_d(c,l) $增加$\delta(c,l) +1$，以概率$p=1- p_d(c,l) $增加$\delta(c,l)$。由上文，因$ \delta(c,l)=0$，则此阶段的更新算法为:系统对压缩计数器以概率$p= p_d(c,l) $增加$1$，以概率$p=1- p_d(c,l) $增加$0$。
 

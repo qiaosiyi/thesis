@@ -5,6 +5,9 @@ The style file: gbt7714-numerical.bst
 A level-1 auxiliary file: body/chapter_1.aux
 A level-1 auxiliary file: body/chapter_2.aux
 A level-1 auxiliary file: body/chapter_3.aux
+A level-1 auxiliary file: body/chapter_4.aux
+A level-1 auxiliary file: body/chapter_5.aux
+A level-1 auxiliary file: body/chapter_6.aux
 A level-1 auxiliary file: appendix/acknowledgements.aux
 A level-1 auxiliary file: setup/formatApp.aux
 A level-1 auxiliary file: appendix/appA.aux
@@ -18,45 +21,45 @@ Warning--I didn't find a database entry for "Manolakis2005"
 Warning--empty author in huawei2019
 Warning--empty author in cisco2019
 Warning--empty title in xilinx
-You've used 36 entries,
+You've used 105 entries,
             4418 wiz_defined-function locations,
-            1078 strings with 13106 characters,
-and the built_in function-call counts, 147703 in all, are:
-= -- 3295
-> -- 16465
-< -- 20408
-+ -- 5824
-- -- 1416
-* -- 1047
-:= -- 20577
-add.period$ -- 131
-call.type$ -- 36
-change.case$ -- 113
-chr.to.int$ -- 5189
-cite$ -- 41
-duplicate$ -- 674
-empty$ -- 2112
-format.name$ -- 437
-if$ -- 38799
-int.to.chr$ -- 8
-int.to.str$ -- 37
+            1400 strings with 26960 characters,
+and the built_in function-call counts, 564380 in all, are:
+= -- 11302
+> -- 65294
+< -- 80430
++ -- 22309
+- -- 5168
+* -- 3513
+:= -- 77830
+add.period$ -- 363
+call.type$ -- 105
+change.case$ -- 388
+chr.to.int$ -- 20133
+cite$ -- 110
+duplicate$ -- 2049
+empty$ -- 6318
+format.name$ -- 1568
+if$ -- 147601
+int.to.chr$ -- 9
+int.to.str$ -- 106
 missing$ -- 0
-newline$ -- 221
-num.names$ -- 102
-pop$ -- 6873
+newline$ -- 622
+num.names$ -- 309
+pop$ -- 28816
 preamble$ -- 1
-purify$ -- 36
+purify$ -- 105
 quote$ -- 0
-skip$ -- 15294
+skip$ -- 58148
 stack$ -- 0
-substring$ -- 6885
-swap$ -- 47
-text.length$ -- 306
+substring$ -- 26574
+swap$ -- 126
+text.length$ -- 1043
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 448
+type$ -- 1277
 warning$ -- 3
-while$ -- 390
+while$ -- 1333
 width$ -- 0
-write$ -- 488
+write$ -- 1427
 (There were 4 warnings)

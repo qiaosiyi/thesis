@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.14159265-2.6-0.999992 (TeX Live 2020/W32TeX) (preloaded format=xelatex 2020.6.28)  29 JUN 2020 22:39
+This is XeTeX, Version 3.14159265-2.6-0.999992 (TeX Live 2020/W32TeX) (preloaded format=xelatex 2020.6.28)  13 JUL 2020 00:30
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -981,6 +981,7 @@ LaTeX Info: Redefining \GenericWarning on input line 433.
 LaTeX Info: Redefining \GenericError on input line 601.
 )) (./main.aux
 (./body/chapter_1.aux) (./body/chapter_2.aux) (./body/chapter_3.aux)
+(./body/chapter_4.aux) (./body/chapter_5.aux) (./body/chapter_6.aux)
 (./appendix/acknowledgements.aux) (./setup/formatApp.aux) (./appendix/appA.aux)
 (./appendix/appB.aux) (./appendix/achievements.aux)
 (./appendix/authorization.aux))
@@ -1163,9 +1164,9 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 
 ]) (./setup/abstract-xiuwen.tex
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <12> on input line 28.
+(Font)              <12> on input line 25.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <6> on input line 28.
+(Font)              <6> on input line 25.
 
 
 Package Fancyhdr Warning: \headheight is too small (12.0pt): 
@@ -1176,48 +1177,48 @@ This may cause the page layout to be inconsistent, however.
 [1
 
 ] [2]
-Underfull \hbox (badness 10000) in paragraph at lines 51--52
+Underfull \hbox (badness 10000) in paragraph at lines 48--49
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 53--54
+Underfull \hbox (badness 10000) in paragraph at lines 50--51
 
  []
 
 [3
 
 
-]) (./setup/content.tex (./main.toc)
+]) (./setup/content.tex (./main.toc [4
+
+
+])
 \tf@toc=\write4
 \openout4 = `main.toc'.
 
- [4
+ [5] [6] (./main.toe [7
 
 
-] (./main.toe)
+])
 \tf@toe=\write5
 \openout5 = `main.toe'.
 
- [5
-
-
-] [6
+ [8]
+[9] [10
 
 
 ])
 \openout2 = `body/chapter_1.aux'.
 
-
-(./body/chapter_1.tex
+ (./body/chapter_1.tex
 1
-LaTeX Font Info:    Calculating math sizes for size <10.5> on input line 17.
+LaTeX Font Info:    Calculating math sizes for size <10.5> on input line 13.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <10.5> on input line 17.
+(Font)              <10.5> on input line 13.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <7.34996> on input line 17.
+(Font)              <7.34996> on input line 13.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <5.25> on input line 17.
+(Font)              <5.25> on input line 13.
 [1
 
 
@@ -1228,7 +1229,11 @@ File: figures/sdnarcs.pdf Graphic file (type pdf)
  [3] [4]
 File: figures/proghardwarePDParcs.pdf Graphic file (type pdf)
 <use figures/proghardwarePDParcs.pdf>
- [5] [6] [7]
+
+Overfull \vbox (1.83405pt too high) has occurred while \output is active []
+
+
+[5] [6] [7]
 File: figures/thesistree.pdf Graphic file (type pdf)
 <use figures/thesistree.pdf>
  [8]) [9]
@@ -1236,6 +1241,132 @@ File: figures/thesistree.pdf Graphic file (type pdf)
 
  (./body/chapter_2.tex
 2
+[10
+
+
+
+]
+
+Package Fancyhdr Warning: \headheight is too small (16.40778pt): 
+Make it at least 16.44879pt.
+We now make it that large for the rest of the document.
+This may cause the page layout to be inconsistent, however.
+
+[11]
+Overfull \vbox (1.08403pt too high) has occurred while \output is active []
+
+
+[12]
+File: figures/pdphistory.pdf Graphic file (type pdf)
+<use figures/pdphistory.pdf>
+ [13]
+File: figures/asicsmartnic.pdf Graphic file (type pdf)
+<use figures/asicsmartnic.pdf>
+ [14]
+File: figures/progsmartnic.pdf Graphic file (type pdf)
+<use figures/progsmartnic.pdf>
+ [15]
+File: figures/generalprog.pdf Graphic file (type pdf)
+<use figures/generalprog.pdf>
+ [16]
+File: figures/historyprocessors.pdf Graphic file (type pdf)
+<use figures/historyprocessors.pdf>
+ [17]
+File: figures/pktheader.pdf Graphic file (type pdf)
+<use figures/pktheader.pdf>
+File: figures/progparser.pdf Graphic file (type pdf)
+<use figures/progparser.pdf>
+ [18]
+File: figures/traditionalmatch.pdf Graphic file (type pdf)
+<use figures/traditionalmatch.pdf>
+File: figures/progmatch.pdf Graphic file (type pdf)
+<use figures/progmatch.pdf>
+ [19]
+File: figures/securechannel.pdf Graphic file (type pdf)
+<use figures/securechannel.pdf>
+ [20]
+Overfull \vbox (1.65826pt too high) has occurred while \output is active []
+
+
+[21]
+File: figures/rammatch.pdf Graphic file (type pdf)
+<use figures/rammatch.pdf>
+File: figures/tcammatch.pdf Graphic file (type pdf)
+<use figures/tcammatch.pdf>
+ [22]) [23]
+\openout2 = `body/chapter_3.aux'.
+
+ (./body/chapter_3.tex
+3
+[24
+
+
+
+] [25]
+File: figures/fpgaprogramabstraction.pdf Graphic file (type pdf)
+<use figures/fpgaprogramabstraction.pdf>
+ [26]
+File: figures/dcprinciple.pdf Graphic file (type pdf)
+<use figures/dcprinciple.pdf>
+ [27] [28]
+File: figures/jitter.pdf Graphic file (type pdf)
+<use figures/jitter.pdf>
+File: figures/tcpdumploss.pdf Graphic file (type pdf)
+<use figures/tcpdumploss.pdf>
+ [29]
+File: figures/caprepsoftway.pdf Graphic file (type pdf)
+<use figures/caprepsoftway.pdf>
+File: figures/caprephardway.pdf Graphic file (type pdf)
+<use figures/caprephardway.pdf>
+ [30]
+File: figures/arccaprep.pdf Graphic file (type pdf)
+<use figures/arccaprep.pdf>
+
+Overfull \vbox (1.2811pt too high) has occurred while \output is active []
+
+
+[31]
+File: figures/pktstruct.pdf Graphic file (type pdf)
+<use figures/pktstruct.pdf>
+ [32] [33] [34]
+
+Package xeCJK Warning: Unknown CJK family `\CJKttdefault' is being ignored.
+(xeCJK)                
+(xeCJK)                Try to use `\setCJKmonofont[...]{...}' to define it.
+
+[35]
+Missing character: There is no （ in font rm-lmr12!
+Missing character: There is no ） in font rm-lmr12!
+ [36]
+File: figures/logsearch.pdf Graphic file (type pdf)
+<use figures/logsearch.pdf>
+File: figures/searchtime.pdf Graphic file (type pdf)
+<use figures/searchtime.pdf>
+File: figures/originpipeline.pdf Graphic file (type pdf)
+<use figures/originpipeline.pdf>
+ [37] [38] [39] [40]) [41]
+\openout2 = `body/chapter_4.aux'.
+
+ (./body/chapter_4.tex
+4
+) [42
+
+
+
+]
+\openout2 = `body/chapter_5.aux'.
+
+ (./body/chapter_5.tex
+5
+) [43
+
+
+
+]
+\openout2 = `body/chapter_6.aux'.
+
+ (./body/chapter_6.tex
+6
 
 Package fontspec Info: Could not resolve font "SimHei/BI" (it probably doesn't
 (fontspec)             exist).
@@ -1260,27 +1391,21 @@ Package fontspec Info: Font family 'SimHei(0)' created for font 'SimHei' with
 ;"
 (fontspec)             - 'small caps'  (m/sc) with NFSS spec.: 
 
-) [10
+File: figures/echoes.pdf Graphic file (type pdf)
+<use figures/echoes.pdf>
+File: figures/xjtu_gray.pdf Graphic file (type pdf)
+<use figures/xjtu_gray.pdf>
+File: figures/xjtu_blue.pdf Graphic file (type pdf)
+<use figures/xjtu_blue.pdf>
+
+Package natbib Warning: Citation `Manolakis2005' on page 44 undefined on input 
+line 58.
+
+[44
 
 
 
-]
-\openout2 = `body/chapter_3.aux'.
-
- (./body/chapter_3.tex
-3
-)
-
-Package Fancyhdr Warning: \headheight is too small (16.40778pt): 
-Make it at least 16.44879pt.
-We now make it that large for the rest of the document.
-This may cause the page layout to be inconsistent, however.
-
-[11
-
-
-
-]
+] [45]) [46]
 \openout2 = `appendix/acknowledgements.aux'.
 
  (./appendix/acknowledgements.tex
@@ -1289,20 +1414,21 @@ Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 (hyperref)                \hskip 12.0pt
 (hyperref)                replaced by space on input line 3.
 
-) [12
+) [47
 
 
 
-] (./main.bbl [13
+] (./main.bbl [48
 
 
-]) [14]
+] [49] [50] [51] [52]) [53]
 \openout2 = `setup/formatApp.aux'.
 
  (./setup/formatApp.tex)
 \openout2 = `appendix/appA.aux'.
 
- (./appendix/appA.tex
+
+(./appendix/appA.tex
 附录A
 Package hyperref Info: bookmark level for unknown definition defaults to 0 on i
 nput line 9.
@@ -1312,7 +1438,7 @@ Package hyperref Info: bookmark level for unknown theorem defaults to 0 on inpu
 t line 36.
 Package hyperref Info: bookmark level for unknown proof defaults to 0 on input 
 line 47.
-) [15
+) [54
 
 
 
@@ -1322,66 +1448,55 @@ line 47.
 
  (./appendix/appB.tex
 附录B
-
-Package xeCJK Warning: Unknown CJK family `\CJKttdefault' is being ignored.
-(xeCJK)                
-(xeCJK)                Try to use `\setCJKmonofont[...]{...}' to define it.
-
 Package hyperref Info: bookmark level for unknown lstlisting defaults to 0 on i
 nput line 33.
-) [16
+) [55
 
 
 
 ]
 \openout2 = `appendix/achievements.aux'.
 
- (./appendix/achievements.tex [17
+ (./appendix/achievements.tex [56
 
-
-
-] [18
 
 
 ])
 \openout2 = `appendix/authorization.aux'.
 
  (./appendix/authorization.tex)
-[19
+[57
+
+
 
 
 ]
 \tf@thm=\write6
 \openout6 = `main.thm'.
 
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 35.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 35.
- (./main.aux (./body/chapter_1.aux) (./body/chapter_2.aux)
-(./body/chapter_3.aux) (./appendix/acknowledgements.aux) (./setup/formatApp.aux
-) (./appendix/appA.aux) (./appendix/appB.aux) (./appendix/achievements.aux)
+
+
+Package natbib Warning: There were undefined citations.
+
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 38.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 38.
+(./main.aux (./body/chapter_1.aux) (./body/chapter_2.aux) (./body/chapter_3.aux
+) (./body/chapter_4.aux) (./body/chapter_5.aux) (./body/chapter_6.aux)
+(./appendix/acknowledgements.aux) (./setup/formatApp.aux) (./appendix/appA.aux)
+(./appendix/appB.aux) (./appendix/achievements.aux)
 (./appendix/authorization.aux))
-Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 35.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 35.
-
-
-Package rerunfilecheck Warning: File `main.out' has changed.
-(rerunfilecheck)                Rerun to get outlines right
-(rerunfilecheck)                or use package `bookmark'.
-
-Package rerunfilecheck Info: Checksums for `main.out':
-(rerunfilecheck)             Before: 0AEF1FB97F17285A41A6A796A9472336;3177
-(rerunfilecheck)             After:  ED41BBD5A1787F245D40A1B794113888;2440.
-
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
-
+Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 38.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 38.
+Package rerunfilecheck Info: File `main.out' has not changed.
+(rerunfilecheck)             Checksum: 26A112896475C4253C8B67FF86E4B8AA;8883.
  ) 
 Here is how much of TeX's memory you used:
- 22899 strings out of 479277
- 447230 string characters out of 5883835
+ 23477 strings out of 479277
+ 465010 string characters out of 5883835
  994407 words of memory out of 5000000
- 40001 multiletter control sequences out of 15000+600000
- 583206 words of font info for 168 fonts, out of 8000000 for 9000
+ 40531 multiletter control sequences out of 15000+600000
+ 592035 words of font info for 172 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
- 57i,12n,84p,1064b,1875s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 57i,12n,84p,1274b,1877s stack positions out of 5000i,500n,10000p,200000b,80000s
 
-Output written on main.pdf (31 pages).
+Output written on main.pdf (73 pages).

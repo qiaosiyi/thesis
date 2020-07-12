@@ -1,4 +1,4 @@
-\begin{thebibliography}{36}
+\begin{thebibliography}{105}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{#1}
 \expandafter\ifx\csname urlstyle\endcsname\relax\else
@@ -124,14 +124,14 @@ LU~G, GUO~C, LI~Y, et~al.
 Nsdi: volume~11.
 \newblock [S.l.: s.n.], 2011: 2-2.
 
-\bibitem[Firestone et~al.(2018)Firestone, Putnam, Mundkur, Chiou, Dabagh,
-  Andrewartha, Angepat, Bhanu, Caulfield, Chung, et~al.]{azure}
+\bibitem[Firestone et~al.(2018{\natexlab{a}})Firestone, Putnam, Mundkur, Chiou,
+  Dabagh, Andrewartha, Angepat, Bhanu, Caulfield, Chung, et~al.]{azure}
 FIRESTONE~D, PUTNAM~A, MUNDKUR~S, et~al.
 \newblock Azure accelerated networking: Smartnics in the public
   cloud\allowbreak[C]//\allowbreak
 15th $\{$USENIX$\}$ Symposium on Networked Systems Design and Implementation
   ($\{$NSDI$\}$ 18).
-\newblock [S.l.: s.n.], 2018: 51-66.
+\newblock [S.l.: s.n.], 2018{\natexlab{a}}: 51-66.
 
 \bibitem[Zilberman et~al.(2014)Zilberman, Audzevich, Covington, and
   Moore]{netfpga2014}
@@ -260,10 +260,523 @@ NETFPGA.
 \newblock 2020.
 \newblock \url{https://netfpga.org/site/#/about/}.
 
+\bibitem[中国工业信息化部(2011)]{20112m}
+中国工业信息化部.
+\newblock 2012年使用4M宽带的用户将过半\allowbreak[EB/OL].
+\newblock 2011.
+\newblock \url{http://www.gov.cn/jrzg/2012-04/01/content_2104826.htm}.
+
+\bibitem[McKeown(1997)]{mckeown1997fast}
+MCKEOWN~N.
+\newblock A fast switched backplane for a gigabit switched
+  router\allowbreak[J].
+\newblock Business Communications Review, 1997, 27\penalty0 (12): 1-30.
+
+\bibitem[Katevenis et~al.(2004)Katevenis, Passas, Simos, Papaefstathiou, and
+  Chrysos]{katevenis2004variable}
+KATEVENIS~M, PASSAS~G, SIMOS~D, et~al.
+\newblock Variable packet size buffered crossbar (cicq)
+  switches\allowbreak[C]//\allowbreak
+2004 IEEE International Conference on Communications (IEEE Cat. No. 04CH37577):
+  volume~2.
+\newblock [S.l.]: IEEE, 2004: 1090-1096.
+
+\bibitem[Aybay(2000)]{aybay2000method}
+AYBAY~G.
+\newblock Method and apparatus for forwarding variable-length packets between
+  channel-specific packet processors and a crossbar of a multiport
+  switch\allowbreak[M].
+\newblock [S.l.]: Google Patents, 2000.
+
+\bibitem[Nachiondo et~al.(2009)Nachiondo, Flich, and
+  Duato]{nachiondo2009buffer}
+NACHIONDO~T, FLICH~J, DUATO~J.
+\newblock Buffer management strategies to reduce hol blocking\allowbreak[J].
+\newblock IEEE transactions on parallel and distributed systems, 2009,
+  21\penalty0 (6): 739-753.
+
+\bibitem[Cisco(2006)]{cisco12000seriesrouters}
+CISCO.
+\newblock Cisco 12000 series routers\allowbreak[EB/OL].
+\newblock 2006.
+\newblock
+  \url{https://www.cisco.com/c/en/us/products/routers/12000-series-routers/index.html}.
+
+\bibitem[Yoshigoe et~al.(2001)Yoshigoe and Christensen]{yoshigoe2001parallel}
+YOSHIGOE~K, CHRISTENSEN~K~J.
+\newblock A parallel-polled virtual output queued switch with a buffered
+  crossbar\allowbreak[C]//\allowbreak
+2001 IEEE Workshop on High Performance Switching and Routing (IEEE Cat. No.
+  01TH8552).
+\newblock [S.l.]: IEEE, 2001: 271-275.
+
+\bibitem[Heitner et~al.(2004)Heitner, Song, and Vianna]{heitner2004folded}
+HEITNER~M~L, SONG~J~J, VIANNA~R.
+\newblock Folded clos architecture switching\allowbreak[M].
+\newblock [S.l.]: Google Patents, 2004.
+
+\bibitem[Broadcom(2019)]{broadcom256t}
+BROADCOM.
+\newblock Tomahawk 4 industry’s highest bandwidth ethernet switch chip at
+  25.6tbps\allowbreak[EB/OL].
+\newblock 2019.
+\newblock
+  \url{https://www.globenewswire.com/news-release/2019/12/09/1958047/0/en/Broadcom-Ships-Tomahawk-4-Industry-s-Highest-Bandwidth-Ethernet-Switch-Chip-at-25-6-Terabits-per-Second.html}.
+
+\bibitem[Casado et~al.(2007)Casado, Freedman, Pettit, Luo, McKeown, and
+  Shenker]{casado2007ethane}
+CASADO~M, FREEDMAN~M~J, PETTIT~J, et~al.
+\newblock Ethane: Taking control of the enterprise\allowbreak[J].
+\newblock ACM SIGCOMM computer communication review, 2007, 37\penalty0 (4):
+  1-12.
+
+\bibitem[Al-Fares et~al.(2010)Al-Fares, Radhakrishnan, Raghavan, Huang, Vahdat,
+  et~al.]{al2010hedera}
+AL-FARES~M, RADHAKRISHNAN~S, RAGHAVAN~B, et~al.
+\newblock Hedera: dynamic flow scheduling for data center
+  networks.\allowbreak[C]//\allowbreak
+Nsdi: volume~10.
+\newblock [S.l.: s.n.], 2010: 89-92.
+
+\bibitem[Heller et~al.(2010)Heller, Seetharaman, Mahadevan, Yiakoumis, Sharma,
+  Banerjee, and McKeown]{heller2010elastictree}
+HELLER~B, SEETHARAMAN~S, MAHADEVAN~P, et~al.
+\newblock Elastictree: Saving energy in data center
+  networks.\allowbreak[C]//\allowbreak
+Nsdi: volume~10.
+\newblock [S.l.: s.n.], 2010: 249-264.
+
+\bibitem[ONF/TS-022(2015)]{openflowoptical}
+ONF/TS-022.
+\newblock Optical transport protocol extensions\allowbreak[EB/OL].
+\newblock 2015.
+\newblock
+  \url{https://3vf60mmveq1g8vzn48q2o71a-wpengine.netdna-ssl.com/wp-content/uploads/2014/10/Optical_Transport_Protocol_Extensions_V1.0.pdf}.
+
+\bibitem[Jain et~al.(2013)Jain, Kumar, Mandal, Ong, Poutievski, Singh, Venkata,
+  Wanderer, Zhou, Zhu, et~al.]{jain2013b4}
+JAIN~S, KUMAR~A, MANDAL~S, et~al.
+\newblock B4: Experience with a globally-deployed software defined
+  wan\allowbreak[J].
+\newblock ACM SIGCOMM Computer Communication Review, 2013, 43\penalty0 (4):
+  3-14.
+
+\bibitem[Aryaka(2017)]{aryakasdwan}
+ARYAKA.
+\newblock Managed sd-wan for digital transformation\allowbreak[EB/OL].
+\newblock 2017.
+\newblock
+  \url{https://www.aryaka.com/aryaka-sd-wan-solutions-for-manufacturing/}.
+
+\bibitem[ONF/TS-029(2017)]{openflowsptn}
+ONF/TS-029.
+\newblock Mpls-tp openflow protocol extensions for sptn\allowbreak[EB/OL].
+\newblock 2017.
+\newblock
+  \url{https://3vf60mmveq1g8vzn48q2o71a-wpengine.netdna-ssl.com/wp-content/uploads/2017/07/MPLS-TP-OpenFlow-Protocol-Extensions-for-SPTN-1-0.pdf}.
+
+\bibitem[De~Carli et~al.(2009)De~Carli, Pan, Kumar, Estan, and
+  Sankaralingam]{de2009plug}
+DE~CARLI~L, PAN~Y, KUMAR~A, et~al.
+\newblock Plug: flexible lookup modules for rapid deployment of new protocols
+  in high-speed routers\allowbreak[C]//\allowbreak
+Proceedings of the ACM SIGCOMM 2009 conference on Data communication.
+\newblock [S.l.: s.n.], 2009: 207-218.
+
+\bibitem[Anwer et~al.(2010)Anwer, Motiwala, Tariq, and
+  Feamster]{anwer2010switchblade}
+ANWER~M~B, MOTIWALA~M, TARIQ~M~B, et~al.
+\newblock Switchblade: a platform for rapid deployment of network protocols on
+  programmable hardware\allowbreak[C]//\allowbreak
+Proceedings of the ACM SIGCOMM 2010 conference.
+\newblock [S.l.: s.n.], 2010: 183-194.
+
+\bibitem[Intel(2013)]{intelflexpipe}
+INTEL.
+\newblock Intel ethernet switch fm6000 series\allowbreak[EB/OL].
+\newblock 2013.
+\newblock
+  \url{https://www.intel.com/content/dam/www/public/us/en/documents/product-briefs/ethernet-switch-fm6000-series-brief.pdf}.
+
+\bibitem[BAREFOOT(2017)]{tofino}
+BAREFOOT.
+\newblock The world's fastest p4 programmable ethernet switch
+  asics\allowbreak[EB/OL].
+\newblock 2017.
+\newblock \url{https://barefootnetworks.com/products/brief-tofino/}.
+
+\bibitem[Naous et~al.(2008)Naous, Erickson, Covington, Appenzeller, and
+  McKeown]{naous2008implementing}
+NAOUS~J, ERICKSON~D, COVINGTON~G~A, et~al.
+\newblock Implementing an openflow switch on the netfpga
+  platform\allowbreak[C]//\allowbreak
+Proceedings of the 4th ACM/IEEE Symposium on Architectures for Networking and
+  Communications Systems.
+\newblock [S.l.: s.n.], 2008: 1-9.
+
+\bibitem[Yabe(2011)]{yabe2011openflow}
+YABE~T.
+\newblock Openflow implementation on netfpga-10g design document\allowbreak[M].
+\newblock [S.l.]: Stanford University, 2011.
+
+\bibitem[Han et~al.(2015)Han, Mundkur, Rotsos, Antichi, Dave, Moore, and
+  Neumann]{han2015blueswitch}
+HAN~J~H, MUNDKUR~P, ROTSOS~C, et~al.
+\newblock Blueswitch: Enabling provably consistent configuration of network
+  switches\allowbreak[C]//\allowbreak
+2015 ACM/IEEE Symposium on Architectures for Networking and Communications
+  Systems (ANCS).
+\newblock [S.l.]: IEEE, 2015: 17-27.
+
+\bibitem[Li et~al.(2016)Li, Tan, Luo, Peng, Luo, Xu, Xiong, Cheng, and
+  Chen]{li2016clicknp}
+LI~B, TAN~K, LUO~L, et~al.
+\newblock Clicknp: Highly flexible and high performance network processing with
+  reconfigurable hardware\allowbreak[C]//\allowbreak
+Proceedings of the 2016 ACM SIGCOMM Conference.
+\newblock [S.l.: s.n.], 2016: 1-14.
+
+\bibitem[Wang et~al.(2017)Wang, Soul{\'e}, Dang, Lee, Shrivastav, Foster, and
+  Weatherspoon]{wang2017p4fpga}
+WANG~H, SOUL{\'E}~R, DANG~H~T, et~al.
+\newblock P4fpga: A rapid prototyping framework for
+  p4\allowbreak[C]//\allowbreak
+Proceedings of the Symposium on SDN Research.
+\newblock [S.l.: s.n.], 2017: 122-135.
+
+\bibitem[Xilinx(2017)]{sdnet}
+XILINX.
+\newblock Packet processor smartcore\allowbreak[EB/OL].
+\newblock 2017.
+\newblock
+  \url{https://www.xilinx.com/support/documentation-navigation/development-tools/software-development/sdnet.html}.
+
+\bibitem[Firestone et~al.(2018{\natexlab{b}})Firestone, Putnam, Mundkur, Chiou,
+  Dabagh, Andrewartha, Angepat, Bhanu, Caulfield, Chung,
+  et~al.]{firestone2018azure}
+FIRESTONE~D, PUTNAM~A, MUNDKUR~S, et~al.
+\newblock Azure accelerated networking: Smartnics in the public
+  cloud\allowbreak[C]//\allowbreak
+15th $\{$USENIX$\}$ Symposium on Networked Systems Design and Implementation
+  ($\{$NSDI$\}$ 18).
+\newblock [S.l.: s.n.], 2018{\natexlab{b}}: 51-66.
+
+\bibitem[Intel(2010)]{intelixp4xx}
+INTEL.
+\newblock Ixp4xx product line of network processors\allowbreak[EB/OL].
+\newblock 2010.
+\newblock
+  \url{https://www.intel.com/content/dam/www/public/us/en/documents/specification-updates/ixp4xx-product-line-network-processors-spec-update.pdf}.
+
+\bibitem[OpenSwitch(2010)]{xpliant}
+OPENSWITCH.
+\newblock Cavium-xpliant® family of programmable ethernet
+  switches\allowbreak[EB/OL].
+\newblock 2010.
+\newblock \url{https://www.openswitch.net/cavium/}.
+
+\bibitem[Netronome(2016)]{netronome}
+NETRONOME.
+\newblock Agilio cx 2x40gbe intelligent server adapter\allowbreak[EB/OL].
+\newblock 2016.
+\newblock \url{http://colfaxdirect.com/store/pc/catalog/Agilio-CX-2x40GbE.pdf}.
+
+\bibitem[Pagiamtzis et~al.(2006)Pagiamtzis and
+  Sheikholeslami]{pagiamtzis2006content}
+PAGIAMTZIS~K, SHEIKHOLESLAMI~A.
+\newblock Content-addressable memory (cam) circuits and architectures: A
+  tutorial and survey\allowbreak[J].
+\newblock IEEE journal of solid-state circuits, 2006, 41\penalty0 (3): 712-727.
+
+\bibitem[Feldman et~al.(2000)Feldman and Muthukrishnan]{feldman2000tradeoffs}
+FELDMAN~A, MUTHUKRISHNAN~S.
+\newblock Tradeoffs for packet classification\allowbreak[C]//\allowbreak
+Proceedings IEEE INFOCOM 2000. Conference on computer communications.
+  Nineteenth annual joint conference of the IEEE computer and communications
+  societies (Cat. No. 00CH37064): volume~3.
+\newblock [S.l.]: IEEE, 2000: 1193-1202.
+
+\bibitem[Kogan et~al.(2014)Kogan, Nikolenko, Rottenstreich, Culhane, and
+  Eugster]{kogan2014sax}
+KOGAN~K, NIKOLENKO~S, ROTTENSTREICH~O, et~al.
+\newblock Sax-pac (scalable and expressive packet
+  classification)\allowbreak[C]//\allowbreak
+Proceedings of the 2014 ACM conference on SIGCOMM.
+\newblock [S.l.: s.n.], 2014: 15-26.
+
+\bibitem[Srinivasan et~al.(1999)Srinivasan, Suri, and
+  Varghese]{srinivasan1999packet}
+SRINIVASAN~V, SURI~S, VARGHESE~G.
+\newblock Packet classification using tuple space
+  search\allowbreak[C]//\allowbreak
+Proceedings of the conference on Applications, technologies, architectures, and
+  protocols for computer communication.
+\newblock [S.l.: s.n.], 1999: 135-146.
+
+\bibitem[Greenhalgh et~al.(2009)Greenhalgh, Huici, Hoerdt, Papadimitriou,
+  Handley, and Mathy]{greenhalgh2009flow}
+GREENHALGH~A, HUICI~F, HOERDT~M, et~al.
+\newblock Flow processing and the rise of commodity network
+  hardware\allowbreak[J].
+\newblock ACM SIGCOMM Computer Communication Review, 2009, 39\penalty0 (2):
+  20-26.
+
+\bibitem[FlowForwarding(2013)]{lincswitch}
+FLOWFORWARDING.
+\newblock Link is not closed\allowbreak[EB/OL].
+\newblock 2013.
+\newblock \url{https://flowforwarding.github.io/LINC-Switch/}.
+
+\bibitem[Floodlight(2013)]{indigo}
+FLOODLIGHT.
+\newblock Open source project to support openflow on a range of physical and
+  now virtual switch platforms\allowbreak[EB/OL].
+\newblock 2013.
+\newblock \url{https://github.com/floodlight/indigo}.
+
+\bibitem[in~Brazil(2013)]{cpqd}
+IN~BRAZIL~E~I~C.
+\newblock Basic openflow software switch\allowbreak[EB/OL].
+\newblock 2013.
+\newblock \url{https://cpqd.github.io/ofsoftswitch13/}.
+
+\bibitem[Snabb(2015)]{snabbswitch}
+SNABB.
+\newblock Snabb switch:a simple and fast packet networking
+  toolkit\allowbreak[EB/OL].
+\newblock 2015.
+\newblock \url{https://github.com/snabbco/snabb}.
+
+\bibitem[Pfaff et~al.(2015)Pfaff, Pettit, Koponen, Jackson, Zhou, Rajahalme,
+  Gross, Wang, Stringer, Shelar, et~al.]{ovs}
+PFAFF~B, PETTIT~J, KOPONEN~T, et~al.
+\newblock The design and implementation of open
+  vswitch\allowbreak[C]//\allowbreak
+12th $\{$USENIX$\}$ Symposium on Networked Systems Design and Implementation
+  ($\{$NSDI$\}$ 15).
+\newblock [S.l.: s.n.], 2015: 117-130.
+
+\bibitem[Moln{\'a}r et~al.(2016)Moln{\'a}r, Pongr{\'a}cz, Enyedi, Kis, Csikor,
+  Juh{\'a}sz, K{\H{o}}r{\"o}si, and R{\'e}tv{\'a}ri]{molnar2016dataplane}
+MOLN{\'A}R~L, PONGR{\'A}CZ~G, ENYEDI~G, et~al.
+\newblock Dataplane specialization for high-performance openflow software
+  switching\allowbreak[C]//\allowbreak
+Proceedings of the 2016 ACM SIGCOMM Conference.
+\newblock [S.l.: s.n.], 2016: 539-552.
+
+\bibitem[Panda et~al.(2016)Panda, Han, Jang, Walls, Ratnasamy, and
+  Shenker]{panda2016netbricks}
+PANDA~A, HAN~S, JANG~K, et~al.
+\newblock Netbricks: Taking the v out of $\{$NFV$\}$\allowbreak[C]//\allowbreak
+12th $\{$USENIX$\}$ Symposium on Operating Systems Design and Implementation
+  ($\{$OSDI$\}$ 16).
+\newblock [S.l.: s.n.], 2016: 203-216.
+
+\bibitem[Consortium et~al.(2018)]{p42018behavioral}
+CONSORTIUM~P~L, et~al.
+\newblock Behavioral model (bmv2)\allowbreak[J].
+\newblock URL: https://github. com/p4lang/behavioral-model [cited 2020-01-21],
+  2018.
+
+\bibitem[Azure(2016)]{sonic}
+AZURE~M.
+\newblock Open source network operating system\allowbreak[EB/OL].
+\newblock 2016.
+\newblock \url{https://azure.github.io/SONiC/}.
+
+\bibitem[Dalton et~al.(2018)Dalton, Schultz, Adriaens, Arefin, Gupta, Fahs,
+  Rubinstein, Zermeno, Rubow, Docauer, et~al.]{dalton2018andromeda}
+DALTON~M, SCHULTZ~D, ADRIAENS~J, et~al.
+\newblock Andromeda: Performance, isolation, and velocity at scale in cloud
+  network virtualization\allowbreak[C]//\allowbreak
+15th $\{$USENIX$\}$ Symposium on Networked Systems Design and Implementation
+  ($\{$NSDI$\}$ 18).
+\newblock [S.l.: s.n.], 2018: 373-387.
+
+\bibitem[Shinde et~al.(2013)Shinde, Kaufmann, Roscoe, and
+  Kaestle]{shinde2013we}
+SHINDE~P, KAUFMANN~A, ROSCOE~T, et~al.
+\newblock We need to talk about nics\allowbreak[C]//\allowbreak
+Presented as part of the 14th Workshop on Hot Topics in Operating Systems.
+\newblock [S.l.: s.n.], 2013.
+
+\bibitem[Costa et~al.(2012)Costa, Donnelly, Rowstron, and
+  O'Shea]{costa2012camdoop}
+COSTA~P, DONNELLY~A, ROWSTRON~A, et~al.
+\newblock Camdoop: Exploiting in-network aggregation for big data
+  applications\allowbreak[C]//\allowbreak
+Presented as part of the 9th $\{$USENIX$\}$ Symposium on Networked Systems
+  Design and Implementation ($\{$NSDI$\}$ 12).
+\newblock [S.l.: s.n.], 2012: 29-42.
+
+\bibitem[Sapio et~al.(2017)Sapio, Abdelaziz, Aldilaijan, Canini, and
+  Kalnis]{sapio2017network}
+SAPIO~A, ABDELAZIZ~I, ALDILAIJAN~A, et~al.
+\newblock In-network computation is a dumb idea whose time has
+  come\allowbreak[C]//\allowbreak
+Proceedings of the 16th ACM Workshop on Hot Topics in Networks.
+\newblock [S.l.: s.n.], 2017: 150-156.
+
+\bibitem[Mai et~al.(2014)Mai, Rupprecht, Alim, Costa, Migliavacca, Pietzuch,
+  and Wolf]{mai2014netagg}
+MAI~L, RUPPRECHT~L, ALIM~A, et~al.
+\newblock Netagg: Using middleboxes for application-specific on-path
+  aggregation in data centres\allowbreak[C]//\allowbreak
+Proceedings of the 10th ACM International on Conference on emerging Networking
+  Experiments and Technologies.
+\newblock [S.l.: s.n.], 2014: 249-262.
+
+\bibitem[Graham et~al.(2016)Graham, Bureddy, Lui, Rosenstock, Shainer, Bloch,
+  Goldenerg, Dubman, Kotchubievsky, Koushnir, et~al.]{graham2016scalable}
+GRAHAM~R~L, BUREDDY~D, LUI~P, et~al.
+\newblock Scalable hierarchical aggregation protocol (sharp): a hardware
+  architecture for efficient data reduction\allowbreak[C]//\allowbreak
+2016 First International Workshop on Communication Optimizations in HPC
+  (COMHPC).
+\newblock [S.l.]: IEEE, 2016: 1-10.
+
+\bibitem[Liu et~al.(2017)Liu, Luo, Nelson, Ceze, Krishnamurthy, and
+  Atreya]{liu2017incbricks}
+LIU~M, LUO~L, NELSON~J, et~al.
+\newblock Incbricks: Toward in-network computation with an in-network
+  cache\allowbreak[C]//\allowbreak
+Proceedings of the Twenty-Second International Conference on Architectural
+  Support for Programming Languages and Operating Systems.
+\newblock [S.l.: s.n.], 2017: 795-809.
+
+\bibitem[Sanvito et~al.(2018)Sanvito, Siracusano, and Bifulco]{sanvito2018can}
+SANVITO~D, SIRACUSANO~G, BIFULCO~R.
+\newblock Can the network be the ai accelerator?\allowbreak[C]//\allowbreak
+Proceedings of the 2018 Morning Workshop on In-Network Computing.
+\newblock [S.l.: s.n.], 2018: 20-25.
+
+\bibitem[Siracusano et~al.(2018)Siracusano and Bifulco]{innetworknn}
+SIRACUSANO~G, BIFULCO~R.
+\newblock In-network neural networks\allowbreak[EB/OL].
+\newblock 2018.
+\newblock \url{https://arxiv.org/pdf/1801.05731.pdf}.
+
+\bibitem[Jouppi et~al.(2017)Jouppi and Young]{tpugoogle}
+JOUPPI~N~P, YOUNG~C.
+\newblock In-datacenter performance analysis of a tensor processing
+  unit\allowbreak[EB/OL].
+\newblock 2017.
+\newblock \url{https://arxiv.org/ftp/arxiv/papers/1704/1704.04760.pdf}.
+
+\bibitem[Miao et~al.(2017)Miao, Zeng, Kim, Lee, and Yu]{miao2017silkroad}
+MIAO~R, ZENG~H, KIM~C, et~al.
+\newblock Silkroad: Making stateful layer-4 load balancing fast and cheap using
+  switching asics\allowbreak[C]//\allowbreak
+Proceedings of the Conference of the ACM Special Interest Group on Data
+  Communication.
+\newblock [S.l.: s.n.], 2017: 15-28.
+
+\bibitem[Lapolli et~al.(2019)Lapolli, Marques, and
+  Gaspary]{lapolli2019offloading}
+LAPOLLI~{\^A}~C, MARQUES~J~A, GASPARY~L~P.
+\newblock Offloading real-time ddos attack detection to programmable data
+  planes\allowbreak[C]//\allowbreak
+2019 IFIP/IEEE Symposium on Integrated Network and Service Management (IM).
+\newblock [S.l.]: IEEE, 2019: 19-27.
+
+\bibitem[Yang et~al.(2018)Yang, Jiang, Liu, Huang, Gong, Zhou, Miao, Li, and
+  Uhlig]{yang2018elastic}
+YANG~T, JIANG~J, LIU~P, et~al.
+\newblock Elastic sketch: Adaptive and fast network-wide
+  measurements\allowbreak[C]//\allowbreak
+Proceedings of the 2018 Conference of the ACM Special Interest Group on Data
+  Communication.
+\newblock [S.l.: s.n.], 2018: 561-575.
+
+\bibitem[Kim et~al.(2015)Kim, Sivaraman, Katta, Bas, Dixit, and
+  Wobker]{kim2015band}
+KIM~C, SIVARAMAN~A, KATTA~N, et~al.
+\newblock In-band network telemetry via programmable
+  dataplanes\allowbreak[C]//\allowbreak
+ACM SIGCOMM.
+\newblock [S.l.: s.n.], 2015.
+
+\bibitem[Jin et~al.(2017)Jin, Li, Zhang, Soul{\'e}, Lee, Foster, Kim, and
+  Stoica]{jin2017netcache}
+JIN~X, LI~X, ZHANG~H, et~al.
+\newblock Netcache: Balancing key-value stores with fast in-network
+  caching\allowbreak[C]//\allowbreak
+Proceedings of the 26th Symposium on Operating Systems Principles.
+\newblock [S.l.: s.n.], 2017: 121-136.
+
+\bibitem[Science(2018)]{lec8rmtp4}
+SCIENCE~N~C.
+\newblock Rmt and p4 notes\allowbreak[EB/OL].
+\newblock 2018.
+\newblock
+  \url{https://cs.nyu.edu/~anirudh/CSCI-GA.2620-001/lectures/lec8_rmt_p4.txt}.
+
+\bibitem[Toonk(2020)]{linux2020andree}
+TOONK~A.
+\newblock Linux kernel and measuring network throughput.\allowbreak[EB/OL].
+\newblock 2020.
+\newblock
+  \url{https://medium.com/devops-dudes/linux-kernel-and-measuring-network-throughput-547c3b68c4d2}.
+
+\bibitem[Bernat(2017)]{bernat2017performance}
+BERNAT~V.
+\newblock Performance progression of ipv4 route lookup on
+  linux\allowbreak[EB/OL].
+\newblock 2017.
+\newblock
+  \url{https://vincent.bernat.ch/en/blog/2017-performance-progression-ipv4-route-lookup-linux}.
+
+\bibitem[Kannan et~al.(2013)Kannan and Banerjee]{kannan2013compact}
+KANNAN~K, BANERJEE~S.
+\newblock Compact tcam: Flow entry compaction in tcam for power aware
+  sdn\allowbreak[C]//\allowbreak
+International conference on distributed computing and networking.
+\newblock [S.l.]: Springer, 2013: 439-444.
+
+\bibitem[周亚东\ 等(2017)周亚东, 陈凯悦, 冷俊园, and
+  胡成臣]{zhouyadong2017liubiao}
+周亚东, 陈凯悦, 冷俊园, 等.
+\newblock
+  软件定义网络流表溢出脆弱性分析及防御方法\allowbreak[J].
+\newblock 西安交通大学学报, 2017\penalty0 (10): 53-58.
+
+\bibitem[郑鹏\ 等(2018)郑鹏, 胡成臣, and 李昊]{zhengpeng2018uflow}
+郑鹏, 胡成臣, 李昊.
+\newblock 基于流量特征的 OpenFlow
+  南向接口开销优化技术\allowbreak[J].
+\newblock 计算机研究与发展, 2018, 55\penalty0 (2): 346-357.
+
+\bibitem[Hu et~al.(2013)Hu, Liu, Zhao, Chen, Chen, Cheng, and
+  Wu]{hu2013discount}
+HU~C, LIU~B, ZHAO~H, et~al.
+\newblock Discount counting for fast flow statistics on flow size and flow
+  volume\allowbreak[J].
+\newblock IEEE/ACM Transactions on Networking, 2013, 22\penalty0 (3): 970-981.
+
+\bibitem[Xilinx(2020)]{alveou250}
+XILINX.
+\newblock Alveo u200 and u250 data center accelerator cards data
+  sheet\allowbreak[EB/OL].
+\newblock 2020.
+\newblock
+  \url{https://www.xilinx.com/support/documentation/data_sheets/ds962-u200-u250.pdf}.
+
+\bibitem[Xilinx(2015)]{xilinxmulti}
+XILINX.
+\newblock Multiplier v12.0\allowbreak[EB/OL].
+\newblock 2015.
+\newblock
+  \url{https://www.xilinx.com/support/documentation/ip_documentation/mult_gen/v12_0/pg108-mult-gen.pdf}.
+
 \bibitem[Lee(2016)]{Lee2016}
 LEE~Z.
 \newblock GB/T 7714-2015 参考文献 BiBTeX 样式\allowbreak[EB/OL].
 \newblock 2016.
 \newblock \url{https://github.com/zepinglee/gbt7714-bibtex-style}.
+
+\bibitem[Vetterli et~al.(2014)Vetterli, Kovacevic, and Goyal]{Vetterli2014}
+VETTERLI~M, KOVACEVIC~J, GOYAL~V~K.
+\newblock Foundations of signal processing\allowbreak[M].
+\newblock Cambridge: Cambridge University Press, 2014.
 
 \end{thebibliography}
