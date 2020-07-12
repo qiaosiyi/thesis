@@ -284,7 +284,7 @@ f(c)=\frac{b^c-1}{b-1}
 
 
 \begin{algorithm}[ht]
-	\caption{DISCO算法的估计方法 \label{discoa1}}
+	\caption{DISCO算法计数器估计更新方法 \label{discoa1}}
 	\IncMargin{2em}
 	\DontPrintSemicolon
 %	\KwIn{$\mbf{x}(k), \quad \mu, \quad \mbf{w}(0)$}
@@ -332,13 +332,13 @@ DISCO算法提出后，由软件实现并达到单CPU核心11Gbps处理能力。
 
 使用查表法加速指数计算可获得很好的效果，但对数计算（$ log（X） $）即指数反函数计算无法实现一周期出结果。对数计算一般反向利用指数表进行二分估计。如图\ref{fig:logsearch}所示，左边为上述的指数预计算查找表。初始化值，c=0，f(c)=0，假设此时到来数据包长度为1500字节。根据公式\ref{discofun2}计算$ \delta(c,l)$，以及公式\ref{discofun3}计算$p_d(c,l) $。首先，在计算$ \delta(c,l)$时，最关键需要计算 $ f^{-1}(l+f(c)) $，带入$ l=1500 $、 $ f(0)=0 $，得到：
 
-\begin{equation} \label{discofun3}
+\begin{equation} \label{discofun4}
 f^{-1}(1500+0) = x \rightarrow f(x)=1500 = \dfrac{b^x-1}{b-1}
 \end{equation}
 
 带入b=1.006，经过变换：
 
-\begin{equation} \label{discofun3}
+\begin{equation} \label{discofun5}
 b^x=1500\times(b-1)+1\\
 = 1500\times 0.006+1\\
 =10
@@ -364,11 +364,114 @@ b^x=1500\times(b-1)+1\\
 
 3）存在问题。
 
-本文总结上述分析，并将基于软件的DISCO算法硬件流水线在图展示。
+\begin{figure}[!ht]
+	\centering
+	\includegraphics[scale=1]{originpipeline.pdf}
+	\caption{压缩统计硬件流水线设计（未优化）} \label{fig:originpipeline}
+\end{figure}
+
+本文总结上述分析，并将基于软件的DISCO算法硬件流水线在图\ref{fig:originpipeline}中展示。当数据包到达系统，首先获取当前对应流的统计量$ C_i $，之后由指数计算和对数计算模块求出中间变量，最后通过四则运算得到关键判定值$ \delta(c,l)$和$p_d(c,l) $。对其进行性能分析：硬件设计为提高吞吐量一般采用流水线设计。为统合前后分级的节拍，要求每一级流水线的时延固定。本文发现二分查找虽然平均时延只有7周期，但最长时延可达到12周期，最短只需1周期，因此为了使流水线对外表现稳定，需要在硬件设计逻辑是增加许多配合打拍的逻辑，资源效率较低。另外在计算关键判定值时需要使用两次除法器。逻辑除法在FPGA设计中一般耗时需要40个周期以上，虽然除法器可以以流水线方式工作以提高吞吐，但本算法有一个更新闭环，在只有一条流量的时候，前后两次更新时间内不可进入流水线计算。
+因此一次更新所耗费的时长大约为50个周期，假设FPGA数据通路主频是300MHz，因而更新频率只有6Mpps。若对应64字节最小包，硬件加速后也只能达到4Gbps线速，与本文100Gbps设计目标相差甚远。
 
 \BiSubsection{优化}{aa}
 
 1）符合DC抽象的算法优化方法
+
+前文提到的优化设计方法原则1：每一级有应有固定的节拍数。因为更新压缩表有强烈前后依赖关系，因此找到如何缩短整体处理时间，以及将可变动节拍计算逻辑固定化（应向减少节拍的方向优化）是本文的重大挑战。
+
+本文发现，若$ c $值处于比较大的阶段，当进行每包更新时，$ c $与更新值$ c' $的差值最大为1。即，公式\ref{discofun2}中$ \delta(c,l)=0$。因此，根据算法\ref{discoa1}，有：
+
+\begin{equation} \label{mydiscof1}
+c'=c+\delta(c,l) + 1 =c+1
+\end{equation}
+
+这是一个很重要的现象，由前一节本文提到，若想加速环节内的计算速度，须减少更新循环内耗费的时钟周期数。则要将时序数可变的逻辑修正为固定时序逻辑，且应该尽量朝向能够减小时钟周期占数的方向。如果只需要判断c更新后的值加一与否，也许可以避免掉大量的对数二分查找过程。因此本文首先分析，当$ \delta(c,l)=0$时系统状态。由公式\ref{discofun2}与\ref{discofun3},本文得到：
+
+\begin{align}
+\delta(c,l) =  \lceil f^{-1}(l+f(c)) - c \rceil -1 &= 0 \nonumber \\
+\lceil f^{-1}(l+f(c)) - c \rceil &= 1 %\\
+%\lceil f^{-1}(l+f(c)) - f^{-1}(f(c)) \rceil &= 1 
+\end{align}
+
+因此，得到：
+
+
+\begin{align}
+0 &\leq f^{-1}(l+f(c)) - c \leq 1 \nonumber  \\
+0 &\leq f^{-1}(l+f(c)) - f^{-1}(f(c)) \leq 1
+%\lceil f^{-1}(l+f(c)) - f^{-1}(f(c)) \rceil &= 1 
+\end{align}
+
+%\begin{equation} \label{mydiscof1}
+%
+%\end{equation}
+
+由于$f^{-1}(\cdot)$是增函数，且$l>0$，显然上述公式为正值，因此上述公式可变为：
+
+%\begin{equation} \label{mydiscof2}
+%f^{-1}(l+f(c)) - f^{-1}(f(c)) \leq 1
+%\end{equation}
+
+\begin{align}\label{mydiscof2}
+f^{-1}(l+f(c)) - f^{-1}(f(c)) &\leq 1 \nonumber  \\
+f^{-1}(l+f(c)) - c &\leq 1 \nonumber  \\
+f^{-1}(l+f(c))  &\leq c + 1  \nonumber \\
+l+f(c) &\leq f(c+1) \nonumber  \\
+f(c+1) - f(c) &\geq l
+\end{align}
+
+在以太网规范中，包长$l \in [64,1518]$，因此根据上式可知：须满足左边大于1518:
+
+\begin{equation} \label{mydiscof3}
+f(c+1) - f(c) \geq 1518
+\end{equation}
+
+则根据公式\ref{mydiscof3}，一定可找到一个最小的$ c_{lmin} $值，满足：对于任意$ c \geq c_{lmin} $ 时，均有$ \delta(c,l)=0$。
+
+下面关注$ p_d(c,l) $，DISCO算法\ref{discoa1}对$ p_d(c,l) $的描述为：系统对压缩计数器以概率$p= p_d(c,l) $增加$\delta(c,l) +1$，以概率$p=1- p_d(c,l) $增加$\delta(c,l)$。由上文，因$ \delta(c,l)=0$，则此阶段的更新算法为:系统对压缩计数器以概率$p= p_d(c,l) $增加$1$，以概率$p=1- p_d(c,l) $增加$0$。
+
+由公式\ref{discofun3}、以及条件$ \delta(c,l)=0$，得到：
+
+\begin{align}\label{mydiscof4}
+p_d(c,l) &= \dfrac{l+f(c)-f(c+\delta(c,l))}{f(c+\delta(c,l)+1)-f(c+\delta(c,l))}  \nonumber \\
+&= \dfrac{l+f(c)-f(c+0)}{f(c+0+1)-f(c+0)} \nonumber  \\
+&= \dfrac{l}{f(c+1)-f(c)} 
+\end{align}
+
+
+
+观察上式，本文发现，当$ c \geq c_{lmin} $ ，DISCO的计算操作可化简为算法\ref{discoa2}：
+
+\begin{algorithm}[ht]
+	\caption{当$ c \geq c_{lmin} $时约化的压缩算法 \label{discoa2}}
+	\IncMargin{2em}
+	\DontPrintSemicolon
+	%	\KwIn{$\mbf{x}(k), \quad \mu, \quad \mbf{w}(0)$}
+	%	\KwOut{$y(k), \quad \varepsilon(k)$}
+	%
+	$ v = random(0,1) $
+
+	$ p_d(c,l)=\dfrac{l}{f(c+1)-f(c)} $ \tcp*{计算概率值}
+	
+	\eIf{$ v \leq  p_d(c,l)  $}
+	{$ c = c +  1 $ \tcp*{根据概率值，计数器只增加1}}
+	{$ c = c   $ }
+\end{algorithm}
+
+但此式中依然包含了硬件除法，由前文分析知，此步骤须耗费数十个时钟周期\footnote{根据不同结果保留精度以及除数被除数位宽需求，商用Xilinx除法器IP核须要耗费40到80个时钟周期不等。}，因此本文将概率计算公式继续化简为查表算法。这将解决本文提出优化希望的第二个重点问题：计算依赖数据之间的时钟周期数量过大。
+
+观察公式\ref{mydiscof4}，简化后概率$ p_d() $与两个变量$ c,l $有关，且计算时只依赖于简单函数计算过程。$ c $的范围在$ [1,3072] $之间，$ l $的范围在$ [64,1518] $之间。因此c与l合成的总体表项有4百万个，总共需耗费片上存储空间约32Mb--128Mb\footnote{以8bits或32bits为结果存储位宽计算。}由于FPGA内高速片上存储资源相对较少，实验用ONetCard网卡只有16Mb，然而目前比较高端的FPGA片上存储也只有100Mb左右\citeup{alveou250}。设计过程中需要折中考虑资源占用与计算速度的互相矛盾的关系。显然查表内容占据了过多硬件资源，在工程实践上是不合理的。
+
+接下来我们继续观察公式\ref{mydiscof4}，可发现：
+
+\begin{align}\label{mydiscof5}
+p_d(c,l) &= \dfrac{l}{f(c+1)-f(c)}   \nonumber \\
+&= \dfrac{1}{f(c+1)-f(c)} \times l 
+\end{align}
+
+上式表明，参数$ p_d(c,l) $可分解为两部分，第一部分只与$ c $相关，另外一部分是一个乘数系数。因此，本文将查表过程分解为两步：第一步，根据参数c查找数值$ p_c= \dfrac{1}{f(c+1)-f(c)} $；第二步，计算$ p_d = p_c \times l $从而得到所需概率$ p_d(c,l) $。因此硬件中出了一个深度为3k的表，还需要一个12bits$\times$12bits的窄单周期乘法器\citeup{xilinxmulti}即可，最大总共消耗两周期即可完成所有计算。
+%在实现时，pc的位宽20bits解释一下，总共32bits，然后pc的范围，，，，画总体实现架构，写 表生成的算法，写新算法。给出一个例子。参考论文吧，乔思祎2020年7月12日19:24:45
+
 
 2）无偏估计证明
 
