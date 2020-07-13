@@ -24,4 +24,6 @@ for c in range(3072):
   zhishu = 6+math.pow(1.006,c)
   b = math.log(zhishu,1.006)
   cishu = int(math.log(3072 - b,2))
-  print c,"\t",cishu 
+  # print c,"\t",cishu 
+
+print math.log(2829359,2)

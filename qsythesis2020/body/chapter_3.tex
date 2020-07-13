@@ -385,7 +385,7 @@ b^x=1500\times(b-1)+1\\
 c'=c+\delta(c,l) + 1 =c+1
 \end{equation}
 
-这是一个很重要的现象，由前一节本文提到，若想加速环节内的计算速度，须减少更新循环内耗费的时钟周期数。则要将时序数可变的逻辑修正为固定时序逻辑，且应该尽量朝向能够减小时钟周期占数的方向。如果只需要判断c更新后的值加一与否，也许可以避免掉大量的对数二分查找过程。因此本文首先分析，当$ \delta(c,l)=0$时系统状态。由公式\ref{discofun2}与\ref{discofun3},本文得到：
+这是一个很重要的现象，由前一节本文提到，若想加速环节内的计算速度，须减少更新循环内耗费的时钟周期数。则要将时序数可变的逻辑修正为固定时序逻辑，且应该尽量朝向能够减小时钟周期占数的方向。如果只需要判断c更新后的值加一与否，也许可以避免掉大量的对数二分查找过程。另外对于当c比较小的时候，本文将其计数转化为线性增加，因此计算复杂度也很低，若c较小也表明占用的计数位宽度不会很大。接下来本文分析此方案的可行性。本文首先分析，当$ \delta(c,l)=0$时系统状态。由公式\ref{discofun2}与\ref{discofun3},本文得到：
 
 \begin{align}
 \delta(c,l) =  \lceil f^{-1}(l+f(c)) - c \rceil -1 &= 0 \nonumber \\
@@ -420,15 +420,15 @@ l+f(c) &\leq f(c+1) \nonumber  \\
 f(c+1) - f(c) &\geq l
 \end{align}
 
-在以太网规范中，包长$l \in [64,1518]$，因此根据上式可知：须满足左边大于1518:
+在以太网规范中，包长$l \in [64,1518]$，根据上述不等式可知：须满足左边大于1518则不等式恒成立:
 
 \begin{equation} \label{mydiscof3}
 f(c+1) - f(c) \geq 1518
 \end{equation}
 
-由于$ f(\cdot) $是增函数且导数始终大于零，则一定可找到一个最小的$ c_{lmin} $值，满足：对于任意$ c \geq c_{lmin} $ 时，均有上式成立，也即$\delta(c,l) =0$。
+由于$ f(\cdot) $是增函数且导数始终大于零，则一定可找到一个最小的$ c_{lmin} $值，满足：对于任意$ c \geq c_{lmin} $ 时，均有上式（\ref{mydiscof3}）成立，也即$\delta(c,l) =0$。
 
-下面关注$ p_d(c,l) $，DISCO算法\ref{discoa1}对$ p_d(c,l) $的描述为：系统对压缩计数器以概率$p= p_d(c,l) $增加$\delta(c,l) +1$，以概率$p=1- p_d(c,l) $增加$\delta(c,l)$。由上文，因$ \delta(c,l)=0$，则此阶段的更新算法为:系统对压缩计数器以概率$p= p_d(c,l) $增加$1$，以概率$p=1- p_d(c,l) $增加$0$。
+下面关注此条件下$ p_d(c,l) $的计算过程，DISCO算法\ref{discoa1}对$ p_d(c,l) $的描述为：系统对压缩计数器以概率$p= p_d(c,l) $增加$\delta(c,l) +1$，以概率$p=1- p_d(c,l) $增加$\delta(c,l)$。由上文，因$ \delta(c,l)=0$，则此阶段的更新算法为:系统对压缩计数器以概率$p= p_d(c,l) $增加$1$，以概率$p=1- p_d(c,l) $增加$0$。
 
 由公式\ref{discofun3}、以及条件$ \delta(c,l)=0$，得到：
 
@@ -458,18 +458,171 @@ p_d(c,l) &= \dfrac{l+f(c)-f(c+\delta(c,l))}{f(c+\delta(c,l)+1)-f(c+\delta(c,l))}
 	{$ c = c   $ }
 \end{algorithm}
 
+\begin{algorithm}[ht]
+	\caption{求解硬件压缩算法不同阶段判定标志位$c_{lmax}$  \label{mydiscoa2}}
+	\IncMargin{2em}
+	\DontPrintSemicolon
+	\KwIn{$b$ - 函数$f(c)$中的预定义参数}
+	\KwOut{$c_{lmax}$ - 基于硬件DISCO压缩算法中判断标志位}
+	%
+	$ 	PKT\_Length\_MAX = 1518 $
+	
+	$ c=0 $
+	
+	\While{True}{
+		$ c++ $	
+		
+		$ f(c+1)=\dfrac{b^{c+1}-1}{b-1} $
+		
+		$ f(c)=\dfrac{b^{c}-1}{b-1} $
+		
+		\If{$ f(c+1)-f(c)\geq PKT\_Length\_MAX $}{
+			$ c_{lmax} = c $
+			
+			\Return $ c_{lmax} $
+		}
+	}
+	
+\end{algorithm}
+
 但此式中依然包含了硬件除法，由前文分析知，此步骤须耗费数十个时钟周期\footnote{根据不同结果保留精度以及除数被除数位宽需求，商用Xilinx除法器IP核须要耗费40到80个时钟周期不等。}，因此本文将概率计算公式继续化简为查表算法。这将解决本文提出优化希望的第二个重点问题：计算依赖数据之间的时钟周期数量过大。
 
-观察公式\ref{mydiscof4}，简化后概率$ p_d() $与两个变量$ c,l $有关，且计算时只依赖于简单函数计算过程。$ c $的范围在$ [1,3072] $之间，$ l $的范围在$ [64,1518] $之间。因此c与l合成的总体表项有4百万个，总共需耗费片上存储空间约32Mb--128Mb\footnote{以8bits或32bits为结果存储位宽计算。}由于FPGA内高速片上存储资源相对较少，实验用ONetCard网卡只有16Mb，然而目前比较高端的FPGA片上存储也只有100Mb左右\citeup{alveou250}。设计过程中需要折中考虑资源占用与计算速度的互相矛盾的关系。显然查表内容占据了过多硬件资源，在工程实践上是不合理的。
+观察公式\ref{mydiscof4}，简化后概率$ p_d() $与两个变量$ c,l $有关，且计算时只依赖于简单函数计算过程。$ c $的范围在$ [1,3072] $之间，$ l $的范围在$ [64,1518] $之间。因此c与l合成的总体表项有4百万个，总共需耗费片上存储空间约32Mb--128Mb\footnote{以8bits或32bits为结果存储位宽计算。}由于FPGA内高速片上存储资源相对较少，实验用ONetCard网卡只有16Mb，然而目前比较高端的FPGA片上存储也只有100Mb左右\citeup{alveou250}。设计过程中需要折中考虑资源占用与计算速度的互相矛盾的关系。显然查表占据了过多硬件资源，在工程实践上是不合理的。
 
-接下来我们继续观察公式\ref{mydiscof4}，可发现：
+接下来继续观察公式\ref{mydiscof4}，可发现：
 
 \begin{align}\label{mydiscof5}
 p_d(c,l) &= \dfrac{l}{f(c+1)-f(c)}   \nonumber \\
 &= \dfrac{1}{f(c+1)-f(c)} \times l 
 \end{align}
 
-上式表明，参数$ p_d(c,l) $可分解为两部分，第一部分只与$ c $相关，另外一部分是一个乘数系数。因此，本文将查表过程分解为两步：第一步，根据参数c查找数值$ p_c= \dfrac{1}{f(c+1)-f(c)} $；第二步，计算$ p_d = p_c \times l $从而得到所需概率$ p_d(c,l) $。因此硬件中出了一个深度为3k的表，还需要一个12bits$\times$12bits的窄单周期乘法器\citeup{xilinxmulti}即可，最大总共消耗两周期即可完成所有计算。
+上式表明，参数$ p_d(c,l) $可分解为两部分，第一部分只与$ c $相关，另外一部分是一个乘数系数$l$。因此，本文将查表过程分解为两步：第一步，根据参数c查找数值$ p_c= \dfrac{1}{f(c+1)-f(c)} $，本文称此查找表为PLUT（$p_d$ Look Up Table）；第二步，计算$ p_d = p_c \times l $从而得到所需概率$ p_d(c,l) $。
+
+\begin{algorithm}[ht]
+	\caption{求解快速概率计算PLUT查找表  \label{mydiscoa3}}
+	\IncMargin{2em}
+	\DontPrintSemicolon
+	\KwIn{$b$ - 函数$f(c)$中的预定义参数; $c_{lmax}$}
+	\KwOut{$PLUT$ -快速概率计算查找表}
+	%
+	$Depth = 3072 $ \tcp*{查找表最深为3K条表项}
+	
+	$ PLUT[3072] $
+	
+	\For{$c=c_{lmax}$ , $c_{lmax}+1$ , $\cdots$,$ Depth $}{
+		
+		$ f(c+1)=\dfrac{b^{c+1}-1}{b-1} $
+		
+		$ f(c)=\dfrac{b^{c}-1}{b-1} $
+		
+		$ 	p_c=\dfrac{1}{f(c+1)-f(c)}\times 2^{21.4} $
+		
+		$ PLUT[c] = p_c $ \tcp*{保存表项内容}
+	}
+\end{algorithm}
+
+
+
+系统在初始化之前须计算PLUT表项中的值。概率值是一个归一化的数值，但在硬件中浮点数的处理比较复杂且存储效率低。本文将概率归一化为32bits最大的整数值（$2^{32}=4294967295$），因此$ p_c \times l  $不应超过 $ 2^{32} $，$ p_c $的最大值应满足$ l_{max} \times p_{cmax} = 2^{32 } $ ，得到：
+
+\begin{equation} \label{mydiscof6}
+p_{cmax} = \dfrac{2^{32}}{1518} =2829359.2=2^{21.4}
+\end{equation}
+
+
+
+因此硬件中除了一个深度为3k的表，还需要一个22bits$\times$12bits（PLUT$\times l$）的窄单周期乘法器\citeup{xilinxmulti}即可，最大总共消耗两周期即可完成所有计算。设计中的查找表占片上存储容量约9KB（=3K 深度$\times$3Bytes），远小于板上资源限制条件。
+
+\begin{algorithm}[!h]
+	\caption{硬件统计压缩算法（优化）  \label{mydiscoa4}}
+	\IncMargin{2em}
+	\DontPrintSemicolon
+	\KwIn{$l$ - 每个到达数据包的待统计包长度;   $id$ - 每个数据包的流分类标号;  $ Counter\_Table[] $ - 统计计数器存储组; \\ \quad\quad\quad $c_{lmax}$ - 基于硬件DISCO压缩算法中判断标志位}
+	\KwOut{完成快速更新统计表$ Counter\_Table[id] $}
+	$f(c)=\dfrac{b^c-1}{b-1}$ \tcp*{初始化过程}
+	
+	$M\_Number = f(c_{lmax}) $ \tcp*{计算判断标志位所对应的统计容量}
+	
+	$ Counter\_Table[id] = 0 $ \tcp*{计数器初始值均为0}
+	
+	\tcp*{循环开始，针对每个到达数据包都做计算}
+	\For{ Each incoming packet}{ 
+		$ v = random(0, 2^{32}) $         \tcp*{获取一个随机数字，范围为0-4字节内任意数字}
+		
+		$ c_{current} = Counter\_Table[id] $
+		
+		
+		\eIf{$ c_{current} + l \leq M\_Number $}{ 
+			
+			$ c' = c_{current} + l $ \tcp*{判断是否属于第一阶段，只进行线性统计并更新}
+			
+			$ Counter\_Table[id] = c' $
+			
+		}{	
+			\eIf{first time get into $ 2^{nd} $ stage}{ 
+				
+				$ l = l - ( M\_Number - c_{current}) $ \tcp*{首次进入第二阶段须在存储数据的最左bit位增加标志位，并初始化}
+				
+				$ 	c_{current} = c_{current} \quad | \quad 22'b{10\_0000\_0000\_0000\_0000\_0000} $
+				
+				$ 	c_{current} = c_{current} \quad \& \quad 22'b{10\_0000\_0000\_0000\_0000\_0000} $
+				
+				$ p_c=PLUT[c_{lmax}] \times l $ 
+				
+				\eIf{$ v \leq p_c $}{
+					
+					$ 	c' = c_{lmax} + 1 $
+					
+					$ 	c_{current} = c_{current} \quad \&\quad c' 	 $
+					
+				}{
+					$ 	c_{current} = c_{current} \quad \&\quad c_{lmax}	 $
+				}
+				$ Counter\_Table[id] = c_{current} $  \tcp*{第二阶段进行压缩统计并更新}
+			}{
+				
+				$ c = c_{current} \quad \&\quad 22'b{01\_1111\_1111\_1111\_1111\_1111} $
+				
+				$ p_c = PLUT[c] \times l $
+				
+				\If{$ v \leq p_c $}{   
+					$ 	c_{current} = c_{current} + 1 $ \tcp*{第二阶段为压缩计数阶段并进行更新}
+					
+					$ Counter\_Table[id] = c_{current} $
+				}				
+			}			
+		}
+	}
+\end{algorithm}
+
+本文给出对于任意的系统测量需求范围计算上文提到的$ c_{lmin} $（算法\ref{mydiscoa2}）以及PLUT表（算法\ref{mydiscoa3}）的计算方法。这两组参数均在系统初始化之前由控制器离线计算完成，在系统运行时加载如硬件查表空间即可。
+
+
+
+\begin{figure}[!ht]
+	\centering
+	\includegraphics[scale=1]{mydiscopipeline3.pdf}
+	\caption{压缩统计硬件流水线设计（优化）} \label{fig:mydiscopipeline}
+\end{figure}
+
+图\ref{fig:mydiscopipeline}展示了优化后的压缩计数架构设计（算法\ref{mydiscoa4}，描述了快速压缩更新的完整过程）。Magic\_Number值由$c_{lmax}$带入函数$f(c)$中得出，第一阶段，系统采用线性增长方式，系统判断当线性增长的统计量大于Magic\_Number后，统计方式改为压缩方法（第二阶段）。为快速区分某统计值所处统计阶段，本文将统计量c的最高位设置为标志记位，当第一阶段时为“0”，第二阶段时须标记为“1”。
+
+\begin{figure}[!ht]
+	\centering
+	\includegraphics[scale=0.97]{couterqsy1.pdf}
+	\caption{不同参数b下的计数曲线} \label{fig:couterqsy1}
+\end{figure}
+
+本文提出的新压缩方法具有极大灵活性，在运行时用户可根据自身对于统计精度、统计容量大小（b），资源消耗率（Depth），来自行选择计算查找表内容。如图\ref{fig:couterqsy1}，展示了在不同计数容量需求下，修改参数b来扩展计数器统计容量范围（从$1.5\times 10^{10}$Bytes到$5.3\times 10^{12}$Bytes，扩容353倍）。此时计数器位宽（22bits）与查找表PLUT的位宽深度（24bits，3072项）均保持不变。
+
+\begin{figure}[!ht]
+	\centering
+	\includegraphics[scale=1]{plut.pdf}
+	\caption{b=1.006时的PLUT查找表样例} \label{fig:plut}
+\end{figure}
+
+图\ref{fig:plut}展示了当b取1.006，深度3072时概率查找表（PLUT）存储内容的样例。若线性统计量超过294495后，进入第二阶段进行压缩统计。当此时C存储压缩值为1254，且新入包长为512字节，则经过查表与计算得到$ p_c=RAM(1254)\times pkt\_length= 2371876 \times 512 = 1214400512 $，与随机数生成器比较后判断是否+1，即可获得新的计数值。最终本文将耗时超过50个时钟周期的压缩计算过程缩短到3个时钟周期内完成。
+
 %在实现时，pc的位宽20bits解释一下，总共32bits，然后pc的范围，，，，画总体实现架构，写 表生成的算法，写新算法。给出一个例子。参考论文吧，乔思祎2020年7月12日19:24:45
 
 
