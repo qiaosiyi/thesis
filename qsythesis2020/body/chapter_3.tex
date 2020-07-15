@@ -621,19 +621,127 @@ p_{cmax} = \dfrac{2^{32}}{1518} =2829359.2=2^{21.4}
 	\caption{b=1.006时的PLUT查找表样例} \label{fig:plut}
 \end{figure}
 
-图\ref{fig:plut}展示了当b取1.006，深度3072时概率查找表（PLUT）存储内容的样例。若线性统计量超过294495后，进入第二阶段进行压缩统计。当此时C存储压缩值为1254，且新入包长为512字节，则经过查表与计算得到$ p_c=RAM(1254)\times pkt\_length= 2371876 \times 512 = 1214400512 $，与随机数生成器比较后判断是否+1，即可获得新的计数值。最终本文将耗时超过50个时钟周期的压缩计算过程缩短到3个时钟周期内完成。
+图\ref{fig:plut}展示了当b取1.006，深度3072时，概率查找表（PLUT）存储内容的样例。若线性统计量超过294495后，进入第二阶段进行压缩统计。当此时C存储压缩值为1254，且新入包长为512字节，则经过查表与计算得到$ p_c=RAM(1254)\times pkt\_length= 2371876 \times 512 = 1214400512 $，与随机数生成器比较后判断是否+1，即可获得新的计数值。最终本文将耗时超过50个时钟周期的压缩计算过程缩短到3个时钟周期内完成。
 
 %在实现时，pc的位宽20bits解释一下，总共32bits，然后pc的范围，，，，画总体实现架构，写 表生成的算法，写新算法。给出一个例子。参考论文吧，乔思祎2020年7月12日19:24:45
 
 
 2）无偏估计证明
 
+整理本文提出的计数器更新规则：
+
+\begin{equation} \label{mydiscof7}
+ f(C)=\left\{
+\begin{array}{rcl}
+C         &      & {C \leq Magic\_Number} \\
+\dfrac{b^C-1}{b-1}       &      & {C \geq C_{lmax}}
+\end{array} \right. 
+\end{equation}
+
+其中$ C $为计数器中存储值，$ b $为固定常数。定义阶段转换时系统状态：
 
 
+\begin{align}\label{mydiscof9}
+f(C_{magic}) &= C_{magic} \nonumber \\
+&=\dfrac{b^{C_{lmax}}-1}{b-1} \quad\quad (C_{magic} = Magic\_Number)
+\end{align}
+
+本文定义统计过程：统计从第一阶段开始线性累加，当统计量恰好等于$ Magic\_Number $时，转换为第二阶段，其中判断数值$ Magic\_Number $定义。$ C_{lmax} $由（算法\ref{mydiscoa3}）由（式\ref{mydiscof9}）定义，且此时压缩后的存储值（$ C_{lmax} $为压缩后计数的初始值）所表达的实际值由规则$f(C)$(公式\ref{mydiscof7})定义，且初始值所表达真实值与$ Magic\_Number $相等。
+
+本文将证明上述的统计估计函数$f(c)$（c为计数值）在累积统计数据包长度$l$的各个阶段均为无偏估计。首先定义数据包统计过程，不失偏颇，本文假定针对某一条流进行叙述。计数过程的每次累加由数据包触发，假设所有阶段内共有 $ m $ （ $（m\in N^{\ast} $）个数据包到达并触发统计过程。数据包长度分别为$l_1,l_2,\dots,l_m$（$ l_i,i\in N^{\ast} $）。$ c_i $为第$ i $个数据包触发系统更新后的计数值。
+
+\begin{theorem}%[Riesz 表示定理]
+	$ c $为公式\ref{mydiscof7}中的统计值，其中$ f(c) $为真实统计量的估计值，则$ f(c) $是一种无偏估计。即，对任意$ i\in N^{\ast} $，有：
+\begin{equation} \label{mydiscof8}
+E[f(c_i)]=\sum ^{m}_{i=1}l_{i}
+\end{equation}	
+\end{theorem}
+
+\begin{proof}
+	首先，考虑函数$ f(c) $的第一阶段。由于线性计数，计数值等于累加值，存在特殊情况$n$（$ n\leq m $），使得：
+
+	\begin{equation} \label{mydiscofa}
+	c_i=\sum ^{k}_{i=1}l_{i} \quad\quad k \leq n; k,n,m \in N^{\ast}
+	\end{equation}
+	
+	又根据定义（公式\ref{mydiscof7}），可得：
+	
+	\begin{align}\label{mydiscofb}
+	f(c_i) &= c_i \nonumber \\
+	&=\sum ^{k}_{i=1}l_{i} \quad\quad k \leq n
+	\end{align}
+	
+	因此：
+	
+	\begin{align}\label{mydiscofc}
+	E[f(c_i)] &= E(c_i) \nonumber \\
+	&=c_i \nonumber  \\
+	&=\sum ^{k}_{i=1}l_{i} \quad\quad i \leq n
+	\end{align}
+	
+	其次，考虑第二阶段，前文工作\citeup{hu2013discount}已经证明：
+	
+	\begin{equation} \label{mydiscofd}
+	E[\dfrac{b^c-1}{b-1}]=\sum_{i=1}^{m}l_i \quad\quad i \leq m
+	\end{equation}
+	
+	令p为第二阶段内的某一个数据包，即$ n \leq p \leq m $，根据定义\ref{mydiscof9}可得：
+	
+	\begin{equation} \label{mydiscofe}
+		f(c_n) = c_n = \dfrac{b^{c_n}-1}{b-1}\quad\quad p=n
+	\end{equation}
+	
+	由\ref{mydiscofd}与\ref{mydiscofe}得到：
+	
+	\begin{equation} \label{mydiscoff}
+	E[f(c_p)]=E[\dfrac{b^{c_p}-1}{b-1}]=\sum_{i=1}^{p}l_i\quad\quad p=n
+	\end{equation}
+	
+	由于p=n时无偏性成立，因此当p>n时，可直接应用结论\ref{mydiscofd}得证无偏性：
+	
+	\begin{equation} \label{mydiscofh}
+	E[f(c_p)]  = \sum_{i=1}^{p}l_i \quad\quad n<p\leq m
+	\end{equation}
+	
+	联系\ref{mydiscofc}、\ref{mydiscoff}与\ref{mydiscofh}得到：
+	
+	\begin{equation} \label{mydiscofg}
+	E[f(c_p)]==\sum_{i=1}^{p}l_i\quad\quad p \in [1,m]
+	\end{equation}
+	
+	以上证明假定数据包$ 1,2,\cdots,n $恰好组成了第一阶段，且数据包$ n,n+1,p,\cdots,m $恰好组成第二阶段，并得证。另需证明一般情况，Magic\_Number无法由确定数量包长度之和组成，即：
+	
+	\begin{equation} \label{mydiscofi}
+	\sum_{i=1}^{n}l_i < C_{magic} < \sum_{i=1}^{n+1}l_i
+	\end{equation}
+	
+	对此，根据算法\ref{mydiscoa4}，将第$ n+1 $个数据包的包长度$ l_{n+1} $ 分为两部分:$ l_{n+1}=j+k $，得到两个序列$ n'=1,2,\cdots,n,j $，以及$ p'=k,n+1,n+2,\cdots,m $且一定有$ j $使得：
+	
+	\begin{equation} \label{mydiscofk}
+	\left\{
+	\begin{array}{rcl}
+	E[f(c_{n'})]=\sum_{i=1}^{n'}l_i=\sum_{i=1}^{n}l_i+j=C_{magic}         &      & {n' \leq j} \\
+	E[f(c_{p'})] =\sum_{i=1}^{p'} l_i     &      & {j\leq p' \leq m}
+	\end{array} \right. 
+	\end{equation}
+	
+	因此，归约到特殊情况的结论（\ref{mydiscofg}）。证毕。
+\end{proof}
 
 \BiSection{软硬一体化的系统实验平台}{aa} %2
 
+基于软件的网络实现平台，例如OVS，cPqd软件交换机，易于修改与部署，且可以配合网络拓扑仿真框架进行流量测试。但其仿真性能受限于CPU架构，交换性能和仿真时间随着流量和节点的增加而快速变差。这种通常的实验设施无法完成本文对于高精度高性能设计的验证。因此对于本章节介绍的两个关键内容，本文使用基于硬件的真实网卡进行流量测试。本文实现了一款带有PCIe Gen2 $ \times $ 8主机接口的基于FPGA的智能网卡ONetCard。配以相应的软件驱动，实现并打通了数据通路。
+
 \BiSubsection{软件}{aa}
+
+实验平台包括两部分，一部分是主机运行的软件驱动程序，另一部分是FPGA网卡中运行的逻辑编码。数据帧从硬件传输到软件依靠CPU中断的通知，所以当网络中的数据包传输速率非常快的时候，单位时间产生中断次数也非常多，数据包的处理过程被大量中断干扰，从而降低了性能。目前数据从硬件到软件的传输方式通常为DMA，DMA可以减小搬运数据所消耗的CPU时间，从而提升传输效率。针对网络流量捕获和回放的DMA驱动软件模块，通过PCIe接口在主机内存与网卡内收发FIFO直接传递数据。要求高速传输，因此DMA设计的时候要考虑“高带宽，低时延，低中断频率”。本模块大体分为三个主要部分：PCIe，DMA，数据包队列，各个模块功能特性如下：
+
+\begin{itemize}
+	\item PCIe模块。PCIe接口为Gen2 $\times$4，总带宽为4$\times$5Gbps=20Gbps。PCIe接口IP采用Xilinx提供的7Series\_IntBlock\_PCIe IP core，总线宽度为128bits，总线时钟频率为125MHz。
+	\item DMA模块。使用基于描述符换的Scatter-Gather型DMA。使用多通道DMA，通道数量可配置。低中断频率，在系统内存中设置多块缓存区采用“乒---乓”操作（或基于简单的容量计数以及计时机制）控制中断频率的速度。包计数中断域值（或缓存块大小）计时器均可配置。
+	\item 数据包队列。软件中数据包存储队列数可配置。收发队列互相独立，互不干扰。
+\end{itemize}
+
 
 \BiSubsection{硬件}{aa}
 
