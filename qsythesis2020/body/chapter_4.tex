@@ -64,21 +64,141 @@ P4是目前广泛使用的可定义数据平面内的数据包解析和查表过
 
 \begin{figure}[!ht]
 	\centering 
-	\includegraphics[scale=1]{asdev.pdf}
-	\caption{基于FPGA的PL开发流程} \label{fig:asdev}
+	\includegraphics[scale=1]{asdev1.pdf}
+	\caption{基于SDNet工具链的FPGA-PL端编译流程} \label{fig:asdev}
 \end{figure}
 
-本文利用Xilinx SDNet/P4-SDNet作为建立本文设计原型系统的基本开发工具，基于FPGA的PL编译流程如图\ref{fig:asdev}所示。SDNe
+本文利用Xilinx SDNet/P4-SDNet作为建立本文设计原型系统的基本开发工具，基于FPGA的PL编译流程如图\ref{fig:asdev}所示。SDNet和P4-SDNet已经是成熟商用包装解决方案，并包含了为FPGA数据平面设计的P4语言到verilog硬件模块的编译工具链。P4-SDNet内建两种专为P4$ _{16} $（提取包头数据，修改包头域值）提供的P4\_extern功能。这种extern功能给用户提供了足够灵活的直接修改原始数据包头域的能力，但目前此编译器并不支持其他extern对象的编译，且用户也不可定义其自己的extern对象。
+
+使用其类似的思路，本文在开发流程中增加新的编译模块，使其将能够使用户扩展extern对象定义的范围：扩展前端编译器，使其支持其他的高层次描述（描述中增加标记符以提高后端编译器的性能），并将其转译为逻辑中间表示层（IR）；最后通过后端编译器再次映射到PL端。
+本文提出的硬件转发体系结构与通行产品不同，下面将详细介绍本文开发流程与经典可编程数据平面（以P4为例）之间的差别。
+
+\begin{figure}[!ht]
+	\centering 
+	\includegraphics[scale=1]{ascomp.pdf}
+	\caption{基于SDNet工具链的FPGA-PL端编译流程} \label{fig:ascomp}
+\end{figure}
+
+图\ref{fig:ascomp}中左边为经典的P4程序编译标准流程，对P4目标器件编程需要两个描述文件。首先是P4行为描述程序代码，包含了待处理数据包的包头域定义，包头域匹配关系图，流表设计，执行动作设计等。第二为P4架构图，此文件由设备厂商提供，编译器须根据不同底层芯片实现样式进行有针对性的编译，这样编译器可根据结构图对程序进行等效变换以及重组。前端编译器会将文本代码转换为逻辑关系表，也称作中间表示层（Intermediate Representation, IR），后端编译器一般有厂商提供，可将符合规范的IR表示直接转为机器二级制配置文件。远端控制器将配置文件下载入可编程交换机设备即完成了数据平面重配置过程。此时，控制器也需要收集P4定义信息，以方便后续添加流表项等网络功能设置。
+
+根据之前本文提到的自适应交换系统的额外特点，如图\ref{fig:ascomp}右边所示，本文对基础编译框架进行补充。首先P4结构图需要修改为自适应交换机的底层实现，例如需要体现包头域协同处理机制。其次本文支持高层次语言的PISA\_extern对象编程，因此在额外扩展的前端编译器中，需要将高层次编译器适配入本流程。新增部分由红色区域块所示。最终后端编译器配合P4结构图生成FPGA中的RTL代码，交由FPGA厂商工具链生成二进制流文件（bitfile），通过板上运行时代理下载入FPGA即完成了PL端配置。SS端配置同经典过程所述。
+
+\BiSubsection{高层次语言映射样例}{aa}
 
 
+
+{\fontsize{10pt}{0.5\baselineskip}\selectfont
+	\begin{lstlisting}[caption={数据平面接口：PL端高层语言描述},label={ascode1}]
+	extern extern_example{           				//声明模块名称：extern_example
+		ext_type(in bit<wdth> input_Port);			//声明接口位宽以及数据流方向
+		int a = VHDL_method_example();				//模块使用其他语言快verilog
+		void CPP_HLS_method_example(a);				//模块使用类C的函数描述语言
+	}
+	control control_example{						//实例化样例模块
+		extern_example(0x0) my_extern_example;
+		action my_extern_call(){					//调用PL端功能
+			my_extern_example.C_HLS_method_example();
+		}
+	}
+	\end{lstlisting}
+}
+
+PL以FPGA芯片为例，自适应交换平台可以将SS交换芯片无法完成的用户定义功能映射到FPGA中。用户的额外功能对象须遵循PL端输入输出接口规范。P4语言风格的数据平面接口规范如代码 \ref{ascode1} 所示。代码定义了一个名为“extern\_example”的PL模块，模块可由C语言或HDL风格实现。对外接口位宽以及方向需要标记。在后期可实例化一个或多个样例，每个样例可自由调用PL端模块中的任意描述功能。
+
+{\fontsize{10pt}{0.5\baselineskip}\selectfont
+	\begin{lstlisting}[caption={extern实例的C++类声明},label={ascode2}]
+	#include <hls/hls_sim/extern.h>					//头文件extern.h 定义了外围数据传输
+	using namespace std;
+	template <typename .. Args>
+	using ActionPrimitive =
+		hls :: ActionPrimitive <Args ...>;
+	using hls :: Data;
+	class extern_example: public ExternType{
+		public:
+			void init() override{}
+			void C_HLS_method_example(){...}
+	};
+	HLS_REGISTER_EXTERN(extern_example);
+	int import_extern_example(){return 0;}
+	\end{lstlisting}
+}
+
+如代码 \ref{ascode2} 展示了C++风格extern函数。头文件“extern.h”中定义了核心函数之前的流水线结构（需要用户注意并修改），无需提现在核心描述代码中。FPGA高层次编译工具链（SDx，Bluespec System Verilog）可读取此类文件，并综合成带有用户功能的IP核，小的IP核可便于集成进更大的FPGA工程。
+
+{\fontsize{10pt}{0.5\baselineskip}\selectfont
+	\begin{lstlisting}[caption={extern实例的VHDL模块声明},label={ascode3}]
+	`timescale 1ns/1ps
+	module VHDL_method_example#(
+		parameter DATA_WIDTH = D_WIDTH,
+		parameter CTRL_WIDTH = C_WIDTH,
+		parameter EXTERN_REG_WIDTH = R_WIDTH,
+		...
+		)(//---data interface
+			input		[DATA_WIDTH - 1:0]	in_data,
+		  //---register interface
+		  	input [EXTERN_REG_WIDTH - 1:0]  in_reg,
+		  //---misc
+		  	input							clk,
+		  	input							reset);
+		  	
+		//local parameter
+		//wires/regs
+		//modules
+		//method example logic
+	endmodule //VHDL_method_example
+	\end{lstlisting}
+}
+
+代码 \ref{ascode3}展示了VHDL语言实现PL实例模块，在VHDL中须描述数据总线位宽，寄存器通路接口等。对于其他硬件系统，用户只需要指定通信用同步数据总线的时钟周期（时间约束）。
+实际上，本文所描述的所有编译工具链仍处于设计阶段，并需要大量代码工作完成自动化处理。本文主要目的在于规划框架以及作为商用工具链的补充设计参考。硬件开发时间周期过长，为快速进行数据平面验证，本文生成的所有bit文件均为手动整合代码。
 
 \BiSection{硬件设计}{aa}
 
-各种花哨 映射方法，加速方法
+\BiSubsection{协议设计}{aa}
 
-rmt的crossbar介绍
+\begin{figure}[!ht]
+	\centering 
+	\includegraphics[scale=1]{asframe.pdf}
+	\caption{SS与PL内部通信帧格式} \label{fig:asframe}
+\end{figure}
 
-有状态转发
+上节提到自适应交换架构中SS端与PL端的通信须包含元祖数据以及包头，本节论文详细讨论通信帧格式。本文设计了一种通信帧（可满足大部分需求，用户也可以自行定义），格式如图\ref{fig:asframe}所示。首先帧头指定了帧的编号PID，帧由SS中的数据包生成，完整的数据包与帧使用同一个PID编号，方便PL协处理器处理之后重新组合。元祖信息（metadata）包括了数据包转发过程中的信息，例如输出端口，组表编号，丢包等。用户元组信息为帧有效字长，由于用户可以定义帧长度，这将给用户极大的灵活性空间。此外用户还可定义包头长度以及携带的数据包负载信息长度等。SS与PL之间传递的大部分操作数都是商用ASIC中已经实现的指令，因此SS端设计可以极大程度复用已有芯片设计。须增加的功能只有帧长度信息等域，这样可使对ASIC改动降到最低。
+
+\BiSubsection{SS端固定功能}{aa}
+
+SS端对于目前商用普通交换芯片中需增加的功能为第一小节中提到的图 \ref{fig:asarch}内左边虚线内的MMU模块。自适应交换的核心思想是利用基于ASIC的交换系统（SS）提供包交换的高性能，而用可编程硬件协处理器（PL）提供包处理的灵活性。因此在SS端本文将包处理逻辑做的最简化，只保留一个用户可配置逻辑（即帧长度的定义）。MMU将用户定义的不超过帧长度的包头数据（指某一区间段）复制到通信帧中即可。MMU的其余工作还包括了动态申请和释放数据包缓存空间，以及重组数据包。接下来本小结主要介绍MMU的分析与设计。
+
+假设SS与PL之间单向通信带宽有256G(PCIe4.0)，以帧内包含完整64字包头节为例，则包速率达到380Mpps。目前交换芯片的时钟驱动频率大约在1GHz到1.5GHz之间。对于MMU模块，若留给每个数据包的处理时间3周期则不会超过时钟频率（需要约1.2GHz主频）。在之前的MMU设计中，内存被分割为每页256字节。调度器以页为单位进行分配，维护逻辑映射与物理映射之间的关系由于页容量比较小而变得比较复杂。因此MMU瓶颈处理一个分配任务需要耗时25周期\citeup{wang2017p4fpga}，尽管这种设计思路在资源利用率上比较占优（平均资源浪费仅为1/2page），但它的时间复杂度太高，导致分配性能受影响。在ASIC的存储设计中，其经济性要好于由FPGA组成的片上存储资源。因而本文在设计存储单位时将每个地址对应的容量配额扩大为1.6KB（可完整放下一个最大包）。在分配以及查找长包时，可节省逻辑地址与物理地址之间多次正向/反向映射过程，因此大大提升分配速度。
+
+\begin{figure}[!ht]
+	\centering 
+	\includegraphics[scale=1]{asmmu.pdf}
+	\caption{高pps性能MMU的实现方案} \label{fig:asmmu}
+\end{figure}
+
+如图\ref{fig:asmmu}所示，本文使用了一组“标志位”寄存器来指示其对应的page空间是否被占用。当数据包请求一个新的可用地址时，优先译码器会将标志位最左边为“1”的位置作为地址（address）返回给调度器，且便立即将此位置的标志“1”更新为“0”。之后调度器会把数据包向此位置写入，并且令此位置的地址作为PID值填入PL通信帧的首部。当MMU收到一个含有PID值的读请求时，MMU会读取以PID值为位置的存储空间并将其组合为数据包重新发出到入队流水线中，完成后立即将此位置的标志位为“1”。此时数据包的metadata中一般包含了由PL端处理完成给出的执行需求，SS端无需对此包做额外的分析工作。为了防止地址冲突以及标记位数据不同步带来的读写错误，优先译码器必须在完成上一个“读/写”请求之前，更新空闲地址，以备调度器无缝衔接下一个写请求，读请求则无需使用优先译码器结果，无操作风险。上文分析过，对每个读写操作，MMU都预留了3个时钟周期的处理时间。在系统运行后，由于数据包连续到达以及连续读写，因此在一段时间内，平均读次数是等于写次数的。MMU将读写交替进行，可为写请求争取6个时钟周期的译码时间，一般来讲对于有4k个位置的优先译码器，6个时钟周期足够通过硬件并行地两两比较找出最优位置（每周期比较两次的情况下$2^{6\times2}=4096$，但一般可以比较次数更多）。
+
+接下来分析MMU应维护的内存容量大小。在元祖信息帧由PL返回之前，数据包都需要维持在MMU的存储空间内。假设信息帧处理时间为$T=n$(（微秒），上文提到总体包处理频率不超过$v=$380Mpps，因而平均在等待的数据包个数为$T \times v \leq =380n$。目前板间硬件处理时延应保证在3微秒以下，如果使用片内AXI总线互联，则完整处理时间应保证在1微秒\citeup{xilinxpcie}以内\footnote{在数据包的处理过程中查找TCAM表是最费时间的，一般需要20个时钟周期，但正常处理流程内TCAM表项不会超过2个。普通精确匹配查找表只需要不超过3个时钟周期即可。我们假设比较悲观的情形，PL内的处理过程包含5级TCAM查表以及10级精确匹配查表，则总共须耗费650时钟周期。若以200MHz主频运行FPGA，则总耗时约0.7微秒（一般只需要0.1微秒）。因此本文认为，PL的处理时延主要由信息帧传输过程贡献。PCIe收发器结构复杂，突发的批次传输时延较大（100时钟周期\citeup{xilinxpcie}），但高性能片上AXI总线的传输时延也很低（不超过10时钟周期）}。为保险起见，本文将处理时间余量增大十倍假设最大不超过10微秒，则根据上式，可约估SS端等待数据包个数为4k个。上文提到每个数据包存储位置占用1.6KB，则板上共计须设置最多为6.4MB存储空间。以目前的半导体工业水平可满足此需求。
+
+
+
+\BiSubsection{PL设计}{aa}
+
+基于FPGA的PL设计最大的挑战来自于大批量信息帧的处理速度（380Mpps）。对于PL内部逻辑，由于帧内包含了基本的metadata信息以及包头域段落，对PL的性能设计可将其按照网络处理最小包（64字节）的方式分析。按照FPGA主频200MHz计算，即使每个时钟周期都能由流水线处理完成一个数据包，FPGA的性能也只能达到200Mpps。对于某些带状态阻塞性处理机制（如有状态查找表），平均需要2-3个时钟周期才可处理完成一个数据包，因此FPGA的处理性能会下降到60Mpps。远远达不到系统设计的需求。
+
+一种思路是将FPGA内一条流水线完整复制多份，只要保证每一条并行流水线流量均衡，且不超过70Mpps性能要求即可。但由于数据包流水线内有查表等大资源消耗量组件（1k深度的TCAM表项可占据整个FPGA逻辑资源的1/3），有限的FPGA逻辑面积不可能满足多条并行流水线的资源占用需求。
+
+为解决上述挑战，本文提出一种微结构并行数据包处理流水线设计（micro-level parallel processing）。微结构流水线的核心思想是将原有的大表项拆分为多个小表项的等价组合，即通过不完整的复制大资源模块，而满足原始用户语义下的数据包处理需求。总结如下，本文将通过以下两个关键技术解决高效PL处理设计，1）提出一种资源高效的并行数据包处理架构，2）通过流表编译算法将流表项映射到多路子流表中，以达到高效利用硬件资源。
+
+1）资源与性能
+
+2）并行流水
+
+%各种花哨 映射方法，加速方法
+%
+%rmt的crossbar介绍
+%
+%有状态转发
 
 \BiSection{软件设计}{aa}
 
