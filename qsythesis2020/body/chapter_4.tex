@@ -339,15 +339,148 @@ D[k]=\sum_{j\in Q_k}D\_id[j]
 
 其中$K$为并行子表的个数，当$N=16$时，计算搜索数约为$10^8$数量级，以目前服务器CPU计算能力约须消耗10秒钟才可找到精确解。然而在真实场景下，一般须设置$N\geq 64$（为使各个流水线中流量更均衡），搜索空间会陡增至$10^{35}$数量级，甚至可能将$N$设置为表达256个ID组份之多。
 
-本文提出一种基于模拟退火方法的启发式算法。在PL的多级流表中，每一级流表组合机制的结果空间为初始集合S的子集$Q_k$。模拟退火算法的状态转移探索方式为下列情形二之一：（1）从集合$Q_k$中随机地移动一个元素到任意其他的集合$Q_{k'}$；（2）交换任意一组（2个）集合$Q_k$中的两个元素。首先，在每一个启发式搜索状态内，须保证$Q_k$内元素的有序性。考虑到真实网络流量的“80/20”分布定律，
+\begin{algorithm}[!h]
+	\caption{LBBTC算法初始化  \label{lbbtcinit}}
+	\IncMargin{2em}
+	\DontPrintSemicolon
+
+	
+	$Q_k = \phi; D[k]=0;i,j,k=0;i,j,k \in \mathbb{Z}$; $//$初始化
+	
+	对 $D_{-}id[i]$ 按降序排列，记为$\left\{ Sid\left[ 1\right] ,Sid\left[ 2\right] ,\ldots ,Sid\left[ 2^{P}\right] \right\} $\;
+	
+	\For{i in [1,$2^P$]}
+	{
+		\For{j in [Sid[1],\ldots, Sid[$2^P$]]}
+		{
+			对 $D[k]$ 按升序排序，获取各小流量$ID$组份，记为 $\left\{ Sd\left[ 1\right] ,\ldots ,Sd\left[ k\right] \right\} $\;
+			
+			\For{k in [1,K]}
+			{
+				\If{$\left| Q_{Sd\left[ k\right] }\right| =Min\left| Q_{i}\right| ,i\in \left[ 1,K\right] $}
+				{
+					$D\left[ Sd\left[ k\right] \right] +=D\left[ Sid\left[ i\right] \right] $\;
+					
+					$Q_{Sd\left[ k\right]} \cup =\left\{ Sid\left[ i\right] \right\} $\;
+					
+					\textbf{break}\;
+				}
+			}
+		}
+	}
+
+$//$获得中间阶段的初始化结果: $\left\{ Q_{k},D\left[ k\right] ,k\in \left[ 1,k\right] \right\} $\;
 
 
 
 
+\For{i in $\left\{ Sid\left[ 1\right] ,\ldots ,Sid\left[ 2^{P}\right] \right\} $}
+{
+	\textbf{find} $D\left[ k_{i}\right] =Min\left( D\left[ k\right] \right) ;k,k_{i}\in \left[ 1,K\right] $\;
+	$Q_{k_i}\cup =\left\{ Sid\left[ i\right] \right\} $\;
+	$ D\left[ k_{i}\right] +=D\left[ Sid\left[ i\right] \right] $\;
+}
+
+$//$Get intermediate initial results: $\left\{ Q^{'}_{k},D'\left[ k\right] ,k\in \left[ 1,K\right] \right\} $\;
+
+\If{$Max\left( \left| Q_{k}'\right| \right) \leq C_{0}\cdot R_{d}/K$}
+{
+	\Return $\left\{ Q^{'}_{k},D'\left[ k\right] ,k\in \left[ 1,K\right] \right\} $\;
+}
+\ElseIf{$Max\left( \left| Q_{k}'\right| \right) > C_{0}\cdot R_{d}/K$}
+{
+	\textbf{set} $ C_{k_{1}}=2 \cdot C_{k_{1}}$\;
+	\While{$C_{sum}>C_0 \cdot R_d$}
+	{
+		\textbf{find:} another $C_{k'}$ and 
+		
+		\textbf{set:} $C_{k'}=\dfrac{C_{k'}}{2},k'\in [1,K]$\; 
+	}
+	
+	\While{$|Q^{'}_{k}|>C_k$}
+	{
+		\textbf{pop:} a $ID$ group from $Q'_{k}$ to  $Q'_{k_1}$\;
+	}
+}
+
+\end{algorithm}
+
+本文提出一种基于模拟退火方法的启发式算法。在PL的多级流表中，每一级流表组合机制的结果空间为初始集合S的子集$Q_k$。模拟退火算法的状态转移探索方式为下列情形二之一：（1）从集合$Q_k$中随机地移动一个元素到任意其他的集合$Q_{k'}$；（2）交换任意一组（2个）集合$Q_k$中的两个元素。首先，在每一个启发式搜索状态内，须保证$Q_k$内元素的有序性（如算法\ref{lbbtcinit}所示）。如果流量都很均衡则哈希后的ID组份流量也会均衡，但考虑到真实网络流量的“80/20”分布定律，哈希后流量分布也呈现巨大差异性。差异性提现在两方面：第一是流量的不均衡性，第二是流数目分布的不均衡性。因此本文将解空间（$Q_k$）内的元素分为两个属性，一部分是流量巨大的ID组份，另一部分是小流所代表的ID组份。在第二种转移探索方式中，各集合$Q_k$内同属性元素做互相交换。例如，做集合$Q_1$和$Q_2$元素交换时，只选择每个集合里符合大流属性的ID组份间进行交换。大流组份不会与小流组份进行交换。因此退火算法可以避免大量的无效探索次数。
+
+本文定义启发式算法的能量方程（评价函数）如下：
+
+%\begin{equation}
+%
+%\end{equation}
+
+\begin{align}\label{a4}
+&E_1(n)=\dfrac{Max|D[k]-avg(D[k])|}{avg(D[k])\times 100\%}  \\
+&E_2(n)=\dfrac{\sum{K}(C_k-C_0)}{C_0 \times 100\%}
+\end{align}
+
+模拟退火的核心优化思想是，接受一个新探索状态的条件是满足新的能量低于当前能量。在本文的启发式算法中，进入新阶段的移动条件是：
+
+\begin{equation}
+\left\{
+\begin{array}{lr}
+\Delta E_1= E_1(n+1)-E_1(n)<0, &  \\
+and,& \\
+\Delta E_2=E_2(n+1)-E_2(n)<0 &  
+\end{array}
+\right.
+\end{equation}
+
+另外，当满足移动移动条件时，算法最终以概率$P=e^{-|\dfrac{\Delta E_1 + \Delta E_2}{t} |}$接受移动推荐。温度参数$t$初始值为100，并且在之后迭代中以指数函数形式（$t(n+1)=t(n)\times 0.99$）下降到1。如算法\ref{lbbtcms}所示，最终停止搜索的跳出条件为：
+
+\begin{equation}
+\left\{
+\begin{array}{lr}
+E_1<q_1\  \&\& \ E_2<q_2, &  \\
+or,& \\
+t=1 &  
+\end{array}
+\right.
+\end{equation}
 
 
+\begin{algorithm}[!h]
+	\caption{LBBTC启发式算法  \label{lbbtcms}}
+	\IncMargin{2em}
+	\DontPrintSemicolon
+	
+\textbf{define:}$\Delta(D,K) =\sum ^{K}_{k=1}\left| D\left[ k\right] -\dfrac {100\% }{K}\right| ^{2}$\;
 
-NP难题
+
+\textbf{Now calculate:} $\Delta(D,K)\  and\  \Delta'(D',K) $\;
+\If{$\Delta>\Delta'$}
+{
+	\textbf{return} $\left\{ Q^{'}_{k},D'\left[ k\right] ,k\in \left[ 1,K\right] \right\} $\;
+}
+\Else{\While{$Times--$}
+	{
+		\textbf{exchange }the elements of $ID $ groups in $Q'_k$ and $Q'_j$\;
+		\textbf{find} minimum $\Delta' $and 
+		\textbf{reset} $Q'_k,D'[k]$\;
+	}
+	\If{$\Delta' \leq \Delta $}
+	{
+		\textbf{return}  $\left\{ Q^{'}_{k},D'\left[ k\right] ,k\in \left[ 1,K\right] \right\} $\;
+		
+	}\Else{
+		\textbf{return}  $\left\{ Q_{k},D\left[ k\right] ,k\in \left[ 1,k\right] \right\} $\;
+	}
+}
+\end{algorithm}
+
+\begin{figure}[!ht]
+	\centering 
+	\includegraphics[scale=1]{asgen.pdf}
+	\caption{PL端并行处理流水线一般模型} \label{fig:asgen}
+\end{figure}
+
+下面对本文提出的并行查找块结构进行一般化描述，如图。并行结构查找块是PL中承载用户定义需求的核心逻辑框架，一种可扩展形态如图\ref{fig:asgen}所示。总体看系统中一共有$m(m\geq 1)$个处理流水线，每个流水线为一条完整的并行查找块结构。在每个流水线中总共有$ n(m \geq 1) $级块结构。图中红色正方形框圈出的是流水线中的并行查找结构（基本处理单元，Basic Processing Unit，BPU）。在每一个BPU中，都有并行的“处理引擎”，本文中将其抽象为“数据-执行”（Data-Action）模型，其可以为查表结构，也可以为自定义计算结构。每一个BPU的输入（数据流）个数与执行引擎个数相同，但BPU对外的输入输出个数不一定相同。假设第$i$级BPU的输入有$K_i$个，输出有$K_{i+1}$个。在第$i$级中，流调度模块（流量均衡查找模块与交叉开关）将$K_i$个输入数据流尽可能均衡地分发到$K_{i+1}$个执行引擎中。执行模块的设计以及系统参数（$m,n,K_i$等）可由高层次综合工具，SDNet或HDL语言来定制。
+
+
 
 
 \BiSection{系统性能评价}{System performance and evaluation}\label{spe4}

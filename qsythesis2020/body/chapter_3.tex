@@ -531,7 +531,8 @@ p_{cmax} \leq \dfrac{2^{32}}{1518} =2829359.2=2^{21.4}
 
 
 
-因此硬件中除了一个深度为3k的PLUT表，还需要一个最大22bits$\times$12bits（PLUT$\times l$）的窄单周期乘法器\citeup{xilinxmulti}即可，最大总共消耗两周期即可完成所有计算。设计中的查找表占片上存储容量约9KB（=3K 深度$\times$3Bytes），远小于板上资源限制条件。
+因此硬件中除了一个深度为3k的PLUT表，还需要一个最大22bits$\times$12bits（PLUT$\times \\
+ l$）的窄单周期乘法器\citeup{xilinxmulti}即可，最大总共消耗两周期即可完成所有计算。设计中的查找表占片上存储容量约9KB（=3K 深度$\times$3Bytes），远小于板上资源限制条件。
 
 \begin{algorithm}[!h]
 	\caption{硬件统计压缩算法（优化）  \label{mydiscoa4}}
