@@ -23,9 +23,9 @@
 近年来，现场可编程门阵列（FPGA）器件得到快速发展，以可编程硬件技术为首的异构架构已经大量融合到网络领域，带来高用户可定制能力的同时也能保证了一定的处理性能，这也为此论文的研究内容提供了基础的保障。
 本文主要探索以可编程硬件为基础的高性能网络数据平面以及网络系统。本文研究在软件定义的网络编程框架内如何将这种可编程硬件抽象层融入整体系统，并设计与其配套的控制平面协议，使整体网络系统的软硬件有机结合，在增强网络处理能力和灵活性的同时保证安全和效率。本文由理论分析入手提出了体系架构，进而给出系统实现并进行验证。本文将从以下三方面阐述：
 
-1.研究可编程设备加速主机侧网络方法。本文提出利用基于FPGA的智能网卡卸载操作系统内部分网络功能，达到扩展网络接入层的性能的目的。探讨了不同场景下网络功能的构成，分析并提出一种基于可编程硬件的流式计算模型（Data-Computing，DC抽象）。本文把服务器网络功能任务中可转化为DC抽象的计算密集型任务通过合理转换卸载到智能网卡。论文基于可编程网卡设计了一套网络流量捕获、统计分析和回放系统。在满足网络功能不改变的前提下，证明利用基于FPGA的智能网卡能有效地提升服务器的网络性能（100x）、抖动(降低$10^4$x)和效率(10x)。
+1.研究可编程设备加速主机侧网络方法。本文提出利用基于FPGA的智能网卡卸载操作系统内部分网络功能，达到扩展网络接入层的性能的目的。探讨了不同场景下网络功能的构成，分析并提出一种基于可编程硬件的流式计算模型（Data-Computing，DC抽象）。本文把服务器网络功能任务中可转化为DC抽象的计算密集型任务通过合理转换卸载到智能网卡。论文基于可编程网卡设计了一套网络流量捕获、统计分析和回放系统。在满足网络功能不改变的前提下，证明利用基于FPGA的智能网卡能有效地提升服务器的网络性能（100倍）、抖动(降低$10^4$x)和效率(10倍)。
 
-2.研究可编程设备加速网络交换层方法。本文提出一种硬件异构型的可编程网络数据平面架构，将FPGA与ASIC交换芯片有机结合，增强ASIC处理报文的灵活性，同时满足高吞吐的性能需求。论文设计了ASIC面向可编程硬件的扩展接口。交换芯片将数据包头拆分并通过高速数据互联载体发送给FPGA，利用FPGA可重配特性实现完全可编程的包头处理；同时，本文基于DC抽象，将网络随路计算（network-centric computing）模式引入可编程网络体系架构；通过分析网络流量特征在FPGA中设计了一种并行化处理单元，在资源消耗可控的前提下大规模提高可编程硬件处理吞吐（120x）。
+2.研究可编程设备加速网络交换层方法。本文提出一种硬件异构型的可编程网络数据平面架构，将FPGA与ASIC交换芯片有机结合，增强ASIC处理报文的灵活性，同时满足高吞吐的性能需求。论文设计了ASIC面向可编程硬件的扩展接口。交换芯片将数据包头拆分并通过高速数据互联载体发送给FPGA，利用FPGA可重配特性实现完全可编程的包头处理；同时，本文基于DC抽象，将网络随路计算（network-centric computing）模式引入可编程网络体系架构；通过分析网络流量特征在FPGA中设计了一种并行化处理单元，在资源消耗可控的前提下大规模提高可编程硬件处理吞吐（120倍）。
 
 3.SDN网络硬件流表可扩展性研究。由可编程网卡和交换机组成的数据平面内，最重要的资源是流表资源。本文从SDN网络全局视野出发，着手解决流表资源匮乏的问题。本文分析不同的流量规模和特征，以及系统多模块之间的互联协议，提出一种转发设备节点之间的流表共享机制。实现了数据平面应对突发流量时的稳定性。本文将因流表资源不足引发的交换机转发RTT时间和安全通道消息风暴数量的优化均达到至少2个数量级。
 
@@ -45,16 +45,35 @@
 %====================================== 英文摘要 ==========================================
 \BiAppendixChapter{ABSTRACT}{ABSTRACT (English)}
 
-\noindent 英文摘要正文每段开头不缩进，每段之间空一行。\newline
+%\noindent 英文摘要正文每段开头不缩进，每段之间空一行。\newline
+%
+%\noindent The abstract goes here. \newline
 
-\noindent The abstract goes here. \newline
+\noindent Network communication is an important infrastructure for building today's society, and the current development direction is mainly focused on building a high-performance, highly innovative network architecture. In the past 10 years, the concept of Software Defined Network (SDN) and Programmable Network (SDN2.0) has solved the difficult problems of network innovation in the past. However, with the rapid increase in traffic and network function complexity, this new network architecture also brings challenges in both performance and robustness. In terms of performance: CPU-based forwarding platform performance has gradually slowed down, and ASIC-based smart network card hardware has poor programmability. Robustness: The SDN network architecture in which the data plane and the control plane are separated brings problems of insufficient stability, poor security, and low efficiency.\newline
 
-\noindent \LaTeX{} is a typesetting system that is very suitable for producing scientific and mathematical documents of high typographical quality.
+\noindent The thesis analyzes the problem from three dimensions of the network system: \newline
+
+\noindent (1) On the host side network, at the server network card level, the performance of the CPU-based smart network card cannot meet the current development needs of virtualization technology and fine-grained network supervision. \newline
+
+\noindent (2) On the exchange side network, at the core network backbone level, the ASIC-based forwarding plane is not enough to provide high flexibility in network processing. Due to the difficulty in balancing cost and performance, the innovation space of network engineers is limited. \newline
+
+\noindent (3) The control plane interacts with the data plane. The hardware flow table is an efficient and expensive core component of network forwarding. The scarcity of flow tables is more prominent in the software-defined network era. Due to the rapid growth of the number of flows and the flow, the operation of the control plane on the flow table causes a lot of control communication overhead. It is easy to lead to poor network robustness and easy to form security risks. \newline
+
+\noindent In recent years, Field Programmable Gate Array (FPGA) devices have been rapidly developed. Heterogeneous architectures led by programmable hardware technology have been largely integrated into the network field, bringing high user customization capabilities while ensuring certain processing performance This also provides a basic guarantee for the research content of this paper.
+This article mainly explores the high-performance network data plane and network system based on programmable hardware. This paper studies how to integrate this programmable hardware abstraction layer into the overall system within a software-defined network programming framework, and design its supporting control plane protocol, so that the software and hardware of the overall network system can be organically combined, and the network processing capacity and flexibility are enhanced. While ensuring safety and efficiency. This paper starts with theoretical analysis and proposes the system architecture, and then gives the system implementation and verification. This article will explain from the following three aspects: \newline
+
+\noindent 1. Study the method of accelerating the host-side network by programmable devices. This paper proposes to use FPGA-based smart network card to offload some network functions in the operating system to achieve the purpose of expanding the performance of the network access layer. Discussed the composition of network functions in different scenarios, analyzed and proposed a stream computing model (Data-Computing, DC abstraction) based on programmable hardware. In this paper, the computationally intensive tasks that can be transformed into DC abstraction in the server network function tasks are offloaded to the smart network card through reasonable conversion. The thesis designs a set of network traffic capture, statistical analysis and playback system based on the programmable network card. Under the premise that the network function does not change, it is proved that the use of FPGA-based smart network card can effectively improve the server's network performance (100x), jitter (reduced by $10^4$x) and efficiency (10x). \newline
+
+\noindent 2. Study the method of programmable equipment to accelerate the network switching layer. This paper proposes a hardware heterogeneous programmable network data plane architecture that organically combines FPGA and ASIC switching chips to enhance the flexibility of ASIC processing messages while meeting high-throughput performance requirements. The paper designs ASIC's extended interface for programmable hardware. The switching chip splits the data packet header and sends it to the FPGA through a high-speed data interconnection carrier, using the reconfigurable feature of FPGA to realize fully programmable header processing; at the same time, this article is based on the DC abstraction and uses the network-centric computing mode Introduce a programmable network architecture; design a parallel processing unit in FPGA by analyzing the characteristics of network traffic, and massively increase the processing throughput of programmable hardware (120x) under the premise of controllable resource consumption. \newline
+
+\noindent 3. Research on the scalability of SDN network hardware flow table. In the data plane composed of programmable network cards and switches, the most important resource is the flow table resource. This article starts from the overall perspective of SDN network and sets out to solve the problem of lack of flow table resources. This paper analyzes different traffic scales and characteristics, as well as the interconnection protocol between multiple modules of the system, and proposes a flow table sharing mechanism between forwarding equipment nodes. The stability of the data plane when dealing with burst traffic is realized. In this paper, the optimization of the switch forwarding RTT time and the number of security channel message storms caused by insufficient flow table resources has reached at least 2 orders of magnitude. \newline
 
 %\noindent You will never want to use Word when you have learned how to use \LaTeX.
 
 \vspace{\baselineskip}
-\noindent{\fontsize{11.5pt}{11.5pt}\selectfont\bfseries KEY WORDS}: Xi'an Jiaotong University, Doctoral dissertation, \LaTeX{} template
+\noindent{\fontsize{11.5pt}{11.5pt}\selectfont\bfseries KEY WORDS}: Software Defined network, Data Plane, Hardware-based programmability, FPGA, Flow Table
+
+
 
 \vspace{\baselineskip}
 \noindent{\fontsize{11.5pt}{11.5pt}\selectfont\bfseries TYPE OF DISSERTATION}: Application Fundamentals

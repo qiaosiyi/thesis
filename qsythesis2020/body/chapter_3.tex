@@ -5,6 +5,8 @@
 
 \BiSection{本章引论}{Introduction to Chapter}\label{chap31}
 
+本章首先在第\ref{chap32}小节分析了主机侧使用FPGA进行网络功能卸载的必要性，进而提出了流式计算加速原则（\ref{chap33}小节）。利用此方法本文在基于FPGA的智能网卡实现了网络流量捕获、回放（\ref{chap34}小节）与统计（\ref{chap35}小节）的系统，在\ref{chap354}小节中证明了本文中的统计压缩函数为一种无偏估计方法。基于真实实验环境（\ref{chap36}小节）的测试,展示了可编程设备在卸载高时间精度型和高密集度计算型任务时的优势（\ref{chap37}小节）。
+
 \BiSection{问题背景}{Background}\label{chap32}
 
 %有什么东西软件做不好的，
@@ -345,19 +347,34 @@ b^x=1500\times(b-1)+1\\
 
 因此，计算$ f^{-1}(1500+0) $的结果可以等价为：在指数计算表中查找当$ x $等于多少时指数值为10。由于指数值是非连续、非等差数列，查找方法只能使用二分法逼近。如图\ref{fig:logsearch}右侧所示，在3072个表项中从第一行开始进行二分查找至少需要12次跳转。
 
-\begin{figure}[!ht]
+
+\begin{figure}[htbp]
 	\centering
-	\includegraphics[scale=1]{logsearch.pdf}
-	\caption{反向利用指数表进行二分估计以求得对数函数值} \label{fig:logsearch}
+	\begin{minipage}[t]{0.52\textwidth}
+		\centering
+		\includegraphics[scale=1]{logsearch.pdf}
+		\caption{反向利用指数表进行二分估计以求得对数函数值} \label{fig:logsearch}
+	\end{minipage}
+	\begin{minipage}[t]{0.44\textwidth}
+		\centering
+		\includegraphics[scale=1]{searchtime.pdf}
+		\caption{当流量中包长$l=1000$时利用指数表求对数函数值的查找次数} \label{fig:searchtime}
+	\end{minipage}
 \end{figure}
+
+%\begin{figure}[!ht]
+%	\centering
+%	\includegraphics[scale=1]{logsearch.pdf}
+%	\caption{反向利用指数表进行二分估计以求得对数函数值} \label{fig:logsearch}
+%\end{figure}
 
 计算出$ \delta(c,l)$后，$p_d(c,l) $可由指数查表与$ \delta(c,l)$结果共同计算。本文发现，由于不同的$ c $数值与不同$ l $数值，基于硬件计算$ \delta(c,l)$的时钟周期并不固定，例如当前c=1536，那么对数查找的起始位置便不在第一行，而在整体表的中间位置，这样搜索空间会缩小，因此查找次数也会变少。如图\ref{fig:searchtime}所示，假设流每个数据包大小统一为$ l=1000 $，当c的值越来越大，查找次数会往减小的趋势发展。
 
-\begin{figure}[!ht]
-	\centering
-	\includegraphics[scale=1]{searchtime.pdf}
-	\caption{当流量中包长$l=1000$时利用指数表求对数函数值的查找次数} \label{fig:searchtime}
-\end{figure}
+%\begin{figure}[!ht]
+%	\centering
+%	\includegraphics[scale=1]{searchtime.pdf}
+%	\caption{当流量中包长$l=1000$时利用指数表求对数函数值的查找次数} \label{fig:searchtime}
+%\end{figure}
 
 
 
@@ -445,8 +462,8 @@ p_d(c,l) &= \dfrac{l+f(c)-f(c+\delta(c,l))}{f(c+\delta(c,l)+1)-f(c+\delta(c,l))}
 	\caption{当$ c \geq c_{lmin} $时约化的压缩算法 \label{discoa2}}
 	\IncMargin{2em}
 	\DontPrintSemicolon
-	%	\KwIn{$\mbf{x}(k), \quad \mu, \quad \mbf{w}(0)$}
-	%	\KwOut{$y(k), \quad \varepsilon(k)$}
+	\KwIn{当前统计值$c$}
+	\KwOut{当前统计值的更新值$c$}
 	%
 	$ v = random(0,1) $
 
@@ -882,7 +899,7 @@ DISCO与CACTI的压缩过程均由CPU完成，当压缩任务请求频次增加�
 	\caption{不同平台下压缩统计功能功耗对比（单位：瓦特）} \label{table:power} \vspace{2mm}
 	\begin{tabularx}{\textwidth}{*{2}Y}
 		\toprule[1.5pt]
-		DISCO in CPU & FPGA NIC \\
+		基于CPU的实现方案 & FPGA网卡 \\
 		\midrule[1pt]
 		176.25 & 18.559\\
 		\bottomrule[1.5pt]

@@ -5,7 +5,7 @@
 
 \BiSection{本章引论}{Introduction to Chapter}\label{chap51}
 
-
+本章第\ref{chap52}小节首先介绍了目前SDN架构中处理流量的方式，接着在\ref{chap53}小节通过流量特征分析流表溢出的危害性以及不可避免性。在第\ref{chap54}小节提出基于全局资源的流表共享优化机制，第\ref{chap55}小节探讨了方案可执行性已经实现方法，最后本文评估并证明了本文的方法可有效缓解流表溢出所带来的危害具（\ref{chapftsevaluation}）。
 
 \BiSection{背景}{Background}\label{chap52}
 
@@ -370,14 +370,28 @@ T_{FTS} &\propto T_{fwd} - \Delta T_{fwd} + T_{trans} \nonumber \\
 
 图\ref{fig:ftsopt}（b）显示了FTS对数据包转发次数的影响。三角图线是正常情况下数据包的跳数。圆形图线表示FTS机制增加到达路径的平均长度。蓝色图线表示FTS机制中，流对比正常情况下多出的转发次数，可以看到95\%的概率FTS机制增加的跳数不会多于2跳。
 
-图\ref{fig:ftsroute}示出FTS处理一条新流时，新流走过的路径的距离增长情况，在95\%的情形下路径增长不会达到最短路径距离的2倍。本文已将将仿真程序和拓扑数据、实验结果公开到github\footnote{https://github.com/qiaosiyi/test\_overflow\_random\_foward}上。
-
 \begin{figure}[!ht]
 	\centering 
 	\includegraphics[scale=1]{ftsroute.pdf}
 	\caption{相比最短路径，FTS完成路由增加的转发节点数量之比} \label{fig:ftsroute}
 \end{figure}
 
+图\ref{fig:ftsroute}示出FTS处理一条新流时，新流走过的路径的距离增长情况，在95\%的情形下路径增长不会达到最短路径距离的2倍。本文已将将仿真程序和拓扑数据、实验结果公开到github\footnote{https://github.com/qiaosiyi/test\_overflow\_random\_foward}上。
+
+
+
 FTS不能保证同一TCP流量均往一邻居随机转发，并且数据包走过的路径长度也不尽相同。但是从图\ref{fig:ftsopt}(a)的实验结果得到：包包之间的路径差不超过7（8-1=7）跳。GE[24]网口标准转发时延为200us，因此总时间差不会超过2ms。这有可能启动TCP乱序重排机制，还有可能增加传输时延。但是，本文主要期望FTS机制能对流表溢出后的性能进行优化，并与流表溢出后转发设备的性能做对比，乱序导致的性能下降是可以忽略的。
 
 \BiSection{本章小结}{Conclusion}
+
+新兴的SDN、OpenFlow交换机是学术界研究的热点，相比于传统的网络交换设备，OpenFlow交换机需要消耗更大的查找表容量，流表溢出带来的性能下降现象较为严重。本文基于流量分布规律以及理论分析，提出了流表共享机制FTS，扩展了OpenFlow交换机的Table-Miss处理方式。可以有效地缓解流表溢出现象带来的巨大网络通信性能损失。
+
+文中从两方面验证了FTS机制，从实验结果中可以得出FTS机制有以下三个优点：（1）当流表溢出时，FTS相比于目前的Table-Miss处理模式可有效地降低控制消息数量和RTT时延达两个数量级。（2）本文提出了一种有效的快速外部组表选择算法。（3）FTS易于在真实交换机上部署和控制，占用硬件资源少，与现行Table-Miss处理模式兼容。
+
+转发设备硬件资源消耗量大以及设备成本高是目前SDN网络向广域网推进的重要难点。其中流表资源的匮乏有是该问题的核心点，本文提出的FTS机制将为后续SDN发展提供一个可参考的容错机制。
+
+
+
+
+
+

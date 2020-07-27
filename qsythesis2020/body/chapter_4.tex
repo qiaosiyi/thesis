@@ -5,6 +5,9 @@
 
 \BiSection{本章引论}{Introduction to Chapter}\label{chap41}
 
+本章在第\ref{chap42}小节分析了目前各类网络可编程数据平面的缺陷，并提出了一种新的数据平面可编程的交换机架构，包括编程模型（\ref{chap43}小节）以及硬件原理（\ref{chap44}小节）。接着利用前文\ref{chap332}小节提出的设计原理，在\ref{chap45}小节阐述了如何优化了FPGA内部的逻辑资源，证明了其配置方法属于NP难问题（附录\ref{fulua}），而后给出了一种高效的启发式算法（\ref{chap46}小节）。最后给出了系统的三个实际用例测试，证明了系统将数据平面的灵活性与性能同步提升（\ref{spe4}小节）。
+
+
 
 \BiSection{问题背景}{Background}\label{chap42}
 
@@ -337,13 +340,14 @@ D[k]=\sum_{j\in Q_k}D\_id[j]
 	T(N)=K^N
 \end{equation}
 
-其中$K$为并行子表的个数，当$N=16$时，计算搜索数约为$10^10$数量级，以目前服务器CPU计算能力约须消耗10秒钟才可找到精确解。然而在真实场景下，一般须设置$N\geq 64$（为使各个流水线中流量更均衡），搜索空间会陡增至$10^{38}$数量级，甚至可能将$N$设置为表达256个ID组份之多。
+其中$K$为并行子表的个数，当$N=16$时，计算搜索数约为$10^{10}$数量级，以目前服务器CPU计算能力约须消耗10秒钟才可找到精确解。然而在真实场景下，一般须设置$N\geq 64$（为使各个流水线中流量更均衡），搜索空间会陡增至$10^{38}$数量级，甚至可能将$N$设置为表达256个ID组份之多。
 
 \begin{algorithm}[!h]
 	\caption{LBBTC算法初始化  \label{lbbtcinit}}
 	\IncMargin{2em}
 	\DontPrintSemicolon
-
+	\KwIn{流量统计结果$D\_id[i]$}
+	\KwOut{初始化解空间$Q_k$}
 	
 	$Q_k = \phi; D[k]=0;i,j,k=0;i,j,k \in \mathbb{Z}$; $//$初始化
 	
@@ -369,10 +373,10 @@ D[k]=\sum_{j\in Q_k}D\_id[j]
 		}
 	}
 
-$//$获得中间阶段的初始化结果: $\left\{ Q_{k},D\left[ k\right] ,k\in \left[ 1,k\right] \right\} $\;
+$//$获得了流表容量占用均衡的一个排列: $\left\{ Q_{k},D\left[ k\right] ,k\in \left[ 1,k\right] \right\} $\;
 
 
-
+重新回到按照$D\_id[i]$原始的降序排列，以下按照流量公平优先的方式分配：
 
 \For{i in $\left\{ Sid\left[ 1\right] ,\ldots ,Sid\left[ 2^{P}\right] \right\} $}
 {
@@ -381,31 +385,13 @@ $//$获得中间阶段的初始化结果: $\left\{ Q_{k},D\left[ k\right] ,k\in 
 	$ D\left[ k_{i}\right] +=D\left[ Sid\left[ i\right] \right] $\;
 }
 
-$//$Get intermediate initial results: $\left\{ Q^{'}_{k},D'\left[ k\right] ,k\in \left[ 1,K\right] \right\} $\;
+$//$获得了流量均衡的一个排列: $\left\{ Q^{'}_{k},D'\left[ k\right] ,k\in \left[ 1,K\right] \right\} $\;
 
-\If{$Max\left( \left| Q_{k}'\right| \right) \leq C_{0}\cdot R_{d}/K$}
-{
-	\Return $\left\{ Q^{'}_{k},D'\left[ k\right] ,k\in \left[ 1,K\right] \right\} $\;
-}
-\ElseIf{$Max\left( \left| Q_{k}'\right| \right) > C_{0}\cdot R_{d}/K$}
-{
-	\textbf{set} $ C_{k_{1}}=2 \cdot C_{k_{1}}$\;
-	\While{$C_{sum}>C_0 \cdot R_d$}
-	{
-		\textbf{find:} another $C_{k'}$ and 
-		
-		\textbf{set:} $C_{k'}=\dfrac{C_{k'}}{2},k'\in [1,K]$\; 
-	}
-	
-	\While{$|Q^{'}_{k}|>C_k$}
-	{
-		\textbf{pop:} a $ID$ group from $Q'_{k}$ to  $Q'_{k_1}$\;
-	}
-}
+
 
 \end{algorithm}
 
-本文提出一种基于模拟退火方法的启发式算法。在PL的多级流表中，每一级流表组合机制的结果空间为初始集合S的子集$Q_k$。模拟退火算法的状态转移探索方式为下列情形二之一：（1）从集合$Q_k$中随机地移动一个元素到任意其他的集合$Q_{k'}$；（2）交换任意一组（2个）集合$Q_k$中的两个元素。首先，在每一个启发式搜索状态内，须保证$Q_k$内元素的有序性（如算法\ref{lbbtcinit}所示）。如果流量都很均衡则哈希后的ID组份流量也会均衡，但考虑到真实网络流量的“80/20”分布定律，哈希后流量分布也呈现巨大差异性。差异性提现在两方面：第一是流量的不均衡性，第二是流数目分布的不均衡性。因此本文将解空间（$Q_k$）内的元素分为两个属性，一部分是流量巨大的ID组份，另一部分是小流所代表的ID组份。在第二种转移探索方式中，各集合$Q_k$内同属性元素做互相交换。例如，做集合$Q_1$和$Q_2$元素交换时，只选择每个集合里符合大流属性的ID组份间进行交换。大流组份不会与小流组份进行交换。因此退火算法可以避免大量的无效探索次数。
+本文提出一种基于模拟退火方法的启发式算法。在PL的多级流表中，每一级流表组合机制的结果空间为初始集合S的子集$Q_k$。模拟退火算法的状态转移探索方式为下列情形二之一：（1）从集合$Q_k$中随机地移动一个元素到任意其他的集合$Q_{k'}$；（2）交换任意一组（2个）集合$Q_k$中的两个元素。首先，在每一个启发式搜索状态内，须保证$Q_k$内元素的有序性。如果流量都很均衡则哈希后的ID组份流量也会均衡，但考虑到真实网络流量的“80/20”分布定律，哈希后流量分布也呈现巨大差异性。差异性提现在两方面：第一是流量的不均衡性，第二是流数目分布的不均衡性。因此本文将解空间（$Q_k$）内的元素分为两个属性，一部分是流量巨大的ID组份，另一部分是小流所代表的ID组份。在第二种转移探索方式中，各集合$Q_k$内同属性元素做互相交换。例如，做集合$Q_1$和$Q_2$元素交换时，只选择每个集合里符合大流属性的ID组份间进行交换。大流组份不会与小流组份进行交换。因此退火算法可以避免大量的无效探索次数。
 
 本文定义启发式算法的能量方程（评价函数）如下：
 
@@ -442,25 +428,47 @@ t=1 &
 \right.
 \end{equation}
 
+如算法\ref{lbbtcinit}描述了退火算法初始化的过程，算法\ref{lbbtcms}描述了模拟退火算法根据初始化值进行元素交换、退火、最后退出的过程。
 
 \begin{algorithm}[!h]
 	\caption{LBBTC启发式算法  \label{lbbtcms}}
 	\IncMargin{2em}
 	\DontPrintSemicolon
+	\KwIn{初始化后的两组解空间$Q_k$、$ Q^{'}_{k} $及其对应的流量统计和$D[k]$、$ D'\left[ k\right] $}
+	\KwOut{经过元素交换收敛后的答案解空间$Q_k$}
 	
 \textbf{define:}$\Delta(D,K) =\sum ^{K}_{k=1}\left| D\left[ k\right] -\dfrac {100\% }{K}\right| ^{2}$\;
 
+\If{$Max\left( \left| Q_{k}'\right| \right) \leq C_{0}\cdot R_{d}/K$}
+{
+	\Return $\left\{ Q^{'}_{k},D'\left[ k\right] ,k\in \left[ 1,K\right] \right\} $\;
+}
+\ElseIf{$Max\left( \left| Q_{k}'\right| \right) > C_{0}\cdot R_{d}/K$}
+{
+	\textbf{set} $ C_{k_{1}}=2 \cdot C_{k_{1}}$\;
+	\While{$C_{sum}>C_0 \cdot R_d$}
+	{
+		\textbf{find:} another $C_{k'}$ and 
+		
+		\textbf{set:} $C_{k'}=\dfrac{C_{k'}}{2},k'\in [1,K]$\; 
+	}
+	
+	\While{$|Q^{'}_{k}|>C_k$}
+	{
+		\textbf{pop:} a $ID$ group from $Q'_{k}$ to  $Q'_{k_1}$\;
+	}
+}
 
-\textbf{Now calculate:} $\Delta(D,K)\  and\  \Delta'(D',K) $\;
+计算： $\Delta(D,K)\  and\  \Delta'(D',K) $\;
 \If{$\Delta>\Delta'$}
 {
 	\textbf{return} $\left\{ Q^{'}_{k},D'\left[ k\right] ,k\in \left[ 1,K\right] \right\} $\;
 }
 \Else{\While{$Times--$}
 	{
-		\textbf{exchange }the elements of $ID $ groups in $Q'_k$ and $Q'_j$\;
-		\textbf{find} minimum $\Delta' $and 
-		\textbf{reset} $Q'_k,D'[k]$\;
+		交换$Q'_k$和$Q'_j$内的$ID $组份\;
+		找到最小的 $\Delta' $ 并且 
+		重置 $Q'_k,D'[k]$\;
 	}
 	\If{$\Delta' \leq \Delta $}
 	{
@@ -621,7 +629,7 @@ PL端系统高速运行依赖于流量的负载均衡，但实际流量依然存
 
 \BiSection{本章小结}{Conclusion}\label{chap48}
 
-
+本文为增强数据平面转发设备的网络随路计算能力，提出了一种自适应交换系统（Adaptive Switch Architecture, AS）。AS的核心思想是保留ASIC交换芯片中的交换网络结构以确保高性能，但将网络数据可编程性卸载到FPGA可编程硬件中。本文在AS架构中实现了三种难以在目前交换系统中实现的例子，集中体现了AS架构可为目前的交换芯片带来极高的灵活性。此外，本文设计了资源消耗可控的多级并行流水线，并使以上三个应用达到了数个Tbps的吞吐性能。虽然PL（FPGA）端的接口吞吐性能依然无法与ASIC相比，但是我们不需要将完整的数据包送入PL，并且不是所有的数据流都需要被用户定义逻辑处理，因而可以极大缓解二者之间的性能鸿沟。综上，AS架构的性能已经达到了业界芯片标准水平，与其相比具有很高的竞争力。
 
 
 

@@ -111,11 +111,11 @@
 	
 	\ \ 在流表拆分后，$V_k$表示每个流表内，最终可被重新合并的流表项个数， 
 	
-	\ \ $q_1$,$q_2 \in \mathbb{R}$, 存在一个分配规则 $\{Q_i\}^{K}_{i=1}$ 满足LBBCD问题所描述的约束条件。$\}$
+	\ \ $q_1$,$q_2 \in \mathbb{R}$, 存在一个分配规则 $\{Q_i\}^{K}_{i=1}$ 满足LBBTC问题所描述的约束条件。$\}$
 	
-	使用描述语言定义LBBCD问题，AVG\_DIV:=
+	使用描述语言定义LBBTC问题，AVG\_DIV:=
 	
-	为说明 AVG\_DIV $\leq_p$ LBBCD，即AVG\_DIV可被归约到LBBCD问题。令$\langle S_1, w \rangle$为是AVG\_DIV的一个实例，可以继续构造一个LBBCD的实例如 $\langle  S, K, Rd, C_k, T, D\_id,\\ V_k, 
+	为说明 AVG\_DIV $\leq_p$ LBBTC，即AVG\_DIV可被归约到LBBTC问题。令$\langle S_1, w \rangle$为是AVG\_DIV的一个实例，可以继续构造一个LBBTC的实例如 $\langle  S, K, Rd, C_k, T, D\_id,\\ V_k, 
 	q_1, q_2\rangle$如下：
 	
 	令：$S = S_1$,
@@ -138,5 +138,5 @@
 	接下来说明当且仅当$\langle S_1, 2, 1, \dfrac {C_0}{K}, \infty, w, 0, 0, C_0 \rangle \in $ LBBCD时，有$\langle S_1, w\rangle \\
 	\in $ AVG\_DIV：
 	
-	如果存在一组分配机制${Q_1, Q_2}$使得上述约束条件得到满足，则令$S'_1=Q_1$，根据约束A-13,A-14，$\sum_{x\in S'_1}w(x)=\dfrac{1}{2}\sum _{x \in S_1}w(x)$。另一方面，如果存在一个子集$S'_1( S'_1 \subseteq S_1)$，满足$\sum_{x\in S'_1}w(x)=\dfrac{1}{2}\sum _{x \in S_1}w(x)$，则当$Q_1=S'_1$ 且 $Q_2=S_1-S'_1$，显然约束条件A-12至A-15全部满足。所以AVG\_DIV 归约到 LBBCD，LBBCD同样为NP难问题。
+	如果存在一组分配机制${Q_1, Q_2}$使得上述约束条件得到满足，则令$S'_1=Q_1$，根据约束A-13,A-14，$\sum_{x\in S'_1}w(x)=\dfrac{1}{2}\sum _{x \in S_1}w(x)$。另一方面，如果存在一个子集$S'_1( S'_1 \subseteq S_1)$，满足$\sum_{x\in S'_1}w(x)=\dfrac{1}{2}\sum _{x \in S_1}w(x)$，则当$Q_1=S'_1$ 且 $Q_2=S_1-S'_1$，显然约束条件A-12至A-15全部满足。所以AVG\_DIV 归约到LBBTC，LBBTC同样为NP难问题。
 \end{proof}
