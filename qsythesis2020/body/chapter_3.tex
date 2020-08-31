@@ -94,7 +94,8 @@ CPU通过循环取指令等操作，完成通用的可计算任务。计算的�
 在高性能的大数据领域，批处理技术已经可以满足非常多的使用场景，但随着数据时效性价值提升，一种流式计算概念被提出。流式计算是实时的，常驻的，与Hadoop，MaxCompute，Spark等系统不同（它们是离线批处理），流式计算对延迟属性要求更为苛刻。而目前在大数据和高性能网络中的处理就更需要考虑如何利用FPGA来加速流式计算的需求。
 %阿里巴巴 大数据page70 流式计算的特点
 \begin{figure}[!ht]
-	\centering
+	\centering 
+	\vspace{-1.5mm}
 	\includegraphics[scale=1]{fpgaprogramabstraction.pdf}
 	\caption{FPGA硬件编程抽象} \label{fig:fpgaprogramabstraction}
 \end{figure}
@@ -108,7 +109,8 @@ CPU通过循环取指令等操作，完成通用的可计算任务。计算的�
 2）功能卸载的“数据---计算”DC抽象方法。
 
 \begin{figure}[!ht]
-	\centering
+	\centering 
+	\vspace{-1.5mm}
 	\includegraphics[scale=1]{dcprinciple.pdf}
 	\caption{FPGA加速流式计算的DC抽象方法与原则} \label{fig:dcprinciple}
 \end{figure}
@@ -145,7 +147,8 @@ CPU通过循环取指令等操作，完成通用的可计算任务。计算的�
 
 
 \begin{figure}[htbp]
-	\centering
+	\centering 
+	\vspace{-1.5mm}
 	\begin{minipage}[t]{0.48\textwidth}
 		\centering
 		\includegraphics[scale=1]{jitter.pdf}
@@ -171,7 +174,8 @@ CPU通过循环取指令等操作，完成通用的可计算任务。计算的�
 
 
 \begin{figure}[htbp]
-	\centering
+	\centering 
+	\vspace{-1.5mm}
 	\begin{minipage}[t]{0.48\textwidth}
 		\centering
 		\includegraphics[scale=1]{caprepsoftway.pdf}
@@ -204,7 +208,8 @@ CPU通过循环取指令等操作，完成通用的可计算任务。计算的�
 在智能网卡上，数据包首先经由物理网口（phy\_port）进入板上电路，此时需要将网络通信的物理层信号协议转换为二层数据帧。一般由光电转换模块和物理层芯片结合处理。帧封装的数据包数据信息是串行高速总线协议，MAC核逻辑将其转换为低速率的并行总线，并分离出数据的伴随时钟信号。之后为数据流（数据字）添加统一格式标记（控制字）。
 
 \begin{figure}[!ht]
-	\centering
+	\centering 
+	\vspace{-1.5mm}
 	\includegraphics[scale=1]{arccaprep.pdf}
 	\caption{流量捕获与回放系统数据通路FPGA核心逻辑架构} \label{fig:arccaprep}
 \end{figure}
@@ -221,7 +226,8 @@ CPU通过循环取指令等操作，完成通用的可计算任务。计算的�
 \end{itemize}
 
 \begin{figure}[!ht]
-	\centering
+	\centering 
+	\vspace{-1.5mm}
 	\includegraphics[scale=1]{pktstruct.pdf}
 	\caption{数据包格式与控制字标志} \label{fig:pktstruct}
 \end{figure}
@@ -349,7 +355,8 @@ b^x=1500\times(b-1)+1\\
 
 
 \begin{figure}[htbp]
-	\centering
+	\centering 
+	\vspace{-1.5mm}
 	\begin{minipage}[t]{0.52\textwidth}
 		\centering
 		\includegraphics[scale=1]{logsearch.pdf}
@@ -371,7 +378,8 @@ b^x=1500\times(b-1)+1\\
 计算出$ \delta(c,l)$后，$p_d(c,l) $可由指数查表与$ \delta(c,l)$结果共同计算。本文发现，由于不同的$ c $数值与不同$ l $数值，基于硬件计算$ \delta(c,l)$的时钟周期并不固定，例如当前c=1536，那么对数查找的起始位置便不在第一行，而在整体表的中间位置，这样搜索空间会缩小，因此查找次数也会变少。如图\ref{fig:searchtime}所示，假设流每个数据包大小统一为$ l=1000 $，当c的值越来越大，查找次数会往减小的趋势发展。
 
 %\begin{figure}[!ht]
-%	\centering
+%	\centering 
+%	\vspace{-1.5mm}
 %	\includegraphics[scale=1]{searchtime.pdf}
 %	\caption{当流量中包长$l=1000$时利用指数表求对数函数值的查找次数} \label{fig:searchtime}
 %\end{figure}
@@ -381,7 +389,8 @@ b^x=1500\times(b-1)+1\\
 3）存在问题的分析
 
 \begin{figure}[!ht]
-	\centering
+	\centering 
+	\vspace{-1.5mm}
 	\includegraphics[scale=1]{originpipeline.pdf}
 	\caption{压缩统计硬件流水线设计（未优化）} \label{fig:originpipeline}
 \end{figure}
@@ -617,7 +626,8 @@ p_{cmax} \leq \dfrac{2^{32}}{1518} =2829359.2=2^{21.4}
 
 
 \begin{figure}[!ht]
-	\centering
+	\centering 
+	\vspace{-1.5mm}
 	\includegraphics[scale=1]{mydiscopipeline3.pdf}
 	\caption{压缩统计硬件流水线设计（优化）} \label{fig:mydiscopipeline}
 \end{figure}
@@ -625,7 +635,8 @@ p_{cmax} \leq \dfrac{2^{32}}{1518} =2829359.2=2^{21.4}
 图\ref{fig:mydiscopipeline}展示了优化后的压缩计数架构设计（即算法\ref{mydiscoa4}所描述的快速压缩更新的完整过程）。Magic\_Number值由$c_{lmax}$带入函数$f(c)$中得出，第一阶段，系统采用线性增长方式，系统判断当线性增长的统计量大于Magic\_Number后，统计方式改为压缩方法（第二阶段）。为快速区分某统计值所处统计阶段，本文将统计量$ C $的最高位设置为标志记位，在第一阶段最高位为“0”，第二阶段时标记为“1”。
 
 \begin{figure}[!ht]
-	\centering
+	\centering 
+	\vspace{-1.5mm}
 	\includegraphics[scale=0.97]{couterqsy1.pdf}
 	\caption{不同参数b下的计数曲线} \label{fig:couterqsy1}
 \end{figure}
@@ -633,7 +644,8 @@ p_{cmax} \leq \dfrac{2^{32}}{1518} =2829359.2=2^{21.4}
 本文提出的新压缩方法具有极大灵活性，在运行时用户可根据自身对于统计精度、统计容量大小（b），资源消耗率（Depth），来自行选择计算查找表内容。如图\ref{fig:couterqsy1}，展示了在不同计数容量需求下，修改参数b来扩展计数器统计容量范围（从$1.5\times 10^{10}$Bytes到$5.3\times 10^{12}$Bytes，扩容353倍）。此时计数器位宽（20bits）与查找表PLUT的位宽深度（24bits，3072项）均保持不变。
 
 \begin{figure}[!ht]
-	\centering
+	\centering 
+	\vspace{-1.5mm}
 	\includegraphics[scale=1]{plut.pdf}
 	\caption{b=1.006时的PLUT查找表样例} \label{fig:plut}
 \end{figure}
@@ -733,7 +745,8 @@ E[f(c_i)]=\sum ^{m}_{i=1}l_{i}
 	\end{equation}
 	
 	\begin{figure}[!ht]
-		\centering
+		\centering 
+	\vspace{-1.5mm}
 		\includegraphics[scale=1]{discozhengming.pdf}
 		\caption{一般情形转化为特殊情形得以证明} \label{fig:discozhengming}
 	\end{figure}
@@ -797,7 +810,8 @@ E[f(c_i)]=\sum ^{m}_{i=1}l_{i}
 为实现高精度的流量时间标注以及回放功能，本文实现了一款带有PCIe Gen2 $ \times $ 8主机接口的基于FPGA的智能网卡ONetCard（图\ref{fig:onetcard}示）。
 
 \begin{figure}[!ht]
-	\centering
+	\centering 
+	\vspace{-1.5mm}
 	\includegraphics[scale=0.46]{onetcard.pdf}
 	\caption{用于测试基于FPGA网卡的流量捕获功能的ONetCard实验平台} \label{fig:onetcard}
 \end{figure}
@@ -816,12 +830,14 @@ E[f(c_i)]=\sum ^{m}_{i=1}l_{i}
 
 \begin{figure}[!ht]
 	\centering 
+	\vspace{-1.5mm} 
 	\includegraphics[width=0.95\textwidth]{addtimestamp.png}
 	\caption{包头添加时间戳仿真结果} \label{fig:addtimestamp}
 \end{figure}
 
 \begin{figure}[!ht]
 	\centering 
+	\vspace{-1.5mm} 
 	\includegraphics[width=0.95\textwidth]{timecmp.png}
 	\caption{时间戳比较器测试仿真结果} \label{fig:timecmp}
 \end{figure}
@@ -834,6 +850,7 @@ E[f(c_i)]=\sum ^{m}_{i=1}l_{i}
 
 \begin{figure}[!ht]
 	\centering 
+	\vspace{-1.5mm} 
 	\includegraphics[scale=1]{expcaprep.pdf}
 	\caption{回放时间精度实验拓扑} \label{fig:expcaprep}
 \end{figure}
@@ -849,6 +866,7 @@ E[f(c_i)]=\sum ^{m}_{i=1}l_{i}
 
 \begin{figure}[!ht]
 	\centering 
+	\vspace{-1.5mm} 
 	\includegraphics[scale=1]{timebias.pdf}
 	\caption{数据包回放时间精度概率分布} \label{fig:timebias}
 \end{figure}
@@ -873,6 +891,7 @@ E[f(c_i)]=\sum ^{m}_{i=1}l_{i}
 
 \begin{figure}[!ht]
 	\centering 
+	\vspace{-1.5mm} 
 	\includegraphics[scale=1]{discothroughput.pdf}
 	\caption{本文基于FPGA智能网卡压缩算法与其他压缩统计方法性能对比（64字节小包）} \label{fig:discothroughput}
 \end{figure}
@@ -882,6 +901,7 @@ E[f(c_i)]=\sum ^{m}_{i=1}l_{i}
 
 \begin{figure}[!ht]
 	\centering 
+	\vspace{-1.5mm} 
 	\includegraphics[scale=1]{discocpu.pdf}
 	\caption{基于FPGA网卡硬件流量压缩统计系统可有效降低主机CPU消耗（64字节小包）} \label{fig:discocpu}
 \end{figure}
@@ -912,6 +932,7 @@ DISCO与CACTI的压缩过程均由CPU完成，当压缩任务请求频次增加�
 
 \begin{figure}[!ht]
 	\centering 
+	\vspace{-1.5mm} 
 	\includegraphics[scale=1]{discomem.pdf}
 	\caption{在不同流个数下的压缩计数存储空间占用} \label{fig:discomem}
 \end{figure}
@@ -930,6 +951,7 @@ COV(T(S))=\sqrt{\dfrac{Var[T(S)]}{E^2[T(S)]}}=\sqrt{\dfrac{1-1/n}{2}\times (b-1)
 
 \begin{figure}[!ht]
 	\centering 
+	\vspace{-1.5mm} 
 	\includegraphics[scale=1]{discoerr.pdf}
 	\caption{对不同大小（Bytes）的流量估计时的变异系数分布} \label{fig:discoerr}
 \end{figure}

@@ -39,6 +39,7 @@ P4是目前广泛使用的可定义数据平面内的数据包解析和查表过
 
 \begin{figure}[!ht]
 	\centering 
+	\vspace{-1.5mm} 
 	\includegraphics[scale=1]{asarch.pdf}
 	\caption{自适应交换结构框图} \label{fig:asarch}
 \end{figure}
@@ -67,6 +68,7 @@ P4是目前广泛使用的可定义数据平面内的数据包解析和查表过
 
 \begin{figure}[!ht]
 	\centering 
+	\vspace{-1.5mm} 
 	\includegraphics[scale=1]{asdev1.pdf}
 	\caption{基于SDNet工具链的FPGA-PL端编译流程} \label{fig:asdev}
 \end{figure}
@@ -78,6 +80,7 @@ P4是目前广泛使用的可定义数据平面内的数据包解析和查表过
 
 \begin{figure}[!ht]
 	\centering 
+	\vspace{-1.5mm} 
 	\includegraphics[scale=1]{ascomp.pdf}
 	\caption{基于SDNet工具链的FPGA-PL端编译流程} \label{fig:ascomp}
 \end{figure}
@@ -161,6 +164,7 @@ PL以FPGA芯片为例，自适应交换平台可以将SS交换芯片无法完成
 
 \begin{figure}[!ht]
 	\centering 
+	\vspace{-1.5mm} 
 	\includegraphics[scale=1]{asframe.pdf}
 	\caption{SS与PL内部通信帧格式} \label{fig:asframe}
 \end{figure}
@@ -175,6 +179,7 @@ SS端对于目前商用普通交换芯片中需增加的功能为第一小节中
 
 \begin{figure}[!ht]
 	\centering 
+	\vspace{-1.5mm} 
 	\includegraphics[scale=1]{asmmu.pdf}
 	\caption{高pps性能MMU的实现方案} \label{fig:asmmu}
 \end{figure}
@@ -206,6 +211,7 @@ SS端对于目前商用普通交换芯片中需增加的功能为第一小节中
 
 \begin{figure}[!ht]
 	\centering 
+	\vspace{-1.5mm} 
 	\includegraphics[scale=1]{pljidk.pdf}
 	\caption{$ j $组ID组份向$ K $个集合中分配} \label{fig:pljidk}
 \end{figure}
@@ -228,6 +234,7 @@ K_0=\sum_{i_0}^{k_0}j_{i_0}
 	\item LPM（Longest Prefix Matching，最长前缀匹配）表。与CAM不同，PLM表内含有掩码位（*）。不同的数据流被哈希函数分到不同的组份，由于不同的组份有可能被分到不同的子流水线，有可能导致被同一条LPM表项同时匹配的两条流被分到不同的子流水线。若按照无复制方式去拆分流表项，则必然造成一部分流量无法匹配成功。如图\ref{fig:plmask}所示，在做流量分类时，选取包头域中四个bit位进行哈希取值。若这些bit位中有位置对应到了带掩码表项（1*10），而此时，两条流“1010”与“1110”恰好又被哈希函数分到了两个子流水线中的组份（$j_1$与$j_2$），则此掩码表项须分别复制到两条子流水线中。
 	\begin{figure}[!ht]
 		\centering 
+	\vspace{-1.5mm} 
 		\includegraphics[scale=1]{plmask.pdf}
 		\caption{带掩码表项在拆分时，可能需要被复制多份} \label{fig:plmask}
 	\end{figure}
@@ -244,6 +251,7 @@ K_0=\sum_{i_0}^{k_0}j_{i_0}
 
 \begin{figure}[!ht]
 	\centering 
+	\vspace{-1.5mm} 
 	\includegraphics[scale=1]{pllb0.pdf}
 	\caption{流表分割引发的数据包处理信息丢失问题} \label{fig:pllb0}
 \end{figure}
@@ -252,6 +260,7 @@ K_0=\sum_{i_0}^{k_0}j_{i_0}
 
 \begin{figure}[!ht]
 	\centering 
+	\vspace{-1.5mm} 
 	\includegraphics[scale=0.95]{plppl.pdf}
 	\caption{PL端带有流量均衡的并行查找块结构} \label{fig:plppl}
 \end{figure}
@@ -482,6 +491,7 @@ t=1 &
 
 \begin{figure}[!ht]
 	\centering 
+	\vspace{-1.5mm} 
 	\includegraphics[scale=1]{asgen.pdf}
 	\caption{PL端并行处理流水线一般模型} \label{fig:asgen}
 \end{figure}
@@ -582,12 +592,14 @@ PL端系统高速运行依赖于流量的负载均衡，但实际流量依然存
 
 \begin{figure}[!ht]
 	\centering 
+	\vspace{-1.5mm} 
 	\includegraphics[scale=0.96]{asper.pdf}
 	\caption{流量均衡算法计算性能（时间）。在不同的均衡性（$\delta$=9\%,7\%,5\%,3\%）需求下为$K=8$条子流水线在不同流量下的计算时间分布} \label{fig:asper}
 \end{figure}
 
 \begin{figure}[!ht]
 	\centering 
+	\vspace{-1.5mm} 
 	\includegraphics[scale=0.96]{ask.pdf}
 	\caption{在不同子流表数目下（$K=$4,6,8），且$\delta$=3\%时的计算时间分布} \label{fig:ask}
 \end{figure}
@@ -597,7 +609,8 @@ PL端系统高速运行依赖于流量的负载均衡，但实际流量依然存
 在系统启动须先定义$\delta$的可接受域值，本文设定$K=8$，$ J=256$，如图\ref{fig:asper}所示，当设定均衡度为5\%时，可保证在75\%的情况下计算时间小于0.01秒。作为对照，如图\ref{fig:ask}本文测试了当子流水线数目（$K$）不同时计算时间的分布。当并行度增大时，显然算法的收敛时间会增加，在本实验的三个测试功能中，超过90\%的计算时间都小于0.5秒，并且能够以100\%置信度保证计算时间小于1.12秒。
 
 \begin{figure}[htbp]
-	\centering
+	\centering 
+	\vspace{-1.5mm}
 	\begin{minipage}[t]{0.48\textwidth}
 		\centering
 		\includegraphics[scale=1]{astradeoff.pdf}

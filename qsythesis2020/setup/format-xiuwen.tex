@@ -70,9 +70,9 @@
 \titleformat{\chapter}{\center\sanhao}{\chaptertitlename}{0.8em}{}
 \titlespacing{\chapter}{0pt}{-5.3mm}{4.2mm}
 \titleformat{\section}{\xiaosan}{\thesection}{0.5em}{}
-\titlespacing{\section}{0pt}{3mm}{3mm}
+\titlespacing{\section}{0pt}{3mm}{1.5mm}
 \titleformat{\subsection}{\sihao}{\thesubsection}{0.5em}{}
-\titlespacing{\subsection}{2.13em}{3mm}{3mm}
+\titlespacing{\subsection}{2.13em}{1.5mm}{-0.5mm}
 
 % 重新定义BiChapter命令，可实现标题手动换行，但不影响目录
 \def\BiChapter{\relax\@ifnextchar [{\@BiChapter}{\@@BiChapter}}
@@ -169,8 +169,8 @@
 \captiondelim{~~}
 \hangcaption
 \renewcommand{\subcapsize}{\wuhao}
-\setlength{\abovecaptionskip}{0pt}
-\setlength{\belowcaptionskip}{0pt}
+\setlength{\abovecaptionskip}{5pt}
+\setlength{\belowcaptionskip}{-9pt}
 
 % 关于公式的几个定义
 \renewcommand{\Re}{\mathrm{Re}}
@@ -203,6 +203,9 @@
 \renewcommand\thealgocf{\csname the\algocf@within\endcsname-\@arabic\c@algocf}
 \SetAlCapSty{textrm}
 \SetAlCapSkip{1ex}
+
+%\setlength{\abovecaptionskip}{5pt}
+%\setlength{\belowcaptionskip}{-5pt}
 \makeatother
 
 % 更改代码标题

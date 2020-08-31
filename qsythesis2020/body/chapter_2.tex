@@ -59,7 +59,8 @@ P4的目标是让已经部署的硬件网络设备数据平面实现软件定义
 数据平面可编程概念引发了众多新技术和为解决不同问题所提出的创新实践，如图\ref{fig:pdphistory},本文从不同方向架构梳理这些工作。
 
 \begin{figure}[!ht]
-	\centering
+	\centering 
+	\vspace{-1.5mm}
 	\includegraphics[scale=1]{pdphistory.pdf}
 	\caption{可编程数据平面各界发展历史} \label{fig:pdphistory}
 \end{figure}
@@ -82,7 +83,8 @@ P4的目标是让已经部署的硬件网络设备数据平面实现软件定义
 如图\ref{fig:smartnic}所示，是一个典型的智能网卡数据通路，网卡将各种网络处理过程（流分类、流量工程、协议）硬化到专用硬件电路上，使处理效能增加。智能网卡本质类似于一个操作系统的外挂交换机，只是它更靠近网络，主机拥有其完整的控制平面管理能力。
 
 \begin{figure}[!ht]
-	\centering
+	\centering 
+	\vspace{-1.5mm}
 	\includegraphics[scale=1]{smartnic.pdf}
 	\caption{各类智能网卡架构及其可编程性对比} \label{fig:smartnic}
 \end{figure}
@@ -102,7 +104,8 @@ P4的目标是让已经部署的硬件网络设备数据平面实现软件定义
 基于FPGA的智能网卡拥有更为广阔的编程空间。FPGA内部有大量LUT门电路，以及分布式片上互联网络，基于此结构的FPGA可以实现任何客制化的逻辑电路。FPGA使用硬件描述语言开发（HDL），HDL不直接体现门电路的拼接方式而只是一种行为描述语言，从而屏蔽了底层细节。FPGA可以方便地移植程序，我们可以将HDL代码打包成IP核，只要按照规定好的输入输出接口位宽和时序就可以任意复用。在设计电路模组时，我们一般会使用标准的总线接口来连接不同的功能模块，以增强开发的灵活性。如今FPGA厂商也会在FPGA中加入专用功能电路来增加芯片集成度、增强FPGA的处理某些任务时的性能。如ARM核、分布式DSP核、PCIe收发器、分布式片上存储。
 
 \begin{figure}[!ht]
-	\centering
+	\centering 
+	\vspace{-1.5mm}
 	\includegraphics[scale=1]{generalprog.pdf}
 	\caption{性能与灵活性如何更好地折中} \label{fig:generalprog}
 \end{figure}
@@ -124,7 +127,8 @@ P4的目标是让已经部署的硬件网络设备数据平面实现软件定义
 
 在不同的信息技术领域内有不同信息处理需求，从信息技术蓬勃发展的过去的几十年到现在，随着微电子行业的诞生，一直不断地涌现出各种类型基于某种专业硬件的处理器，往往这些设备都兼具有某种软件的可编程性。如图\ref{fig:historyprocessors}所示，下面简要介绍历史各个类型可编程处理器。第一，中央处理器（CPU）。CPU解决的是通用类型的计算问题，工作生产生活中，人们往往会遇到各种各样的数学计算任务，使用CPU去辅助人们完成这类枯燥且量大的工作可以极高地提升社会生产效率。CPU采用冯诺依曼结构，是一种图灵机。它将处理通用计算任务抽象为控制-计算-存储模型。控制模块从存储器内读取程序指令和数据指令，并把他们按逻辑分配给计算模块。人们预先可以将需要处理的任务和数据编写到可重复擦写的存储器中，实现各种灵活的任务需求。操作人员就从繁琐的计算当中隔离开来，只需要去关注如何设计控制逻辑已经对应的需要计算的数据。
 \begin{figure}[!ht]
-	\centering
+	\centering 
+	\vspace{-1.5mm}
 	\includegraphics[scale=1]{historyprocessors.pdf}
 	\caption{器件在不同的专用任务中性能和可编程性指标} \label{fig:historyprocessors}
 \end{figure}
@@ -143,7 +147,8 @@ P4的目标是让已经部署的硬件网络设备数据平面实现软件定义
 
 
 \begin{figure}[htbp]
-	\centering
+	\centering 
+	\vspace{-1.5mm}
 	\begin{minipage}[t]{0.48\textwidth}
 		\centering
 		\includegraphics[scale=1]{pktheader.pdf}
@@ -168,7 +173,8 @@ P4的目标是让已经部署的硬件网络设备数据平面实现软件定义
 可编程解析器须实现灵活可运行时配置的协议图。可编程解析器中的状态转移图可以通过状态查找表来实现。状态查找表可以由RAM 和/或 TCAM存储器组成，RAM是一种基于地址的内容访问存储器；CAM是一种基于内容的地址访问存储器。CAM中在不同地址存储有内容，当CAM接收到一个内容输入请求（key）时，可以并行搜索所有位置，并返回内容等于key的地址位置。TCAM则是在请求key中可以定义“不考虑”bit位，在判断二者内容是否相等时所有“不考虑”位都认为是相等的。如图\ref{fig:progparser}所示，TCAM的key的宽度与一个完整的包头相等，在TCAM的一个表项中，存储着某一个协议的包头标识数据，这个数据的位置与真实数据包包头中此协议的位置相同，但是其他位置都属于“不考虑”bit位。因而只要包头可以匹配此TCAM表项，就代表包头中有这个协议。当然由于包头域是一种有向图，在不同阶段所需要看的标识位置是不一样的。下一跳状态信息就存储在RAM中，得到新的状态后，电路再去查找TCAM，直到有向图走完。只要我们有足够宽的TCAM表，我们可以通过任意修改表中存储的状态图信息来实现运行时可编程的包头解析器。
 
 \begin{figure}[htbp]
-	\centering
+	\centering 
+	\vspace{-1.5mm}
 	\begin{minipage}[t]{0.48\textwidth}
 		\centering
 		\includegraphics[scale=0.9]{traditionalmatch.pdf}
@@ -223,7 +229,8 @@ P4的目标是让已经部署的硬件网络设备数据平面实现软件定义
 在前文提到，软件定义网络（SDN）的诸多优势是由于网络结构逻辑分层带来的。SDN将控制平面抽离出来，形成对网络分布式数据平面的集中控制的结构。作为控制平面与数据平面交换机通信接口OpenFlow协议是目前最具影响力的，已经成为了业内事实标准。SDN将网络业务抽象为网络操作系统（控制面）上的不同应用程序。如图\ref{fig:securechannel}于控制平面与数据平面二者为远距传输，通信成本相对增大，主要体现在：第一，SDN强调网络的快速变化，然而控制器对数据平面的控制都依赖于容易成为瓶颈的安全通道。安全通道一般通信速率较低，而且控制信令传输延迟大。这与快速变化的网络结构成为矛盾。第二，成为中间瓶颈的安全通道容易承载来自内部、外部的大流量，而遭受攻击。
 
 \begin{figure}[!ht]
-	\centering
+	\centering 
+	\vspace{-1.5mm}
 	\includegraphics[scale=1]{securechannel.pdf}
 	\caption{SDN架构的瘦腰问题} \label{fig:securechannel}
 \end{figure}
@@ -248,7 +255,8 @@ SDN网络中存在需要快速变化的流表项信息。SDN的控制平面包�
 第一，基于RAM的精确匹配查找。上文提到由于软件查找算法性能较差，高性能路由设备内一般会使用基于硬件的快速存储器，包括RAM/CAM/TCAM等。RAM是最简单的一类流表查找方法。如图\ref{fig:rammatch}所示，在初始化配置流表项时，包头域的值作为地址，操作数作为内容，存储到RAM内。查找时先从包头提取出匹配域的值（key），然后读出以key为地址位对应的数据即可得到操作数。一般RAM查找的时间复杂度只有$O(1)$。但如果待查找的匹配域过宽，则会消耗掉一个很大RAM空间。例如，我们匹配32位的目的IP地址，则RAM表的地址总线宽度也是32位，如果用1字节（也就是可定义256种不同的操作）来定义操作数的话，那么总共需要的RAM空间是$2^{32}\times 1Byte=4GBytes$。由于实际的数据包中并不是每一个有可能的IP地址都会出现，对于不会出现的IP地址，我们无需对其进行设置。在一个网络中，目的IP地址也许不会超过100万个，但是4GB存储空间却消耗了可以存储40亿个IP地址的空间，利用率很低、比较不经济。如果希望查找位宽更大的MAC（48bits）层key，则需要$2.6\times 10^{5}GB$内存容量，显然已经无法实现。但是对于查找一些小位宽的包头域（如，包头协议、TCP端口号）\footnote{包头协议（8bits）对应内存容量空间256Bytes，端口号（16bits）对应内存容量空间64KBytes。}，则可以在存储容量消耗小于100KB内，实现最快速的单操作周期查找，经济适用性比较高。
 
 \begin{figure}[htbp]
-	\centering
+	\centering 
+	\vspace{-1.5mm}
 	\begin{minipage}[t]{0.39\textwidth}
 		\centering
 		\includegraphics[scale=0.98]{rammatch.pdf}
