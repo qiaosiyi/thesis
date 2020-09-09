@@ -15,31 +15,30 @@
 
 软件定义网络概念的提出，推动网络向高性能和高可编程的方向发展。
 软件定义网络利用流表建立起“匹配+执行”的编程抽象方法，解耦网络数据平面与控制平面；
-数据包协议无关处理器通过扩展匹配域定义的方式进一步优化了网络可编程抽象能力。
-网络数据平面中，流表是表达控制算法灵活性的关键部件。但高性能硬件流表容量较低，易导致节点流表溢出从而影响转发性能；
+数据包协议无关处理器通过扩展匹配域定义的方式，进一步优化了网络可编程抽象能力。
+可编程网络架构的控制平面与数据平面分离，数据平面转发设备中的流表是表达控制算法灵活性的关键部件。但高性能硬件流表容量较低，易导致节点流表溢出从而影响转发性能；
 数据包协议无关的处理技术扩展了数据包头的匹配灵活度，但无法满足数据平面内其他可编程计算需求。因此目前网络数据平面设备面临着吞吐性能和灵活性两方面的制约。
 
 本文主要研究在网络数据平面内如何利用可编程硬件来更灵活、更高效地支持多种类别的可编程抽象方法。
-首先以解决流表资源瓶颈问题为基础，之后利用可编程硬件分别在网络中间节点、主机侧网络中构建协同发展的高性能与高可编程性方法，最终形成一套完整的端到端网络系统。
+本文首先以解决流表资源瓶颈问题为基础，并利用可编程硬件分别在网络中间节点、主机侧网络中构建协同发展的高性能与高可编程性方法，最终形成一套完整的端到端网络系统。
 具体贡献如下：
 
 %{摘要中的贡献、绪论中的创新点，以及总结展望中的总结相互对应，换种表述方式而已。最好用一种套路写法，例如：“为应对XXX问题，提出一种XXX方法，该方法的基本思路，方法的性能或效果。”}
 
-1.提出一种全局场景下扩展流表资源的方法。
-为解决单个转发节点流表容量受限以及流表溢出后数据包处理性能严重下降的问题，本文提出流表共享机制。
-该机制通过与邻居节点建立流表共享，提升整体流表资源的动态利用率，同时为无法建立流表项的流量设置基于离线转发策略的组表转发方式。
+1.提出一种全局场景下的流表资源可扩展方法（Flow Table Sharing, FTS）。
+为解决单个转发节点流表容量受限以及流表溢出后数据包处理性能严重下降的问题，本文提出流表共享机制FTS。
+FTS通过与邻居节点建立流表共享，提升整体流表资源的动态利用率，同时为由于没有足够空间而无法建立流表项的流量，设置一种基于离线转发策略的组表转发方式。
 在流表溢出的情况下，该方案和传统OpenFlow协议相比，使OpenFlow交换机转发RTT延迟和安全通道控制报文风暴数量的优化均达到至少2个数量级。
 
-2.利用可编程硬件加速网络中间节点的普适性计算。
-针对高性能网络转发设备可编程灵活性差的问题，本文提出一种自适应交换的新型转发体系结构（Adaptable Switch）。
-利用高性能的转发芯片与可编程硬件有机结合形成异构体，以及一套高资源利用率的并行流水线、流表分配优化算法，使自适应交换系统在满足全可编程灵活性的条件下，与基于FPGA的数据平面相比，将数据包处理性能提升120倍以上。
+2.支持自适应计算的硬件交换系统架构（Adaptable Switch, AS）。
+针对高性能网络转发设备可编程灵活性差的问题，本文提出利用可编程硬件加速网络中间节点的普适性计算的方法AS。
+利用高性能的转发芯片与可编程硬件有机结合形成异构体，同时获得性能提升以及更高的可编程灵活性。并且还提出了一套部署在硬件上的高资源利用率的并行流水线和流表分配优化算法，使自适应交换系统在满足全可编程灵活性的条件下，与基于FPGA的数据平面相比，将数据包处理性能提升120倍以上。
 
-3.端侧网络在可编程网络测量领域的研究。
-网络测量是众多网络功能的基础，针对目前测量工具性能低下以及缺乏统一的编程抽象，本文提出了一套基于智能网卡的硬件流水线系统。
-系统包括数据包捕获功能、测量系统和发送引擎。
-论文将测量系统的可编程性抽象为基础的包个数统计和数据量缩统计方法。
-通过不同的软件调用，令系统硬件适用于高性能的网络安全、访问控制、流量控制、拥塞探测等多种场景。
-同时利用基于硬件的存储压缩算法，在节约38\%的硬件存储空间情况下，相较于软件的处理方式系统吞吐率提升8倍、系统的处理能耗节约90\%。
+3.端侧网络在网络测量领域的可编程抽象方法。
+网络测量是众多网络功能的基础，针对目前测量工具性能低下以及缺乏统一的编程抽象，为了提高系统使用灵活性以及可用性，本文针对大量场景提出了一套基于测量技术的网卡硬件流水线系统。通过不同的软件调用，令系统硬件适用于高性能的网络安全、访问控制、流量控制、拥塞探测等多种场景。
+考虑到高性能硬件资源有限的问题，
+论文将可编程测量系统抽象为基础的包个数与数据量的压缩统计并提供不同的统计触发方法。
+在节约38\%的硬件存储空间情况下，相较于软件的处理方式系统吞吐率提升8倍、系统的处理能耗节约90\%。
 
 
 
@@ -60,25 +59,31 @@
 %\noindent 英文摘要正文每段开头不缩进，每段之间空一行。\newline
 %
 %\noindent The abstract goes here. \newline
+\noindent The concept of software-defined networking has promoted the development of high-performance and high-programmability networks.
+The software-defined network uses flow tables to establish an abstract programming method of "matching + execution" to decouple the network data plane and control plane;
+The packet protocol-independent processor further optimizes the network programmable abstraction ability by extending the matching domain definition.
+The control plane of the programmable network architecture is separated from the data plane, and the flow table in the data plane forwarding device is a key component that expresses the flexibility of the control algorithm. However, the high-performance hardware flow table has a low capacity, which can easily cause the node flow table to overflow and affect the forwarding performance;
+The data packet protocol-independent processing technology expands the matching flexibility of the data packet header, but cannot meet other programmable computing requirements in the data plane. Therefore, the current network data plane equipment is facing the constraints of throughput performance and flexibility.\newline
 
-\noindent Network communication is an important infrastructure for building today's society, and the current development direction is mainly focused on building a high-performance, highly innovative network architecture. In the past 10 years, the concept of Software Defined Network (SDN) and Programmable Network (SDN2.0) has solved the difficult problems of network innovation in the past. However, with the rapid increase in traffic and network function complexity, this new network architecture also brings challenges in both performance and robustness. In terms of performance: CPU-based forwarding platform performance has gradually slowed down, and ASIC-based smart network card hardware has poor programmability. Robustness: The SDN network architecture in which the data plane and the control plane are separated brings problems of insufficient stability, poor security, and low efficiency.\newline
+\noindent This article mainly studies how to use programmable hardware in the network data plane to support multiple types of programmable abstraction methods more flexibly and efficiently.
+This article is based on solving the bottleneck problem of flow table resources, and uses programmable hardware to build a coordinated development of high performance and high programmability methods in the network intermediate nodes and the host side network, and finally form a complete end-to-end network system.
+The specific contributions are as follows:\newline
 
-\noindent The thesis analyzes the problem from three dimensions of the network system: \newline
 
-\noindent (1) On the host side network, at the server network card level, the performance of the CPU-based smart network card cannot meet the current development needs of virtualization technology and fine-grained network supervision. \newline
+\noindent 1. Propose an extensible method for flow table resources (Flow Table Sharing, FTS) in a global scenario.
+In order to solve the problem that the capacity of the flow table of a single forwarding node is limited and the performance of data packet processing after the flow table overflows, the flow table sharing mechanism FTS is proposed in this paper.
+FTS establishes flow table sharing with neighbor nodes to improve the dynamic utilization of the overall flow table resources. At the same time, it sets a group table forwarding method based on an offline forwarding strategy for the traffic that cannot establish flow entries due to insufficient space.
+In the case of flow table overflow, compared with the traditional OpenFlow protocol, this solution enables the optimization of the OpenFlow switch forwarding RTT delay and the number of secure channel control packet storms to reach at least 2 orders of magnitude.\newline
 
-\noindent (2) On the exchange side network, at the core network backbone level, the ASIC-based forwarding plane is not enough to provide high flexibility in network processing. Due to the difficulty in balancing cost and performance, the innovation space of network engineers is limited. \newline
+\noindent 2. Supporting adaptive computing hardware switching system architecture (Adaptable Switch, AS).
+Aiming at the problem of poor programmable flexibility of high-performance network forwarding equipment, this paper proposes a method AS, which uses programmable hardware to accelerate the universal computing of network intermediate nodes.
+Use high-performance forwarding chips and programmable hardware to organically combine to form isomers, while gaining performance improvements and higher programmable flexibility. It also proposes a set of parallel pipelines and flow table allocation optimization algorithms with high resource utilization deployed on hardware, so that the adaptive switching system meets the conditions of full programmable flexibility, compared with FPGA-based data planes. Improve data packet processing performance by more than 120 times.\newline
 
-\noindent (3) The control plane interacts with the data plane. The hardware flow table is an efficient and expensive core component of network forwarding. The scarcity of flow tables is more prominent in the software-defined network era. Due to the rapid growth of the number of flows and the flow, the operation of the control plane on the flow table causes a lot of control communication overhead. It is easy to lead to poor network robustness and easy to form security risks. \newline
-
-\noindent In recent years, Field Programmable Gate Array (FPGA) devices have been rapidly developed. Heterogeneous architectures led by programmable hardware technology have been largely integrated into the network field, bringing high user customization capabilities while ensuring certain processing performance This also provides a basic guarantee for the research content of this paper.
-This article mainly explores the high-performance network data plane and network system based on programmable hardware. This paper studies how to integrate this programmable hardware abstraction layer into the overall system within a software-defined network programming framework, and design its supporting control plane protocol, so that the software and hardware of the overall network system can be organically combined, and the network processing capacity and flexibility are enhanced. While ensuring safety and efficiency. This paper starts with theoretical analysis and proposes the system architecture, and then gives the system implementation and verification. This article will explain from the following three aspects: \newline
-
-\noindent 1. Study the method of accelerating the host-side network by programmable devices. This paper proposes to use FPGA-based smart network card to offload some network functions in the operating system to achieve the purpose of expanding the performance of the network access layer. Discussed the composition of network functions in different scenarios, analyzed and proposed a stream computing model (Data-Computing, DC abstraction) based on programmable hardware. In this paper, the computationally intensive tasks that can be transformed into DC abstraction in the server network function tasks are offloaded to the smart network card through reasonable conversion. The thesis designs a set of network traffic capture, statistical analysis and playback system based on the programmable network card. Under the premise that the network function does not change, it is proved that the use of FPGA-based smart network card can effectively improve the server's network performance (100x), jitter (reduced by $10^4$x) and efficiency (10x). \newline
-
-\noindent 2. Study the method of programmable equipment to accelerate the network switching layer. This paper proposes a hardware heterogeneous programmable network data plane architecture that organically combines FPGA and ASIC switching chips to enhance the flexibility of ASIC processing messages while meeting high-throughput performance requirements. The paper designs ASIC's extended interface for programmable hardware. The switching chip splits the data packet header and sends it to the FPGA through a high-speed data interconnection carrier, using the reconfigurable feature of FPGA to realize fully programmable header processing; at the same time, this article is based on the DC abstraction and uses the network-centric computing mode Introduce a programmable network architecture; design a parallel processing unit in FPGA by analyzing the characteristics of network traffic, and massively increase the processing throughput of programmable hardware (120x) under the premise of controllable resource consumption. \newline
-
-\noindent 3. Research on the scalability of SDN network hardware flow table. In the data plane composed of programmable network cards and switches, the most important resource is the flow table resource. This article starts from the overall perspective of SDN network and sets out to solve the problem of lack of flow table resources. This paper analyzes different traffic scales and characteristics, as well as the interconnection protocol between multiple modules of the system, and proposes a flow table sharing mechanism between forwarding equipment nodes. The stability of the data plane when dealing with burst traffic is realized. In this paper, the optimization of the switch forwarding RTT time and the number of security channel message storms caused by insufficient flow table resources has reached at least 2 orders of magnitude. \newline
+\noindent 3. The programmable abstract method of end-side network in the field of network measurement.
+Network measurement is the basis of many network functions. In view of the low performance of current measurement tools and the lack of unified programming abstraction, in order to improve the flexibility and usability of the system, this paper proposes a network card hardware pipeline system based on measurement technology for a large number of scenarios. Through different software calls, the system hardware is suitable for high-performance network security, access control, flow control, congestion detection and other scenarios.
+Considering the limited resources of high-performance hardware,
+The thesis abstracts the programmable measurement system based on the compression statistics of the number of packets and data volume and provides different statistical trigger methods.\newline
+In the case of saving 38\% of the hardware storage space, the system throughput rate is increased by 8 times compared with the software processing method, and the processing energy consumption of the system is reduced by 90\%.
 
 %\noindent You will never want to use Word when you have learned how to use \LaTeX.
 

@@ -1,31 +1,44 @@
 % !Mode:: "TeX:UTF-8" 
 
-\BiChapter{研究可编程设备加速网络硬件交换层方法}{Research on Programmable Devices to Accelerate Hardware-based Core layer } \label{chap4}
+\BiChapter{研究可编程硬件设备加速网络交换层方法}{Research on Programmable Devices to Accelerate Hardware-based Core layer } \label{chap4}
 
 
-\BiSection{本章引论}{Introduction to Chapter}\label{chap41}
-
-本章在第\ref{chap42}小节分析了目前各类网络可编程数据平面的缺陷，并提出了一种新的数据平面可编程的交换机架构，包括编程模型（\ref{chap43}小节）以及硬件原理（\ref{chap44}小节）。接着利用前文\ref{chap332}小节提出的设计原理，在\ref{chap45}小节阐述了如何优化了FPGA内部的逻辑资源，证明了其配置方法属于NP难问题（附录\ref{fulua}），而后给出了一种高效的启发式算法（\ref{chap46}小节）。最后给出了系统的三个实际用例测试，证明了系统将数据平面的灵活性与性能同步提升（\ref{spe4}小节）。
+%\BiSection{本章引论}{Introduction to Chapter}\label{chap41}
 
 
 
-\BiSection{问题背景}{Background}\label{chap42}
 
-可编程网络硬件可以运行传统部署在服务器内的功能，从而将网络性能提高数个量级。由于软件定义网络概念的提出，网络灵活性增强，运营商更倾向于自主管理网络内设备的所有行为。具有灵活性的管理方式可以大大增加网络的运行效率，为特定的功能定制专用的网络场景。  现有的面向网络通信的可编程数据平面一般有x86平台，开放接口配置的ASIC转发芯片，以及上一章本文提到的FPGA平台。其在处理灵活性、转发性能等方面均有长足进步，但如前文\ref{chap232}节中介绍，在面对转发容量进一步提高，可配置能力进一步开放的网络应用时依然面临新的挑战：
 
-1）软件具有高度灵活性，但处理性能低下
+%\BiSection{问题背景}{Background}\label{chap42}
 
-数据包交换对于CPU架构平台来说是一种很低效的机械劳动。在软件层面，数据包转发算法已经被优化得极为高效，但面对无穷无尽的任务量，依靠CPU指令集的处理架构存在访存效率低、无法批处理等问题。CPU无法发挥自己实现灵活程序跳转、分支的优势，因此目前高性能软件网络处理性能也只能达到10Gbps（单核心）。对于现代服务器面向200G接口，汇聚层交换转发动辄5、6Tbps的性能需求是远远无法满足的。
+软件定义网络将网络的可编程性抽象为对流表的灵活配置操作，此外数据包协议无关处理器（P4）使得数据包匹配域可自由定制，更加扩展了可编程数据平面的编程灵活性。P4处理器作为目前网络编程领域标杆技术，其有能力实现自定义包头解析，自定义流表的组成结构，以及很高的吞吐设计容量（一般可达到10Tbps），在科研与市场环境下已经得到了良好的应用反馈\citeup{miao2017silkroad}。
 
-2）基于FPGA可编程硬件平台
+但在真实应用环境下，有很多定制化应用无法在高速的数据通路中部署，只能将其转移至服务器软件端，或者在FPGA的开发验证平台中验证，这无疑使得面临巨大的性能损失。虽然P4处理器极大地解决了OpenFlow编程能力不足以及其设计本身所带来的可扩展性差的难题，但它不具备真正意义上的“软件”可编程性。
 
-FPGA是一种逻辑可编程芯片，既能够提供软件一般的可编程能力，也具有类似硬件的性能。目前，主要的云计算厂商阿里巴巴、亚马逊、微软都在数据通路内部署了FPGA加速引擎以同时满足性能和灵活性的需求，例如提升网络加解密性能，定制传输层协议等。然而由于FPGA电路编码转换采用“查找表+内部互联网络”的原理，为保证时间同步性，使得FPGA综合对外的处理主频只能达到200MHz，这样即使FPGA内流水线每个周期都能处理一个数据包，总吞吐性能也无法超过100Gbps\citeup{wang2017p4fpga,netfpga2014}。虽强于软件，但远差于网络的核心层性能需求。
+根据相关工作简介第\ref{chap232}小节介绍以及在实际场景下的各类需求，我们总结出P4处理器概念上的一些不足之处，并总结为以下三点：
+1）P4数据通路内的处理动作只能被数据包触发，而无法响应其他行为。针对一些QoS场景系统更希望根据队列深度做出一些响应，比如拥塞控制场景下的控制算法NDP\citeup{handley2017re}。
+2）P4缺乏计算、控制属性的指令集，例如乘除法、灵活分支判断等，例如网络随路计算\citeup{sapio2017network}、网络测量\citeup{zhang2018adaptive,hu2013discount}等领域。
+3）P4为无状态转发的可编程流水线设计，则对状态协议处理以及有状态计算造成了困难（防火墙\citeup{zerkane2016software}等）。
 
-3)协议无关概念的交换芯片
+为应对以上缺点，本章设计并提出了一种具有支持适应性计算能力的可编程数据平面的自适应交换系统（Adaptable Switch，AS），第\ref{chap43}小节介绍了系统设计目标，以及系统提供的开发框架使用方法。第\ref{chap44}小节介绍AS架构设计核心思想：自适应交换系统同时利用了可编程硬件设备的高度灵活性，以及ASIC交换芯片的高性能特性。本文使用FPGA作为可编程硬件的具体实现载体，FPGA具有与硬件类似的数据包处理能力，同时具有高度灵活的二次编程能力，可带来解决P4架构灵活性不足的应对方案。同时本文修改了通用的基于ASIC的交换芯片的结构，增加与高度灵活的可编程设备通信接口，为后期灵活开发做基础，并尽量减小ASIC交换芯片的修改量，以减少设备厂商的研发改进费用。第\ref{chap45}小节对优化FPGA内硬件性能以及效率做出了分析，并将该优化问题归约为一种NP难问题，此问题由\ref{chap46}小节中给出的一种启发式算法解决，最后\ref{spe4}小节评估了AS系统的资源消耗以及性能，并在其中实现了P4可编程网络架构无法实现的拥塞控制、网络测量、有状态防火墙的三种应用。
 
-与协议无关交换架构（Protocol-Independent Switch Architecture,PISA）相对应的是P4（Programming Protocol-Independent Packet Processor）。P4是一种专用的编程语言，其目标是为任意包协议提供一种基于ASIC硬件（PISA）的现场可重配置能力。根据本文在第二章的介绍，PISA有能力实现自定义包头解析，自定义流表的组成结构，并且最重要的它拥有强大的处理能力（12.8Tbps，显然是唯一可以胜任核心转发设备的架构），并在市场上得到了良好的应用反馈\citeup{miao2017silkroad}。虽然这大大解决OpenFlow编程能力不足以及其设计本身所带来的可扩展性差的难题，但它不具备真正意义上其所追求的“图灵完备”可编程。例如：（1）数据通路内的处理动作只能被数据包触发，而无法响应其他行为。针对一些QoS场景系统更希望根据队列深度做出一些响应，比如拥塞控制场景下的控制算法NDP\citeup{handley2017re}；（2）PISA缺乏计算、控制属性的指令集，例如乘除法、灵活分支判断等；（3）PISA为无状态转发的可编程流水线设计，则对状态协议处理以及有状态计算造成了困难（防火墙\citeup{zerkane2016software}等）。
 
-PISA转为通用型的无状态转发同时提高了性能与灵活性，本文将对PISA架构芯片的目标处理内容做进一步扩展。本文的目标是设计一种适用于网络交换层的交换机架构，这种架构可从计算平面高灵活性的工作任务分离和卸载到网络中，包含但不限于有状态转发、复杂计算以及自定义触发方式。
+
+%可编程网络硬件可以运行传统部署在服务器内的功能，从而将网络性能提高数个量级。由于软件定义网络概念的提出，网络灵活性增强，运营商更倾向于自主管理网络内设备的所有行为。具有灵活性的管理方式可以大大增加网络的运行效率，为特定的功能定制专用的网络场景。  现有的面向网络通信的可编程数据平面一般有x86平台，开放接口配置的ASIC转发芯片，以及上一章本文提到的FPGA平台。其在处理灵活性、转发性能等方面均有长足进步，但如前文\ref{chap232}节中介绍，在面对转发容量进一步提高，可配置能力进一步开放的网络应用时依然面临新的挑战：
+
+%1）软件具有高度灵活性，但处理性能低下
+
+%数据包交换对于CPU架构平台来说是一种很低效的机械劳动。在软件层面，数据包转发算法已经被优化得极为高效，但面对无穷无尽的任务量，依靠CPU指令集的处理架构存在访存效率低、无法批处理等问题。CPU无法发挥自己实现灵活程序跳转、分支的优势，因此目前高性能软件网络处理性能也只能达到10Gbps（单核心）。对于现代服务器面向200G接口，汇聚层交换转发动辄5、6Tbps的性能需求是远远无法满足的。
+
+%2）基于FPGA可编程硬件平台
+
+%FPGA是一种逻辑可编程芯片，既能够提供软件一般的可编程能力，也具有类似硬件的性能。目前，主要的云计算厂商阿里巴巴、亚马逊、微软都在数据通路内部署了FPGA加速引擎以同时满足性能和灵活性的需求，例如提升网络加解密性能，定制传输层协议等。然而由于FPGA电路编码转换采用“查找表+内部互联网络”的原理，为保证时间同步性，使得FPGA综合对外的处理主频只能达到200MHz，这样即使FPGA内流水线每个周期都能处理一个数据包，总吞吐性能也无法超过100Gbps\citeup{wang2017p4fpga,netfpga2014}。虽强于软件，但远差于网络的核心层性能需求。
+
+%3)协议无关概念的交换芯片
+
+%与协议无关交换架构（Protocol-Independent Switch Architecture,PISA）相对应的是P4（Programming Protocol-Independent Packet Processor）。P4是一种专用的编程语言，其目标是为任意包协议提供一种基于ASIC硬件（PISA）的现场可重配置能力。根据本文在第二章的介绍，例如：
+
+%PISA转为通用型的无状态转发同时提高了性能与灵活性，本文将对PISA架构芯片的目标处理内容做进一步扩展。本文的目标是设计一种适用于网络交换层的交换机架构，这种架构可从计算平面高灵活性的工作任务分离和卸载到网络中，包含但不限于有状态转发、复杂计算以及自定义触发方式。
 
 
 
@@ -41,7 +54,7 @@ P4是目前广泛使用的可定义数据平面内的数据包解析和查表过
 	\centering 
 	\vspace{-1.5mm} 
 	\includegraphics[scale=1]{asarch.pdf}
-	\caption{自适应交换结构框图} \label{fig:asarch}
+	\caption{自适应交换结构框图} \label{fig:asarch}\vspace{ 1.5mm} 
 \end{figure}
 
 自适应交换的硬件架构框图。自适应交换包括两部分，1）固定功能的ASIC交换系统（Switching System, SS）；2）用户定义可编程逻辑块（Programmable Logic, PL）。SS基于标准的交换芯片（switching ASCI）处理功能，PL利用FPGA类的可编程硬件支持用户自定义逻辑。一个标准的交换芯片功能包含了数据包头的解析，基本的ACL功能和各个字段的匹配以及执行转发/丢包等动作。额外还会包括流量管理、队列调度等QoS功能。架构中SS与PL两部分可由双芯片拼接的方式实现，SS部分利用一个标准传统的交换芯片（既可以支持P4编程，也可以不支持P4编程）构成。PL端使用FPGA芯片或由FPGA构成的多用途片上系统（MPSoC/ACAP）芯片。在双芯片拼接方案中，两个独立的芯片系统须通过高速互联总线相连接，例如PCIe接口，以太网接口或者类似的收发器。相应地自适应交换系统也可以由单独一颗芯片构建而成，PL与SS部分通过片上高速总线相接，例如，AXI协议总线。
@@ -158,7 +171,7 @@ PL以FPGA芯片为例，自适应交换平台可以将SS交换芯片无法完成
 代码 \ref{ascode3}展示了VHDL语言实现PL实例模块，在VHDL中须描述数据总线位宽，寄存器通路接口等。对于其他硬件系统，用户只需要指定通信用同步数据总线的时钟周期（时间约束）。
 实际上，本文所描述的所有编译工具链仍处于设计阶段，并需要大量代码工作完成自动化处理。本文主要目的在于规划框架以及作为商用工具链的补充设计参考。硬件开发时间周期过长，为快速进行数据平面验证，本文生成的所有bit文件均为手动整合代码。
 
-\BiSection{硬件设计}{Hardware Design}\label{chap44}
+\BiSection{自适应交换架构的硬件设计}{Hardware Design}\label{chap44}
 
 \BiSubsection{协议设计}{Protocol Design}\label{chap441}
 
@@ -246,15 +259,16 @@ K_0=\sum_{i_0}^{k_0}j_{i_0}
 4）多级流表与流量均衡分类器
 
 在数据包处理的过程中，假设匹配N个域，每个域共M个流表项，若只使用一张流表，则总共需要消耗$ M^N $深度的流表项。一般实际应用时，会为每个域单独设立一个查找表，多个域使用多级查找表以串行流水线方式完成匹配过程。这样只需使用$M\times N$深度的表项，可大大节约资源消耗量。
-
-然而，通过第一条子流水线的数据包在匹配下一个域时，下一张流表的流表项不一定与此数据包处于同一条子流水线。如图\ref{fig:pllb0}所示，数据包p0根据流量均衡哈希函数被分配到第1条子流水线，经流表0匹配结束后，此数据包还需流表1继续匹配，但此时发现，处理p0数据包对应的流表1不一定依然存储在流水线1中，也许被拆分到了流水线K-1内。则数据包p0无法得到后续服务。
-
 \begin{figure}[!ht]
 	\centering 
 	\vspace{-1.5mm} 
 	\includegraphics[scale=1]{pllb0.pdf}
 	\caption{流表分割引发的数据包处理信息丢失问题} \label{fig:pllb0}
 \end{figure}
+
+然而，通过第一条子流水线的数据包在匹配下一个域时，下一张流表的流表项不一定与此数据包处于同一条子流水线。如图\ref{fig:pllb0}所示，数据包p0根据流量均衡哈希函数被分配到第1条子流水线，经流表0匹配结束后，此数据包还需流表1继续匹配，但此时发现，处理p0数据包对应的流表1不一定依然存储在流水线1中，也许被拆分到了流水线K-1内。则数据包p0无法得到后续服务。
+
+
 
 为解决此问题，本文提出一种新的“并行查找块结构”，对流量均衡哈希函数以及多级流表之间数据传递进行的重新设计。如图\ref{fig:plppl}所示，每一个查找块代替传统查找流水线内的一个流表（匹配0或匹配1）。查找块使用串行方式组成流水线。每一个查找块内都包含了流量均衡分类器。数据包首先进入分类器，分类器提取出包头域中特征位，将此数据作为哈希函数的输入值进行哈希处理得到一个8位ID数字。本文将此ID号码代表前文提到的流分类组份$ j $的值。接下来的RAM表中保存了对每一个ID编号应该由哪一个子表查找的信息。数据包得到子表编号之后，通过一个交换网络转发到对应的子表流水线中，并完成相应域的查找-执行动作。分类器中子表的映射关系直接关系到后续子流水线的查找任务负载程度，以及子表中存储的流表项数目大小。
 
@@ -282,6 +296,8 @@ K_0=\sum_{i_0}^{k_0}j_{i_0}
 %有状态转发放到实验中去讲
 
 \BiSection{流表、流量分配问题}{Allocation Problem of Table Entries and Flow}\label{chap45}
+
+\BiSubsection{问题分析}{Problem Analysis}\label{chap4ProblemAnalysis}
 
 对本文提出的自适应交换系统的编程涉及到两个部分，一部分是分类器子表的配置，另一部分是流表项的配置。由前文分析可知，分类器子表的配置影响到后续子流水线中流量分配，以及子表中流表项数目的占用。而且如果更改子表配置，则后续对应的子流水线流表项也许同步进行删除和添加。分类器子表的配置是根据不同流组份流量大小来确定的。根据真实流量的分析\citeup{zheng2006tcam}，平均情况下一个流组份的流量大小基本保持不变。因此在得到最佳配置之前，可以先通过测量的方式来对分类配置进行实时调整。接下来本文分析分类表以及流表配置过程。
 
@@ -316,6 +332,7 @@ D[k]=\sum_{j\in Q_k}D\_id[j]
 如前文（流表拆分）中分析，一个带有掩码的流表项可被拆分到不同的组份$ j $中，但其中不同的组份还有可能被重新分配到同一个子流表内。因此可以将已经拆分开的掩码表项重新合成一条。定义总共被合并掉的表项个数为$V_k$。本文称待解决优化问题为“基于流量均衡的流表组合问题”（The Load-Balance-Based Table Construction Problem，LBBTC）。
 
 \begin{definition}[LBBTC]
+	\label{lbbtc}
 	$K$为系统并行流水线数目，当$k\in [1,K]$，若服从：
 	%
 	\begin{enumerate}
@@ -337,11 +354,131 @@ D[k]=\sum_{j\in Q_k}D\_id[j]
 	对于帕累托最小优化的求解定义为LBBTC问题。 \qquad \qquad \qquad \qquad \qquad \qquad \qquad \ \ \  $\Diamond$
 \end{definition}
 
+\BiSubsection{NP难问题证明}{NP hard proof}\label{chap4nphard}
+本文证明上述问题为NP难解问题，而后给出一种基于模拟退火的启发式算法。证明思路中，首先引入一个经典的NP完全问题“平均分割问题”，随后本文通过给出此问题的退化过程，证明“基于流量均衡的流表组合问题”是一个NP难问题。
 
-本文在附录\ref{fulua}中证明上述问题为NP难解问题，而后给出一种基于模拟退火的启发式算法。首先引入一个经典的NP完全问题“平均分割问题”，随后本文通过给出此问题的退化过程，证明“基于流量均衡的流表组合问题”是一个NP难问题。
 
 
-\BiSection{算法设计}{Algorithm Design}\label{chap46}
+待解决优化问题为“基于流量均衡的流表组合问题”（The Load-Balance-Based Table Construction Problem，LBBTC），已知其数学形式化后如定义\ref{lbbtc}所给出。
+
+
+
+
+
+\begin{theorem}%[Riesz 表示定理]
+	$K$为系统并行流水线数目，当$k\in [1,K]$，对于待求问题帕累托最小优化:
+	
+	\begin{equation} \label{a1}
+	F\left[ k\right] =\left( F_{1}\left[ k\right] ,F_{2}\left[ k\right] \right) \left( k\in \left[ 1,K\right] \right)
+	\end{equation}
+	是NP难问题。
+\end{theorem}
+
+
+
+\begin{proof}
+	
+	有用语如下：
+	如果表达式$L_1$可以在多项式时间复杂度内归约到表达式$L_2$，记做$L_1 \leq_p L_2$。若有一多项式时间计算函数$f:\{0,1\}^{\ast}\rightarrow\{0,1\}^{\ast}$，则可描述为：对于任意$x\in \left\{ 0,1\right\} ^{\ast },x\in L_{1}\Leftrightarrow f\left( x\right) \in L_{2}$。
+	
+	
+	
+	
+	平均分配问题(AVG\_DIV)：
+	对于一个有限集合$S=\left\{ 1,2,\ldots ,n\right\}$，重量转换函数 $w:S\rightarrow \mathbb{Z} $，有如下待解问题：是否存在一个子集$S'\subseteq S$满足：
+	
+	\begin{equation}
+	\sum_{X\in S'}w\left( x\right) =\dfrac {1}{2}\sum _{X\in S}w\left( x\right) 
+	\end{equation}
+	
+	平均分割问题可描述如下，AVG\_DIV:=
+	
+	\noindent $\{ \langle  S, w\rangle  :S\subset \mathbb{N} $,
+	
+	\quad 函数$w$ 是 $\mathbb{N} \rightarrow \mathbb{Z} $的映射关系，
+	
+	\quad 存在子集 $S'\subseteq S$ 使得： 
+	
+	\quad $\sum_{X\in S'}w\left( x\right) =\dfrac {1}{2}\sum _{X\in S}w\left( x\right) \}$ 
+	
+	此经典问题AVG\_DIV已经被证明是NP难问题\citeup{cormen2009introduction}。
+	
+	接下来通过给出此问题的退化过程，证明“LBBTC问题”是一个NP难问题。
+	令$S$是组份j所组成的集合，$S={1,2,\cdots,2^P}$。$R_d$是流表的资源消耗率；$K$是流水线并行度；$C_k(k\in [1,K])$是每个子表的设计容量；$T$个流表之间流表项利用均衡度差异；$D\_id[j](j\in S)$是属于同一个ID分组内的总流量大小：定义总共被合并掉的表项个数为$V_k$；以及两个实数变量$q_1$与$q_2$。待求问题为是否存在一个分配组合$\{Q_i\}^{K}_{i=1}$可满足下列约束条件：
+	
+	\begin{align}\label{a2}
+	&Q_{k}\subseteq S, k\in \left[ 1,k\right],\cup Q_{k}=S;\sum ^{k}_{i=1}C_{k}\left[ i\right] \leq C_{0}\cdot R_{d}  \\
+	&\left| \left| \dfrac {Q_{i}}{C_{ki}}\right| -\left| \dfrac {Q_{j}}{C_{kj}}\right| \right|\cdot 100\%\leq T\left( i, j, ki, kj\in \left[ 1,k\right] \right)  \\
+	&BOOL\left(i,j\right)=
+	\begin{cases}
+	1& \text{ $j \in Q_i$ }\\
+	0& \text{ $j \notin Q_i$}
+	\end{cases}\\
+	&G\left[ j\right] =\sum ^{k}_{i=1}BOOL\left( i,j\right) =1\left( j\in S\right) \\
+	&\sum _{j\in S}G\left[ i\right] =2^{P}\left( j\in S\right) \\
+	&D\left[ k\right] =\sum _{j\in Q_{k}}D_{-}id\left[ i\right] \left( k=1,\ldots ,K\right)\\
+	&F_{1}\left[ k\right] =MAX\left( D\left[ k\right] \right) -MlN\left( D\left[ k\right] \right) \leq q_1 \\
+	&F_{2}\left[ k\right] =C_{0}-\sum ^{K}_{k=1}V_{k}\leq q_{2} 
+	\end{align}
+	
+	帕累托最小优化函数：
+	
+	\begin{equation} \label{a3}
+	F\left[ k\right] =\left( F_{1}\left[ k\right] ,F_{2}\left[ k\right] \right) \left( k\in \left[ 1,K\right] \right)
+	\end{equation}
+	
+	
+	平均分割问题（LBBTC）可描述如下，AVG\_DIV:=
+	
+	\noindent $\{ \langle  S, K, Rd, C_k, T, D\_id, V_k, q_1, q_2\rangle:  $
+	
+	\ \ ID组份组成了集合$S=\left\{ 1,2,\ldots ,2^p\right\}$，
+	
+	\ \ 并行流表个数$K\in \mathbb{N}$，
+	
+	\ \ 系统内流表资源冗余度$Rd \in \mathbb{R}$，
+	
+	\ \ $T \in \mathbb{N}$ 个流表之间流表项利用均衡度差异（单位：条），
+	
+	\ \ $D\_id$ 为 $S \rightarrow \mathbb{R}$的映射，表示以不同=ID分组的流量分布，
+	
+	\ \ $C_k$为每个流表的容量，
+	
+	\ \ 在流表拆分后，$V_k$表示每个流表内，最终可被重新合并的流表项个数， 
+	
+	\ \ $q_1$,$q_2 \in \mathbb{R}$, 存在一个分配规则 $\{Q_i\}^{K}_{i=1}$ 满足LBBTC问题所描述的约束条件。$\}$
+	
+	使用描述语言定义LBBTC问题，AVG\_DIV:=
+	
+	为说明 AVG\_DIV $\leq_p$ LBBTC，即AVG\_DIV可被归约到LBBTC问题。令$\langle S_1, w \rangle$为是AVG\_DIV的一个实例，可以继续构造一个LBBTC的实例如 $\langle  S, K, Rd, C_k, T, D\_id,\\ V_k, 
+	q_1, q_2\rangle$如下：
+	
+	令：$S = S_1$,
+	$D\_id[i] = w(i) (i \in S_1)$,
+	$K = 2$, 
+	$Rd = 1$,
+	$T = \infty$, 
+	$q_1 = 0$,
+	$V_k = 0$, $C_{k}=\dfrac {C_{0}}{K}$, $q_2 = C_0$，由于$T$, $q_2$, 为常数，第二个和第八个约束条件释放，利用第4和第5个约束条件，可得到：$Q_1 \cap Q_2=\phi$，因此约束条件变为：
+	
+	
+	\begin{align}\label{a4}
+	&Q_1 \cup Q_2=S_1  \\
+	&Q_1 \cap Q_2=\phi  \\
+	&D\left[ j\right] :=\sum _{x\in Q_{j}}w(x) \left( j=1,2\right)\\
+	&F_1:Max(D[j])-Min(D[j])=0 \nonumber \\
+	\Leftrightarrow \ &D[1]=D[2]=\dfrac{1}{2}\sum_{x\in S_1}w(x) 
+	\end{align}
+	
+	接下来说明当且仅当$\langle S_1, 2, 1, \dfrac {C_0}{K}, \infty, w, 0, 0, C_0 \rangle \in $ LBBCD时，有$\langle S_1, w\rangle \\
+	\in $ AVG\_DIV：
+	
+	如果存在一组分配机制${Q_1, Q_2}$使得上述约束条件得到满足，则令$S'_1=Q_1$，根据约束A-13,A-14，$\sum_{x\in S'_1}w(x)=\dfrac{1}{2}\sum _{x \in S_1}w(x)$。另一方面，如果存在一个子集$S'_1( S'_1 \subseteq S_1)$，满足$\sum_{x\in S'_1}w(x)=\dfrac{1}{2}\sum _{x \in S_1}w(x)$，则当$Q_1=S'_1$ 且 $Q_2=S_1-S'_1$，显然约束条件A-12至A-15全部满足。所以AVG\_DIV 归约到LBBTC，LBBTC同样为NP难问题。
+\end{proof}
+
+
+
+\BiSection{资源优化问题的启发式算法设计}{Algorithm Design}\label{chap46}
 
 本小结将给出一种启发式算法，使前文提到的NP难问题在可接受时间内得到一组有效解。简单解思路为暴力搜索所有$Q_k$的可能组合，来寻找一组均衡的流量分布结果。对于$N$个ID组份的计算搜索次数可以被估计为：
 
@@ -503,7 +640,7 @@ t=1 &
 
 \BiSection{系统开发以及测试}{System Performance and Evaluation}\label{spe4}
 
-对前文提出的系统进行评估，本文完成了4000+行代码在基于Xilinx ZC706开发板上对“自适应交换”系统做了原型实现。完成内容包括了SS功能，以及PL端的三个用户定义测试例子。在SS中，本文将一个发包模块集成在“自适应交换”系统中，以方便大规模地进行流量测试。本文选用了5种流量激励：其中两条真实流量（1）由ISP骨干网捕获（WIND流量），（2）基于基站通信的捕获流量（LTE流量），三条模拟流量（3）服从指数分布流量，（4）Pareto分布流量以及（5）平均分布流量：
+对前文提出的系统进行评估，本文完成了4000+行硬件描述语言HDL代码，在基于Xilinx ZC706开发板上对“自适应交换”系统做了原型实现。完成内容包括了SS功能，以及PL端的三个用户定义测试例子。在SS中，本文将一个发包模块集成在“自适应交换”系统中，以方便大规模地进行流量测试。本文选用了5种流量激励：其中两条真实流量（1）由ISP骨干网捕获（WIND流量），（2）基于基站通信的捕获流量（LTE流量），三条模拟流量（3）服从指数分布流量，（4）Pareto分布流量以及（5）平均分布流量：
 
 \begin{enumerate}
 	\item WIND真实流量。此流量由位于新西兰的接口速率3.7Gbps的ISP路由端口捕获而成。流量包括了4十亿个数据包，持续时间60分钟。
@@ -534,7 +671,7 @@ NDP\citeup{handley2017re}可保障在交换机内拥塞丢包时“小批量”�
 \begin{table}[!ht]
 	\renewcommand{\arraystretch}{1.2}
 	\centering\wuhao
-	\caption{各组件性能以及处理时延} \label{table:as1} \vspace{2mm}
+	\caption{各组件性能以及处理时延} \label{table:as1} \vspace{4mm}
 	\begin{tabularx}{\textwidth}{c|ccccc}
 		\toprule[1.5pt]
 		\multicolumn{2}{c}{组件} & 最大运行频率 / MHz & 阻塞时间 / 周期 & 时延 / 周期 & 吞吐 / Gbps \\
@@ -559,7 +696,7 @@ NDP\citeup{handley2017re}可保障在交换机内拥塞丢包时“小批量”�
 \begin{table}[!ht]
 	\renewcommand{\arraystretch}{1.2}
 	\centering\wuhao
-	\caption{各组件FPGA内资源消耗情况以及所占比例} \label{table:as2} \vspace{2mm}
+	\caption{各组件FPGA内资源消耗情况以及所占比例} \label{table:as2} \vspace{4mm}
 	\begin{tabularx}{\textwidth}{c|cccccc}
 		\toprule[1.5pt]
 		\multicolumn{2}{c}{组件} & LUT & LUT RAM  & FF  & BRAM & DSP \\
@@ -642,7 +779,5 @@ PL端系统高速运行依赖于流量的负载均衡，但实际流量依然存
 
 \BiSection{本章小结}{Conclusion}\label{chap48}
 
-本文为增强数据平面转发设备的网络随路计算能力，提出了一种自适应交换系统（Adaptive Switch Architecture, AS）。AS的核心思想是保留ASIC交换芯片中的交换网络结构以确保高性能，但将网络数据可编程性卸载到FPGA可编程硬件中。本文在AS架构中实现了三种难以在目前交换系统中实现的例子，集中体现了AS架构可为目前的交换芯片带来极高的灵活性。此外，本文设计了资源消耗可控的多级并行流水线，并使以上三个应用达到了数个Tbps的吞吐性能。虽然PL（FPGA）端的接口吞吐性能依然无法与ASIC相比，但是我们不需要将完整的数据包送入PL，并且不是所有的数据流都需要被用户定义逻辑处理，因而可以极大缓解二者之间的性能鸿沟。综上，AS架构的性能已经达到了业界芯片标准水平，与其相比具有很高的竞争力。
-
-
+本章首先分析了目前各类网络可编程数据平面的缺陷，为增强数据平面转发设备的网络随路计算能力，提出了一种自适应交换系统（Adaptive Switch Architecture, AS），包括编程模型（\ref{chap43}小节）以及硬件原理（\ref{chap44}小节）。AS的核心思想是保留ASIC交换芯片中的交换网络结构以确保高性能，但将网络数据可编程性卸载到FPGA可编程硬件中。接着利用前文\ref{chap332}小节提出的设计原理，在\ref{chap45}小节阐述了如何优化了FPGA内部的逻辑资源，证明了其配置方法属于NP难问题，而后给出了一种高效的启发式算法（\ref{chap46}小节）。本文在AS架构中实现了三种难以在目前交换系统中实现的例子，集中体现了AS架构可为目前的交换芯片带来极高的灵活性（\ref{spe4}小节）。此外，本文设计了资源消耗可控的多级并行流水线，并使以上三个应用达到了数个Tbps的吞吐性能。虽然PL（FPGA）端的接口吞吐性能依然无法与ASIC相比，但是我们不需要将完整的数据包送入PL，并且不是所有的数据流都需要被用户定义逻辑处理，因而可以极大缓解二者之间的性能鸿沟。综上，AS架构的性能已经达到了业界芯片标准水平，与其相比具有很高的竞争力。
 
