@@ -13,7 +13,27 @@
 
 软件定义网络将网络的可编程性抽象为对流表的灵活配置操作，此外数据包协议无关处理器（P4）使得数据包匹配域可自由定制，更加扩展了可编程数据平面的编程灵活性。P4处理器作为目前网络编程领域标杆技术，其有能力实现自定义包头解析，自定义流表的组成结构，以及很高的吞吐设计容量（一般可达到10Tbps），在科研与市场环境下已经得到了良好的应用反馈\citeup{miao2017silkroad}。
 
-但在真实应用环境下，有很多定制化应用无法在高速的数据通路中部署，只能将其转移至服务器软件端，或者在FPGA的开发验证平台中验证，这无疑使得面临巨大的性能损失。虽然P4处理器极大地解决了OpenFlow编程能力不足以及其设计本身所带来的可扩展性差的难题，但它不具备真正意义上的“软件”可编程性。
+但在真实应用环境下，有很多定制化应用无法在高速的数据通路中部署，如表\ref{table:asb}所示，只能将其转移至服务器软件端，或者在FPGA的开发验证平台中验证，这无疑使得面临巨大的性能损失。虽然P4网络芯片极大地解决了OpenFlow编程能力不足以及其设计本身所带来的可扩展性差的难题，但它不具备真正意义上的“软件”可编程性。
+
+\begin{table}[!ht]
+	\renewcommand{\arraystretch}{1.2}
+	\centering\wuhao
+	\caption{不同类型可编程数据平面对比} \label{table:asb} \vspace{4mm}
+	\begin{tabularx}{\textwidth}{*{6}Y}
+		\toprule[1.5pt]
+		平台 & 吞吐性能 & 可编程转发 & 事件触发\citeup{handley2017re} & 状态转发\citeup{pontarelli2019flowblaze} & 函数计算\citeup{hu2013discount} \\
+		
+		\midrule[1pt]
+		软件平台\citeup{pisces} & 10Gbps & \checkmark & \checkmark & \checkmark & \checkmark \\
+		
+		FPGA平台\citeup{wang2017p4fpga} & 100Gbps & \checkmark & \checkmark & \checkmark & \checkmark \\
+	
+		P4-芯片\citeup{tofino2} & 12Tbps & \checkmark & $\times$ & $\times$ & $\times$ \\
+	
+		设计目标 & >1Tbps & \checkmark & \checkmark & \checkmark & \checkmark \\
+		\bottomrule[1.5pt]
+	\end{tabularx}
+\end{table}
 
 根据相关工作简介第\ref{chap232}小节介绍以及在实际场景下的各类需求，我们总结出P4处理器概念上的一些不足之处，并总结为以下三点：
 1）P4数据通路内的处理动作只能被数据包触发，而无法响应其他行为。针对一些QoS场景系统更希望根据队列深度做出一些响应，比如拥塞控制场景下的控制算法NDP\citeup{handley2017re}。
