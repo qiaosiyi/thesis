@@ -770,20 +770,28 @@ PL端系统高速运行依赖于流量的负载均衡，但实际流量依然存
 
 在系统启动须先定义$\delta$的可接受域值，本文设定$K=8$，$ J=256$，如图\ref{fig:asper}所示，当设定均衡度为5\%时，可保证在75\%的情况下计算时间小于0.01秒。作为对照，如图\ref{fig:ask}本文测试了当子流水线数目（$K$）不同时计算时间的分布。当并行度增大时，显然算法的收敛时间会增加，在本实验的三个测试功能中，超过90\%的计算时间都小于0.5秒，并且能够以100\%置信度保证计算时间小于1.12秒。
 
-\begin{figure}[htbp]
+%\begin{figure}[htbp]
+%	\centering 
+%	\vspace{-1.5mm}
+%	\begin{minipage}[t]{0.48\textwidth}
+%		\centering
+%		\includegraphics[scale=1]{astradeoff.pdf}
+%		\caption{控制信道消耗量与流量均衡性之间的折中，实验须使用真实流量，已获得数据包之间的时间} \label{fig:astradeoff}
+%	\end{minipage}
+%	\begin{minipage}[t]{0.48\textwidth}
+%		\centering
+%		\includegraphics[scale=1]{astput.pdf}
+%		\caption{BPU中不同并行度对总体性能的提升效果，FPGA主频200MHz} \label{fig:astput}
+%	\end{minipage}
+%\end{figure}
+
+\begin{figure}[!ht]
 	\centering 
-	\vspace{-1.5mm}
-	\begin{minipage}[t]{0.48\textwidth}
-		\centering
-		\includegraphics[scale=1]{astradeoff.pdf}
-		\caption{控制信道消耗量与流量均衡性之间的折中，实验须使用真实流量，已获得数据包之间的时间} \label{fig:astradeoff}
-	\end{minipage}
-	\begin{minipage}[t]{0.48\textwidth}
-		\centering
-		\includegraphics[scale=1]{astput.pdf}
-		\caption{BPU中不同并行度对总体性能的提升效果，FPGA主频200MHz} \label{fig:astput}
-	\end{minipage}
+	\vspace{-1.5mm} 
+	\includegraphics[scale=1]{astradeoff.pdf}
+	\caption{控制信道消耗量与流量均衡性之间的折中，实验须使用真实流量，已获得数据包之间的时间} \label{fig:astradeoff}
 \end{figure}
+
 
 
 
@@ -800,6 +808,13 @@ PL端系统高速运行依赖于流量的负载均衡，但实际流量依然存
 
 
 如图\ref{fig:astput}所示，画出了吞吐随处理引擎并行度的变化趋势。计算处理性能时，须依照运行频率，数据总线宽度，以及真实流量数据包的包长度（平均约650字节）。可看出处理吞吐基本与并行数量呈线性正比。三种应用在PL中的总共处理时延为0.136$ \mu s $，0.142$ \mu s $，0.130$ \mu s $（测量，防火墙，拥塞控制）。
+
+\begin{figure}[!ht]
+	\centering 
+	\vspace{-1.5mm} 
+	\includegraphics[scale=1]{astput.pdf}
+	\caption{BPU中不同并行度对总体性能的提升效果，FPGA主频200MHz} \label{fig:astput}
+\end{figure}
 
 
 \BiSection{本章小结}{Conclusion}\label{chap48}

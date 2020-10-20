@@ -137,7 +137,7 @@ CPU通过循环取指令等操作，完成通用的可计算任务。计算的�
 	\centering 
 	\vspace{-1.5mm}
 	\includegraphics[scale=1]{celiangjiagou.pdf}
-	\caption{测量可编程处理器的系统应用架构} \label{celiangjiagou}
+	\caption{主机端网络测量可编程处理器的系统架构} \label{celiangjiagou}
 \end{figure}
 
 本文利用基于FPGA的智能网卡实现了测量可编程处理器，网卡通过PCIe通道与主机连接并通信，捕获后的网络流量直接送往主机内的网络应用进程。而触发信息则上报给各类网络应用，网络应用只需要接收需要的信息即可完成各种应用的部署，相较于基于软件的应用实现方式，省略了计算繁重的统计过程，可以达到释放宝贵的CPU算力的目的。
@@ -686,7 +686,7 @@ p_{cmax} \leq \dfrac{2^{32}}{1518} =2829359.2=2^{21.4}
 \begin{figure}[!ht]
 	\centering 
 	\vspace{-1.5mm}
-	\includegraphics[scale=1]{mydiscopipeline3.pdf}
+	\includegraphics[scale=1]{mydiscopipeline4.pdf}
 	\caption{压缩统计硬件流水线设计（优化）} \label{fig:mydiscopipeline}
 \end{figure}
 
